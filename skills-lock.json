@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "gardening-mindset": {
+      "source": "coowoolf/insighthunt-skills",
+      "sourceType": "github",
+      "skillPath": "career-development/gardening-mindset/SKILL.md",
+      "computedHash": "b68c649cc897959094d1a310f43c0b239b5b731c88b299c1db287012bf1c6f5a"
+    }
+  }
+}
