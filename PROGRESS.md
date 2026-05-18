@@ -2,7 +2,7 @@
 
 ## Statut global
 **Date:** 2026-05-18 (maj)  
-**État:** MVP avancé en production (Expo SDK 54). 6 tabs + deep features (IA Chat, Calendrier entretien, Stats, Export/Backup). Architecture Zustand + AsyncStorage stable. Détection climat API Köppen-Geiger + fallback. Prêt validation utilisateur.
+**État:** MVP avancé en production (Expo SDK 54). 6 tabs + deep features. P1 (Cartographie multi-bac) SHIPPED 2026-05-18. P2 (Tableaux de bord avancés) EN SPECS (agents Botaniste/UX/Dev/QA livrés). Architecture Zustand + AsyncStorage stable. Détection climat API Köppen-Geiger + fallback. Prêt pour P2 implémentation.
 
 ## Fonctionnalités terminées
 ✅ Onboarding (localisation, style jardinage, type engrais)  
@@ -19,17 +19,18 @@
 ✅ **Calendrier d'Entretien** (jour/semaine/mois, tâches auto/custom, arrosage/engrais/taille/récolte, filtres, widget HomeScreen)  
 ✅ **Détection Saison/Climat** (auto-détection par ville+latitude, climat type, 5 zones, tips contextualisés, StatsScreen)  
 ✅ **Export/Backup JSON** (local + Supabase optionnel, compression, import merge/overwrite, métadonnées persistées)
+✅ **P1 — Cartographie Multi-Bacs** (lits nommés + localisés, grille indépendante par bac, placement plantes, compatibilité voisinage, persistence Zustand)
 
 ## En cours
-(Aucun)
+🔄 **P2 — Tableaux de Bord Avancés** (15 métriques botaniques spécifiées, 6 screens conçues, 15 composants SVG, service d'agrégation, timeline 8 semaines)
 
 ## Backlog priorisé
 
-### P1 — Expérience utilisateur core
-1. **Cartographie du jardin** — Placer plantes sur grille/plan, visualiser densité, conflits croissance.
+### P1 ✅ DONE
+1. **Cartographie du jardin (Multi-Bacs)** — Lits nommés/localisés, grille par bac, placement plantes, conflits voisinage.
 
-### P2 — Données & Analytics
-2. **Tableaux de bord avancés** — Graphiques détaillés, prédictions rendement, comparatifs saisonniers.
+### P2 — Données & Analytics (EN SPECS)
+2. **Tableaux de bord avancés** — 15 métriques botaniques, 6 screens (Home/Production/Water/Health/Plant/Comparison), charts SVG, prédictions rendement, comparatifs saisonniers. Agents (Botaniste/Dev/UX/QA) livrés spécifications. Impl timeline: 8 semaines.
 
 ### P3 — Communauté & Découverte
 6. **Partage entre utilisateurs** — Échanger plans de jardin, stratégies semis, photos avant/après.
@@ -75,4 +76,4 @@
 6. **Climat détecté par API Köppen-Geiger** — fallback local si API timeout.
 7. **IA Chat intègre profil automatiquement** — ville, style, saison contextualisés.
 
-**Dernière mise à jour:** 2026-05-18, branche `master`. IA Chat + Calendrier + Stats + Backup shipped, Köppen-Geiger API intégré, contexte profil auto pour IA.
+**Dernière mise à jour:** 2026-05-18, branche `master`. P1 (Cartographie Multi-Bacs) SHIPPED. P2 (Tableaux de Bord) EN SPECS via agents parallèles (Botaniste: 15 métriques, Dev: architecture complète, UX: 6 screens + 15 components, QA: 80+ test cases). Prêt orchestration implémentation P2.
