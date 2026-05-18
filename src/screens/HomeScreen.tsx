@@ -3,15 +3,18 @@ import {
   View, Text, ScrollView, RefreshControl, StyleSheet, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../store/useStore';
 import WeatherCard from '../components/WeatherCard';
 import WateringCard from '../components/WateringCard';
 import TipCard from '../components/TipCard';
+import TodayChoreWidget from '../components/TodayChoreWidget';
 import { colors, spacing, typography } from '../constants/theme';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 export default function HomeScreen() {
+  const navigation = useNavigation<any>();
   const {
     profile, weather, plants, recommendations, tips,
     isLoadingWeather, weatherError, refreshWeather, refreshRecommendations, markWatered,
@@ -62,6 +65,8 @@ export default function HomeScreen() {
         )}
 
         {weather && <WeatherCard weather={weather} />}
+
+        <TodayChoreWidget onPress={() => navigation.navigate('Tâches')} />
 
         {plants.length === 0 ? (
           <View style={styles.emptyBox}>

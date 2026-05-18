@@ -1,11 +1,14 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry } from '../types';
+import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData } from '../types';
 import { fetchWeather } from '../services/weather';
+import { calculateStats } from '../services/statistics';
 import { isFrostRisk as checkFrost, isHeatWave as checkHeat } from '../services/weather';
 import { getWateringRecommendation, generateTips } from '../services/recommendations';
 import { scheduleDailyWateringNotification, sendWeatherAlert, scheduleMonthlysSowingNotification } from '../services/notifications';
+import { useChoreStore } from './useChoreStore';
+import { BackupMetadata } from '../services/backup';
 
 interface StoreState {
   profile: UserProfile | null;
@@ -14,9 +17,18 @@ interface StoreState {
   weather: WeatherData | null;
   recommendations: WateringRecommendation[];
   tips: GardeningTip[];
+  stats: StatsData | null;
   isLoadingWeather: boolean;
   weatherError: string | null;
 
+  aiChatMessages: AIChatMessage[];
+  aiChatRateLimit: RateLimitStatus | null;
+
+  // Backup metadata
+  backups: BackupMetadata[];
+  lastBackupTime?: string;
+
+  refreshStats: () => void;
   setProfile: (profile: UserProfile) => void;
   updateProfile: (partial: Partial<UserProfile>) => void;
   addPlant: (plant: Omit<Plant, 'id' | 'wateringHistory'>) => void;
@@ -28,6 +40,19 @@ interface StoreState {
   setWeather: (weather: WeatherData) => void;
   refreshWeather: () => Promise<void>;
   refreshRecommendations: () => void;
+
+  setAIChatMessages: (messages: AIChatMessage[]) => void;
+  addAIChatMessage: (message: AIChatMessage) => void;
+  clearAIChatHistory: () => void;
+  setAIChatRateLimit: (status: RateLimitStatus | null) => void;
+
+  // Backup actions
+  setBackups: (backups: BackupMetadata[]) => void;
+  addBackup: (meta: BackupMetadata) => void;
+  setLastBackupTime: (time: string) => void;
+  // Direct plant/entry setters for import restore
+  setPlants: (plants: Plant[]) => void;
+  setEntries: (entries: PlantEntry[]) => void;
 }
 
 function generateId(): string {
@@ -43,8 +68,21 @@ export const useStore = create<StoreState>()(
       weather: null,
       recommendations: [],
       tips: [],
+      stats: null,
       isLoadingWeather: false,
       weatherError: null,
+
+      aiChatMessages: [],
+      aiChatRateLimit: null,
+
+      backups: [],
+      lastBackupTime: undefined,
+
+      refreshStats: () => {
+        const { entries, plants, weather } = get();
+        const stats = calculateStats(entries, plants, weather);
+        set({ stats });
+      },
 
       setProfile: (profile) => {
         set({ profile });
@@ -83,15 +121,22 @@ export const useStore = create<StoreState>()(
           recommendations: s.recommendations.filter(r => r.plantId !== id),
           entries: s.entries.filter(e => e.plantId !== id),
         }));
+        try {
+          useChoreStore.getState().cleanupOrphanChores(get().plants.map(p => p.id));
+        } catch {
+          // ignore
+        }
       },
 
       addEntry: (entry) => {
         const newEntry: PlantEntry = { ...entry, id: generateId() };
         set(s => ({ entries: [newEntry, ...s.entries] }));
+        get().refreshStats();
       },
 
       deleteEntry: (id) => {
         set(s => ({ entries: s.entries.filter(e => e.id !== id) }));
+        get().refreshStats();
       },
 
       markWatered: (plantId) => {
@@ -119,6 +164,7 @@ export const useStore = create<StoreState>()(
           const weather = await fetchWeather(profile.latitude, profile.longitude, profile.city);
           set({ weather, isLoadingWeather: false });
           get().refreshRecommendations();
+          get().refreshStats();
 
           if (checkFrost(weather.forecast)) {
             await sendWeatherAlert('🥶 Risque de gelée !', 'Protégez vos plants fragiles cette nuit.');
@@ -140,9 +186,38 @@ export const useStore = create<StoreState>()(
         const tips = generateTips(plants, weather, profile);
         set({ recommendations, tips });
 
+        try {
+          useChoreStore.getState().generateAutoChores(plants, recommendations, profile);
+        } catch {
+          // ignore — chore store may not be hydrated yet
+        }
+
         if (profile.notificationsEnabled) {
           scheduleDailyWateringNotification(plants, recommendations, weather, profile.notificationHour);
         }
+      },
+
+      setAIChatMessages: (messages) => set({ aiChatMessages: messages }),
+
+      addAIChatMessage: (message) => {
+        set(s => ({ aiChatMessages: [...s.aiChatMessages, message] }));
+      },
+
+      clearAIChatHistory: () => set({ aiChatMessages: [] }),
+
+      setAIChatRateLimit: (status) => set({ aiChatRateLimit: status }),
+
+      // Backup
+      setBackups: (backups) => set({ backups }),
+      addBackup: (meta) => set(s => ({ backups: [meta, ...s.backups], lastBackupTime: meta.timestamp })),
+      setLastBackupTime: (time) => set({ lastBackupTime: time }),
+      setPlants: (plants) => {
+        set({ plants });
+        get().refreshRecommendations();
+      },
+      setEntries: (entries) => {
+        set({ entries });
+        get().refreshStats();
       },
     }),
     {
@@ -153,6 +228,8 @@ export const useStore = create<StoreState>()(
         plants: state.plants,
         entries: state.entries,
         weather: state.weather,
+        backups: state.backups,
+        lastBackupTime: state.lastBackupTime,
       }),
     }
   )

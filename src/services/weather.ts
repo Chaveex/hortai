@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { WeatherData, ForecastDay } from '../types';
+import { detectClimateType, detectSeason, detectClimateTypeFromAPI } from './climateDetection';
 
 const API_KEY = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY ?? '';
 const BASE_URL = 'https://api.openweathermap.org';
@@ -64,6 +65,11 @@ export async function fetchWeather(lat: number, lon: number, cityName: string): 
       humidity: Math.round(data.humidity.reduce((a, b) => a + b, 0) / data.humidity.length),
     }));
 
+  const month = new Date().getMonth() + 1;
+  // Try API first, fallback to local detection
+  const climateType = (await detectClimateTypeFromAPI(lat, lon)) || detectClimateType(lat, cityName);
+  const season = detectSeason(lat, month);
+
   return {
     temperature: Math.round(current.main.temp),
     feelsLike: Math.round(current.main.feels_like),
@@ -75,6 +81,8 @@ export async function fetchWeather(lat: number, lon: number, cityName: string): 
     forecast,
     lastUpdated: new Date().toISOString(),
     city: cityName,
+    climateType,
+    season,
   };
 }
 

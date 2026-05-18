@@ -4,6 +4,7 @@ import {
   Alert, TextInput, ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../store/useStore';
 import { GardeningStyle, FertilizerType } from '../types';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
@@ -23,7 +24,8 @@ const FERTILIZERS: { value: FertilizerType; label: string; icon: string }[] = [
 ];
 
 export default function SettingsScreen() {
-  const { profile, updateProfile, refreshWeather } = useStore();
+  const { profile, updateProfile, refreshWeather, lastBackupTime } = useStore();
+  const navigation = useNavigation<import('@react-navigation/stack').StackNavigationProp<{ BackupSettings: undefined }>>();
   const [cityInput, setCityInput] = useState(profile?.city ?? '');
   const [isSavingCity, setIsSavingCity] = useState(false);
 
@@ -148,6 +150,30 @@ export default function SettingsScreen() {
               </View>
             </View>
           )}
+        </View>
+
+        <Text style={styles.sectionHeader}>Sauvegarde & Export</Text>
+        <View style={styles.card}>
+          <TouchableOpacity
+            style={[styles.optionRow, { borderBottomWidth: 0 }]}
+            onPress={() => navigation.navigate('BackupSettings')}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.optionIcon}>💾</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.optionLabel}>Sauvegardes</Text>
+              {lastBackupTime ? (
+                <Text style={styles.optionSub}>
+                  Dernière : {new Date(lastBackupTime).toLocaleDateString('fr-FR', {
+                    day: '2-digit', month: 'short', year: 'numeric',
+                  })}
+                </Text>
+              ) : (
+                <Text style={styles.optionSub}>Export JSON · ZIP · Cloud optionnel</Text>
+              )}
+            </View>
+            <Text style={{ fontSize: 20, color: colors.textMuted }}>›</Text>
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.version}>MonJardin v1.0.0</Text>

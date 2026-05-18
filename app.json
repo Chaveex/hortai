@@ -18,7 +18,9 @@
         "UIBackgroundModes": [
           "fetch",
           "remote-notification"
-        ]
+        ],
+        "NSCameraUsageDescription": "Pour prendre une photo de plante à analyser par l'IA jardinage.",
+        "NSPhotoLibraryUsageDescription": "Pour joindre une photo de plante à votre question."
       }
     },
     "android": {
@@ -46,6 +48,13 @@
           "icon": "./assets/notification-icon.png",
           "color": "#2D6A4F",
           "sounds": []
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Pour joindre une photo de plante à votre question.",
+          "cameraPermission": "Pour prendre une photo de plante à analyser par l'IA jardinage."
         }
       ],
       "expo-background-fetch",

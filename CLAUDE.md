@@ -47,3 +47,15 @@ Stack inside tabs. `GardenStack` wraps `GardenScreen → AddPlantScreen → Plan
 ### Path alias
 
 `@/*` maps to `./src/*` (tsconfig paths). Metro does not resolve this automatically — use relative imports in practice.
+
+### IA Chat (botaniste expert)
+
+Floating action button (FAB) `src/components/AIFABButton.tsx` is mounted inside `Navigation` (bottom-right, above tab bar) and opens `src/screens/AIChatModal.tsx`. Service `src/services/aiChat.ts` calls Anthropic Messages API (`claude-haiku-4-5-20251001`) via native `fetch` — no SDK dep.
+
+- API key: `EXPO_PUBLIC_ANTHROPIC_API_KEY` in `.env` (also propagated via `eas.json` preview build env).
+- Rate limit: 3 questions/jour, reset à 00:00 UTC. Compteur en AsyncStorage (`aiChat_questionCount` + `aiChat_lastReset`).
+- Historique: AsyncStorage clé `aiChat_messages`, auto-pruné aux 2 derniers jours, max 100 messages. Chargé à l'ouverture du modal.
+- Photo (optionnelle): `expo-image-picker` (caméra ou galerie) → `expo-image-manipulator` compresse en 600x400 JPEG q=0.6 base64 → envoyée comme bloc `image` à Haiku (vision). Thumbnail base64 stockée dans le message user de l'historique.
+- System prompt: scope strict jardinage/botanie/maladies/saisonnalité, refuse hors-scope. Préambule injecté avec ville/style/engrais du profil utilisateur.
+- Erreurs réseau: message "Connexion requise". Erreurs API affichées dans un bandeau rouge dans le modal.
+- State Zustand: `aiChatMessages`, `aiChatRateLimit` (non persistés — gérés par le service AsyncStorage directement).

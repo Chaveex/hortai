@@ -31,6 +31,9 @@ export interface Plant {
   wateringHistory: string[];
 }
 
+export type ClimateType = 'mediterranean' | 'oceanic' | 'continental' | 'mountain' | 'tropical';
+export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
+
 export interface WeatherData {
   temperature: number;
   feelsLike: number;
@@ -42,6 +45,16 @@ export interface WeatherData {
   forecast: ForecastDay[];
   lastUpdated: string;
   city: string;
+  climateType?: ClimateType;
+  season?: Season;
+}
+
+export interface StatsData {
+  totalHarvest: { [plantId: string]: number };
+  monthlyProduction: { [yearMonth: string]: number };
+  waterConsumption: number;
+  healthScore: number;
+  productivityTrend: 'up' | 'stable' | 'down';
 }
 
 export interface ForecastDay {
@@ -82,4 +95,18 @@ export interface GardeningTip {
   priority: 'low' | 'medium' | 'high';
   plantId?: string;
   icon: string;
+}
+
+export interface AIChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+  photo?: string;
+}
+
+export interface RateLimitStatus {
+  allowed: boolean;
+  remaining: number;
+  resetsAt: string;
 }
