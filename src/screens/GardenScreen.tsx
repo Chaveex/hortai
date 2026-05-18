@@ -25,12 +25,20 @@ export default function GardenScreen() {
             </Text>
           )}
         </View>
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => navigation.navigate('AddPlant')}
-        >
-          <Text style={styles.addBtnText}>+ Ajouter</Text>
-        </TouchableOpacity>
+        <View style={styles.headerButtons}>
+          <TouchableOpacity
+            style={styles.mapBtn}
+            onPress={() => navigation.navigate('GardenMap')}
+          >
+            <Text style={styles.mapBtnText}>🗺️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.addBtn}
+            onPress={() => navigation.navigate('AddPlant')}
+          >
+            <Text style={styles.addBtnText}>+ Ajouter</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {plants.length === 0 ? (
@@ -75,6 +83,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingHorizontal: spacing.md, paddingTop: spacing.md, paddingBottom: spacing.sm,
   },
+  headerButtons: {
+    flexDirection: 'row', gap: spacing.sm, alignItems: 'center',
+  },
+  mapBtn: {
+    paddingHorizontal: spacing.sm, paddingVertical: spacing.xs,
+  },
+  mapBtnText: { fontSize: 18 },
   title: { ...typography.h2 },
   subtitle: { fontSize: 13, color: colors.accent, fontWeight: '500' },
   addBtn: {

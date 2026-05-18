@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData } from '../types';
+import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData, GardenMap } from '../types';
 import { fetchWeather } from '../services/weather';
 import { calculateStats } from '../services/statistics';
 import { isFrostRisk as checkFrost, isHeatWave as checkHeat } from '../services/weather';
@@ -28,6 +28,9 @@ interface StoreState {
   backups: BackupMetadata[];
   lastBackupTime?: string;
 
+  // Garden mapping
+  gardenMap: GardenMap;
+
   refreshStats: () => void;
   setProfile: (profile: UserProfile) => void;
   updateProfile: (partial: Partial<UserProfile>) => void;
@@ -53,10 +56,25 @@ interface StoreState {
   // Direct plant/entry setters for import restore
   setPlants: (plants: Plant[]) => void;
   setEntries: (entries: PlantEntry[]) => void;
+
+  // Garden map actions
+  setGardenCell: (row: number, col: number, plantId: string | undefined) => void;
+  setGardenMapSize: (rows: number, cols: number) => void;
+  clearGardenMap: () => void;
 }
 
 function generateId(): string {
   return Math.random().toString(36).slice(2, 11) + Date.now().toString(36);
+}
+
+function createEmptyGardenMap(rows: number = 10, cols: number = 10): GardenMap {
+  const cells: any[] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      cells.push({ row: r, col: c, plantId: undefined });
+    }
+  }
+  return { rows, cols, cells };
 }
 
 export const useStore = create<StoreState>()(
@@ -77,6 +95,8 @@ export const useStore = create<StoreState>()(
 
       backups: [],
       lastBackupTime: undefined,
+
+      gardenMap: createEmptyGardenMap(),
 
       refreshStats: () => {
         const { entries, plants, weather } = get();
@@ -219,6 +239,26 @@ export const useStore = create<StoreState>()(
         set({ entries });
         get().refreshStats();
       },
+
+      setGardenCell: (row, col, plantId) => {
+        set(s => ({
+          gardenMap: {
+            ...s.gardenMap,
+            cells: s.gardenMap.cells.map(cell =>
+              cell.row === row && cell.col === col ? { ...cell, plantId } : cell
+            ),
+          },
+        }));
+      },
+
+      setGardenMapSize: (rows, cols) => {
+        set({ gardenMap: createEmptyGardenMap(rows, cols) });
+      },
+
+      clearGardenMap: () => {
+        const { rows, cols } = get().gardenMap;
+        set({ gardenMap: createEmptyGardenMap(rows, cols) });
+      },
     }),
     {
       name: 'garden-app-storage',
@@ -230,6 +270,7 @@ export const useStore = create<StoreState>()(
         weather: state.weather,
         backups: state.backups,
         lastBackupTime: state.lastBackupTime,
+        gardenMap: state.gardenMap,
       }),
     }
   )

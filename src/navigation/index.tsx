@@ -14,6 +14,7 @@ import ChoreCalendarScreen from '../screens/ChoreCalendarScreen';
 import ChoreDetailScreen from '../screens/ChoreDetailScreen';
 import ChoreFormScreen from '../screens/ChoreFormScreen';
 import StatsScreen from '../screens/StatsScreen';
+import { GardenMapScreen } from '../screens/GardenMapScreen';
 import AIChatModal from '../screens/AIChatModal';
 import AIFABButton from '../components/AIFABButton';
 import { colors } from '../constants/theme';
@@ -27,6 +28,7 @@ function GardenStack() {
       <Stack.Screen name="GardenList" component={GardenScreen} />
       <Stack.Screen name="AddPlant" component={AddPlantScreen} />
       <Stack.Screen name="PlantDetail" component={PlantDetailScreen} />
+      <Stack.Screen name="GardenMap" component={GardenMapScreen} />
       <Stack.Screen name="Stats" component={StatsScreen} />
     </Stack.Navigator>
   );

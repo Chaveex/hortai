@@ -110,3 +110,15 @@ export interface RateLimitStatus {
   remaining: number;
   resetsAt: string;
 }
+
+export interface GardenCell {
+  row: number;
+  col: number;
+  plantId?: string;
+}
+
+export interface GardenMap {
+  rows: number;
+  cols: number;
+  cells: GardenCell[];
+}
