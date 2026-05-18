@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { ScrollView, View, StyleSheet, Alert } from 'react-native';
 import { GardenCell } from './GardenCell';
-import { Plant, GardenMap } from '@/types';
+import { Plant, GardenBed } from '@/types';
 import { isIncompatible } from '@/constants/plantCompatibility';
-import { useStore } from '@/store/useStore';
 
 interface GardenGridProps {
-  gardenMap: GardenMap;
+  gardenMap: GardenBed;
   plants: Plant[];
   onCellPress: (row: number, col: number) => void;
   onPlantPress: (plantId: string) => void;
+  onCellRemove: (row: number, col: number) => void;
 }
 
 export function GardenGrid({
@@ -17,8 +17,8 @@ export function GardenGrid({
   plants,
   onCellPress,
   onPlantPress,
+  onCellRemove,
 }: GardenGridProps) {
-  const setGardenCell = useStore(s => s.setGardenCell);
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
 
   function getNeighbors(row: number, col: number): Array<{ row: number; col: number }> {
@@ -78,7 +78,7 @@ export function GardenGrid({
         { text: 'Annuler', onPress: () => {} },
         {
           text: 'Retirer',
-          onPress: () => setGardenCell(row, col, undefined),
+          onPress: () => onCellRemove(row, col),
           style: 'destructive',
         },
       ]);
@@ -126,6 +126,6 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 44 * 10 + 20,
+    width: 44 * 12 + 50,
   },
 });

@@ -28,7 +28,7 @@ export default function GardenScreen() {
         <View style={styles.headerButtons}>
           <TouchableOpacity
             style={styles.mapBtn}
-            onPress={() => navigation.navigate('GardenMap')}
+            onPress={() => navigation.navigate('GardenBeds')}
           >
             <Text style={styles.mapBtnText}>🗺️</Text>
           </TouchableOpacity>

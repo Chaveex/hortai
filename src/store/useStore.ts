@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData, GardenMap } from '../types';
+import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData, GardenBed, GardenCell } from '../types';
 import { fetchWeather } from '../services/weather';
 import { calculateStats } from '../services/statistics';
 import { isFrostRisk as checkFrost, isHeatWave as checkHeat } from '../services/weather';
@@ -28,8 +28,8 @@ interface StoreState {
   backups: BackupMetadata[];
   lastBackupTime?: string;
 
-  // Garden mapping
-  gardenMap: GardenMap;
+  // Garden beds
+  gardenBeds: GardenBed[];
 
   refreshStats: () => void;
   setProfile: (profile: UserProfile) => void;
@@ -57,24 +57,26 @@ interface StoreState {
   setPlants: (plants: Plant[]) => void;
   setEntries: (entries: PlantEntry[]) => void;
 
-  // Garden map actions
-  setGardenCell: (row: number, col: number, plantId: string | undefined) => void;
-  setGardenMapSize: (rows: number, cols: number) => void;
-  clearGardenMap: () => void;
+  // Garden bed actions
+  addGardenBed: (bed: Omit<GardenBed, 'id'>) => void;
+  updateGardenBed: (bedId: string, partial: Partial<Omit<GardenBed, 'id' | 'cells'>>) => void;
+  deleteGardenBed: (bedId: string) => void;
+  setBedCell: (bedId: string, row: number, col: number, plantId: string | undefined) => void;
+  resizeBed: (bedId: string, rows: number, cols: number) => void;
 }
 
 function generateId(): string {
   return Math.random().toString(36).slice(2, 11) + Date.now().toString(36);
 }
 
-function createEmptyGardenMap(rows: number = 10, cols: number = 10): GardenMap {
-  const cells: any[] = [];
+function createEmptyCells(rows: number, cols: number): GardenCell[] {
+  const cells: GardenCell[] = [];
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       cells.push({ row: r, col: c, plantId: undefined });
     }
   }
-  return { rows, cols, cells };
+  return cells;
 }
 
 export const useStore = create<StoreState>()(
@@ -96,7 +98,7 @@ export const useStore = create<StoreState>()(
       backups: [],
       lastBackupTime: undefined,
 
-      gardenMap: createEmptyGardenMap(),
+      gardenBeds: [],
 
       refreshStats: () => {
         const { entries, plants, weather } = get();
@@ -240,24 +242,57 @@ export const useStore = create<StoreState>()(
         get().refreshStats();
       },
 
-      setGardenCell: (row, col, plantId) => {
+      addGardenBed: (bed) => {
+        const newBed: GardenBed = {
+          ...bed,
+          id: generateId(),
+          cells: createEmptyCells(bed.rows, bed.cols),
+        };
+        set(s => ({ gardenBeds: [...s.gardenBeds, newBed] }));
+      },
+
+      updateGardenBed: (bedId, partial) => {
         set(s => ({
-          gardenMap: {
-            ...s.gardenMap,
-            cells: s.gardenMap.cells.map(cell =>
-              cell.row === row && cell.col === col ? { ...cell, plantId } : cell
-            ),
-          },
+          gardenBeds: s.gardenBeds.map(bed =>
+            bed.id === bedId ? { ...bed, ...partial } : bed
+          ),
         }));
       },
 
-      setGardenMapSize: (rows, cols) => {
-        set({ gardenMap: createEmptyGardenMap(rows, cols) });
+      deleteGardenBed: (bedId) => {
+        set(s => ({
+          gardenBeds: s.gardenBeds.filter(bed => bed.id !== bedId),
+        }));
       },
 
-      clearGardenMap: () => {
-        const { rows, cols } = get().gardenMap;
-        set({ gardenMap: createEmptyGardenMap(rows, cols) });
+      setBedCell: (bedId, row, col, plantId) => {
+        set(s => ({
+          gardenBeds: s.gardenBeds.map(bed =>
+            bed.id === bedId
+              ? {
+                  ...bed,
+                  cells: bed.cells.map(cell =>
+                    cell.row === row && cell.col === col ? { ...cell, plantId } : cell
+                  ),
+                }
+              : bed
+          ),
+        }));
+      },
+
+      resizeBed: (bedId, rows, cols) => {
+        set(s => ({
+          gardenBeds: s.gardenBeds.map(bed =>
+            bed.id === bedId
+              ? {
+                  ...bed,
+                  rows,
+                  cols,
+                  cells: createEmptyCells(rows, cols),
+                }
+              : bed
+          ),
+        }));
       },
     }),
     {
@@ -270,7 +305,7 @@ export const useStore = create<StoreState>()(
         weather: state.weather,
         backups: state.backups,
         lastBackupTime: state.lastBackupTime,
-        gardenMap: state.gardenMap,
+        gardenBeds: state.gardenBeds,
       }),
     }
   )

@@ -117,7 +117,10 @@ export interface GardenCell {
   plantId?: string;
 }
 
-export interface GardenMap {
+export interface GardenBed {
+  id: string;
+  name: string;
+  location?: string;
   rows: number;
   cols: number;
   cells: GardenCell[];
