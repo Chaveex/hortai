@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData, GardenBed, GardenCell } from '../types';
+import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData, GardenBed, GardenCell, GardenMetrics, PlantMetrics, Predictions, GardenInsight, GardenChartData } from '../types';
 import { fetchWeather } from '../services/weather';
 import { calculateStats } from '../services/statistics';
 import { isFrostRisk as checkFrost, isHeatWave as checkHeat } from '../services/weather';
@@ -9,6 +9,10 @@ import { getWateringRecommendation, generateTips } from '../services/recommendat
 import { scheduleDailyWateringNotification, sendWeatherAlert, scheduleMonthlysSowingNotification } from '../services/notifications';
 import { useChoreStore } from './useChoreStore';
 import { BackupMetadata } from '../services/backup';
+import { calculateGardenMetrics, calculatePlantMetrics } from '../services/gardenMetrics';
+import { generatePredictions } from '../services/predictions';
+import { generateGardenInsights, prioritizeInsights } from '../services/insights';
+import { calculateTimeSeriesData } from '../services/statistics';
 
 interface StoreState {
   profile: UserProfile | null;
@@ -30,6 +34,15 @@ interface StoreState {
 
   // Garden beds
   gardenBeds: GardenBed[];
+
+  // Advanced metrics & dashboard (P2)
+  gardenMetrics: GardenMetrics | null;
+  plantMetrics: PlantMetrics[];
+  predictions: Predictions | null;
+  insights: GardenInsight[];
+  chartData: GardenChartData | null;
+  selectedMetricsPeriod: 'week' | 'month' | 'quarter' | 'year' | 'all';
+  selectedDateRange: { start: string; end: string } | null;
 
   refreshStats: () => void;
   setProfile: (profile: UserProfile) => void;
@@ -63,6 +76,13 @@ interface StoreState {
   deleteGardenBed: (bedId: string) => void;
   setBedCell: (bedId: string, row: number, col: number, plantId: string | undefined) => void;
   resizeBed: (bedId: string, rows: number, cols: number) => void;
+
+  // Advanced metrics actions
+  refreshGardenMetrics: () => void;
+  refreshPredictions: () => void;
+  refreshInsights: () => void;
+  setMetricsPeriod: (period: 'week' | 'month' | 'quarter' | 'year' | 'all') => void;
+  setDateRange: (range: { start: string; end: string } | null) => void;
 }
 
 function generateId(): string {
@@ -100,10 +120,21 @@ export const useStore = create<StoreState>()(
 
       gardenBeds: [],
 
+      // Advanced metrics
+      gardenMetrics: null,
+      plantMetrics: [],
+      predictions: null,
+      insights: [],
+      chartData: null,
+      selectedMetricsPeriod: 'month',
+      selectedDateRange: null,
+
       refreshStats: () => {
         const { entries, plants, weather } = get();
         const stats = calculateStats(entries, plants, weather);
         set({ stats });
+        // Also refresh advanced metrics
+        get().refreshGardenMetrics();
       },
 
       setProfile: (profile) => {
@@ -187,6 +218,8 @@ export const useStore = create<StoreState>()(
           set({ weather, isLoadingWeather: false });
           get().refreshRecommendations();
           get().refreshStats();
+          get().refreshPredictions();
+          get().refreshInsights();
 
           if (checkFrost(weather.forecast)) {
             await sendWeatherAlert('🥶 Risque de gelée !', 'Protégez vos plants fragiles cette nuit.');
@@ -293,6 +326,36 @@ export const useStore = create<StoreState>()(
               : bed
           ),
         }));
+      },
+
+      // Advanced metrics methods
+      refreshGardenMetrics: () => {
+        const { plants, entries, weather, profile } = get();
+        const gardenMetrics = calculateGardenMetrics(plants, entries, weather, profile);
+        const plantMetricsArray = plants.map(p => calculatePlantMetrics(p, entries));
+        const chartData = calculateTimeSeriesData(entries, plants, weather);
+        set({ gardenMetrics, plantMetrics: plantMetricsArray, chartData });
+      },
+
+      refreshPredictions: () => {
+        const { plants, entries, weather, profile } = get();
+        const predictions = generatePredictions(plants, entries, weather, profile);
+        set({ predictions });
+      },
+
+      refreshInsights: () => {
+        const { gardenMetrics, predictions, weather, profile } = get();
+        if (!gardenMetrics || !predictions) return;
+        const insights = prioritizeInsights(generateGardenInsights(gardenMetrics, predictions, weather, profile));
+        set({ insights });
+      },
+
+      setMetricsPeriod: (period) => {
+        set({ selectedMetricsPeriod: period });
+      },
+
+      setDateRange: (range) => {
+        set({ selectedDateRange: range });
       },
     }),
     {

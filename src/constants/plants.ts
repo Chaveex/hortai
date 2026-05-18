@@ -654,6 +654,44 @@ export const PLANT_DATABASE: Record<PlantType, PlantInfo> = {
   },
 };
 
+// Regional average harvest per plant type (kg per plant per season)
+export const REGIONAL_AVERAGES: Record<PlantType, number> = {
+  tomato: 5,
+  pepper: 2,
+  zucchini: 8,
+  cucumber: 4,
+  lettuce: 0.5,
+  carrot: 1.5,
+  radish: 0.3,
+  beans: 1.5,
+  peas: 1,
+  basil: 0.3,
+  parsley: 0.2,
+  mint: 0.2,
+  strawberry: 1,
+  potato: 4,
+  onion: 2,
+  garlic: 0.5,
+  leek: 1.5,
+  spinach: 0.5,
+  chard: 1.5,
+  beet: 2,
+  broccoli: 1,
+  corn: 1,
+  sunflower: 0.5,
+  other: 1,
+};
+
+// Helper to get plant name from type
+export function getPlantName(type: PlantType): string {
+  return PLANT_DATABASE[type]?.frenchName || type;
+}
+
+// Helper to get plant icon from type
+export function getPlantIcon(type: PlantType): string {
+  return PLANT_DATABASE[type]?.icon || '🌿';
+}
+
 export const PLANT_TYPES = Object.keys(PLANT_DATABASE) as PlantType[];
 
 export function getPlantInfo(type: PlantType): PlantInfo {

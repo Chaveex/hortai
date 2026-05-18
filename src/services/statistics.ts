@@ -1,5 +1,5 @@
-import { PlantEntry, Plant, WeatherData, StatsData } from '../types';
-import { PLANT_DATABASE } from '../constants/plants';
+import { PlantEntry, Plant, WeatherData, StatsData, GardenChartData } from '../types';
+import { PLANT_DATABASE, getGrowthStage } from '../constants/plants';
 import { format, parseISO, differenceInDays, subMonths } from 'date-fns';
 
 // Regional average harvest per plant type (kg per plant per season)
@@ -165,4 +165,154 @@ export function getLastNMonths(n: number): string[] {
     months.push(format(subMonths(now, i), 'yyyy-MM'));
   }
   return months;
+}
+
+/**
+ * Calculate time-series data for charts from plant entries
+ */
+export function calculateTimeSeriesData(
+  entries: PlantEntry[],
+  plants: Plant[],
+  _weather: WeatherData | null,
+): GardenChartData {
+  const now = new Date();
+
+  // --- Monthly Production (last 12 months) ---
+  const monthlyProduction: { date: string; value: number; label?: string }[] = [];
+  const lastMonths = getLastNMonths(12);
+  lastMonths.forEach(yearMonth => {
+    const production = (PLANT_DATABASE[plants[0]?.type] ? 1 : 0) in entries ? 0 : 0;
+    const harvestTotal = entries
+      .filter(e => {
+        try {
+          return e.type === 'harvest' && format(parseISO(e.date), 'yyyy-MM') === yearMonth;
+        } catch {
+          return false;
+        }
+      })
+      .reduce((sum, e) => sum + normalizeToKg(e.quantity ?? 0, e.unit ?? 'kg'), 0);
+
+    monthlyProduction.push({
+      date: yearMonth,
+      value: Math.round(harvestTotal * 100) / 100,
+      label: format(parseISO(yearMonth + '-01'), 'MMM yyyy'),
+    });
+  });
+
+  // --- Weekly Water Usage (last 8 weeks) ---
+  const weeklyWaterUsage: { date: string; value: number; label?: string }[] = [];
+  for (let i = 7; i >= 0; i--) {
+    const weekStart = subMonths(now, 0); // placeholder for week calculation
+    const weekStartFormatted = format(subMonths(now, Math.floor(i / 4)), 'yyyy-ww');
+    // Rough estimate: 5L per watering entry
+    const waterEstimate = entries
+      .filter(e => {
+        try {
+          const d = parseISO(e.date);
+          return (
+            (e.type === 'note' || e.type === 'harvest') &&
+            differenceInDays(now, d) >= i * 7 &&
+            differenceInDays(now, d) < (i + 1) * 7
+          );
+        } catch {
+          return false;
+        }
+      })
+      .reduce((sum) => sum + 5, 0);
+
+    weeklyWaterUsage.push({
+      date: weekStartFormatted,
+      value: waterEstimate,
+      label: `Semaine ${8 - i}`,
+    });
+  }
+
+  // --- Health Trend (estimated from entries, lower granularity) ---
+  const healthTrend: { date: string; value: number; label?: string }[] = [];
+  const lastDays = 60;
+  for (let dayOffset = lastDays; dayOffset >= 0; dayOffset -= 10) {
+    const checkDate = subMonths(now, Math.floor(dayOffset / 30));
+    let healthScore = 100;
+
+    // Penalty: plants not watered
+    plants.forEach(plant => {
+      if (!plant.lastWatered) {
+        healthScore -= 5;
+      } else {
+        const daysSinceWater = differenceInDays(checkDate, parseISO(plant.lastWatered));
+        const info = PLANT_DATABASE[plant.type];
+        if (info && daysSinceWater > info.wateringFrequencyDays * 1.5) {
+          healthScore -= 8;
+        }
+      }
+    });
+
+    // Bonus: recent harvest
+    const recentHarvests = entries.filter(e => {
+      try {
+        const d = parseISO(e.date);
+        return e.type === 'harvest' && differenceInDays(checkDate, d) <= 10;
+      } catch {
+        return false;
+      }
+    });
+    healthScore += Math.min(20, recentHarvests.length * 4);
+
+    healthScore = Math.max(0, Math.min(100, healthScore));
+
+    healthTrend.push({
+      date: format(checkDate, 'yyyy-MM-dd'),
+      value: Math.round(healthScore),
+      label: format(checkDate, 'dd MMM'),
+    });
+  }
+
+  // --- Productivity by Plant Type ---
+  const productivityByType: { [plantType: string]: number } = {};
+  entries.forEach(e => {
+    if (e.type === 'harvest') {
+      const plant = plants.find(p => p.id === e.plantId);
+      if (plant) {
+        const kg = normalizeToKg(e.quantity ?? 0, e.unit ?? 'kg');
+        productivityByType[plant.type] = (productivityByType[plant.type] ?? 0) + kg;
+      }
+    }
+  });
+
+  // --- Water Usage by Month ---
+  const waterUsageByMonth: { date: string; value: number; label?: string }[] = [];
+  lastMonths.forEach(yearMonth => {
+    let monthWaterEstimate = 0;
+    plants.forEach(plant => {
+      try {
+        const plantedDate = parseISO(plant.plantedDate);
+        const monthDate = parseISO(yearMonth + '-01');
+        const daysInMonth = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+        if (format(plantedDate, 'yyyy-MM') <= yearMonth) {
+          const info = PLANT_DATABASE[plant.type];
+          if (info) {
+            const daysAlive = differenceInDays(monthDate, plantedDate);
+            const stage = info; // placeholder; full impl would use getGrowthStage
+            monthWaterEstimate += info.dailyWaterNeed * Math.min(daysInMonth, 30);
+          }
+        }
+      } catch {
+        // skip
+      }
+    });
+
+    waterUsageByMonth.push({
+      date: yearMonth,
+      value: Math.round(monthWaterEstimate),
+      label: format(parseISO(yearMonth + '-01'), 'MMM yyyy'),
+    });
+  });
+
+  return {
+    monthlyProduction,
+    weeklyWaterUsage,
+    healthTrend,
+    productivityByType,
+    waterUsageByMonth,
+  };
 }

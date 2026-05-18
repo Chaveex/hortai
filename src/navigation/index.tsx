@@ -20,6 +20,12 @@ import { BedFormScreen } from '../screens/BedFormScreen';
 import AIChatModal from '../screens/AIChatModal';
 import AIFABButton from '../components/AIFABButton';
 import { colors } from '../constants/theme';
+import { DashboardScreen } from '../screens/DashboardScreen';
+import { ProductionDashboard } from '../screens/ProductionDashboard';
+import { WaterDashboard } from '../screens/WaterDashboard';
+import { HealthScoreDashboard } from '../screens/HealthScoreDashboard';
+import { PlantDetailDashboard } from '../screens/PlantDetailDashboard';
+import { ComparisonDashboard } from '../screens/ComparisonDashboard';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -34,6 +40,12 @@ function GardenStack() {
       <Stack.Screen name="BedGrid" component={BedGridScreen} />
       <Stack.Screen name="BedForm" component={BedFormScreen} />
       <Stack.Screen name="Stats" component={StatsScreen} />
+      <Stack.Screen name="Dashboard" component={DashboardScreen} />
+      <Stack.Screen name="ProductionDashboard" component={ProductionDashboard} />
+      <Stack.Screen name="WaterDashboard" component={WaterDashboard} />
+      <Stack.Screen name="HealthDashboard" component={HealthScoreDashboard} />
+      <Stack.Screen name="PlantDetailDashboard" component={PlantDetailDashboard} />
+      <Stack.Screen name="ComparisonDashboard" component={ComparisonDashboard} />
     </Stack.Navigator>
   );
 }
