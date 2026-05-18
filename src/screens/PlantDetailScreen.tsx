@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert,
+  TextInput, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -17,7 +18,11 @@ export default function PlantDetailScreen() {
   const route = useRoute<any>();
   const { plantId } = route.params as { plantId: string };
 
-  const { plants, recommendations, tips, markWatered, deletePlant, profile } = useStore();
+  const { plants, recommendations, tips, entries, markWatered, deletePlant, addEntry, deleteEntry, profile } = useStore();
+  const [entryType, setEntryType] = useState<'note' | 'harvest'>('note');
+  const [entryText, setEntryText] = useState('');
+  const [entryQty, setEntryQty] = useState('');
+  const [entryUnit, setEntryUnit] = useState<'kg' | 'g' | 'pièces'>('kg');
   const plant = plants.find(p => p.id === plantId);
 
   if (!plant) {
@@ -28,6 +33,7 @@ export default function PlantDetailScreen() {
     );
   }
 
+  const plantEntries = entries.filter(e => e.plantId === plantId);
   const info = getPlantInfo(plant.type);
   const rec = recommendations.find(r => r.plantId === plantId);
   const plantTips = tips.filter(t => t.plantId === plantId);
@@ -37,6 +43,21 @@ export default function PlantDetailScreen() {
   const seasonalAdvice = info.seasonalAdvice[season];
 
   const daysToHarvest = Math.max(0, info.harvestDays - daysSincePlanting);
+
+  function handleAddEntry() {
+    if (entryType === 'note' && !entryText.trim()) return;
+    if (entryType === 'harvest' && !entryQty.trim()) return;
+    addEntry({
+      plantId,
+      date: new Date().toISOString(),
+      type: entryType,
+      text: entryType === 'note' ? entryText.trim() : undefined,
+      quantity: entryType === 'harvest' ? parseFloat(entryQty) : undefined,
+      unit: entryType === 'harvest' ? entryUnit : undefined,
+    });
+    setEntryText('');
+    setEntryQty('');
+  }
 
   function handleDelete() {
     Alert.alert(
@@ -161,6 +182,83 @@ export default function PlantDetailScreen() {
             </View>
           </>
         )}
+
+        <Text style={styles.label}>Journal & Récoltes</Text>
+        <View style={styles.journalForm}>
+          <View style={styles.entryTypeTabs}>
+            <TouchableOpacity
+              style={[styles.typeTab, entryType === 'note' && styles.typeTabActive]}
+              onPress={() => setEntryType('note')}
+            >
+              <Text style={[styles.typeTabText, entryType === 'note' && styles.typeTabTextActive]}>📓 Note</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.typeTab, entryType === 'harvest' && styles.typeTabActive]}
+              onPress={() => setEntryType('harvest')}
+            >
+              <Text style={[styles.typeTabText, entryType === 'harvest' && styles.typeTabTextActive]}>🌾 Récolte</Text>
+            </TouchableOpacity>
+          </View>
+
+          {entryType === 'note' ? (
+            <TextInput
+              style={styles.entryInput}
+              value={entryText}
+              onChangeText={setEntryText}
+              placeholder="Observation, maladie, intervention…"
+              placeholderTextColor={colors.textMuted}
+              multiline
+              numberOfLines={2}
+            />
+          ) : (
+            <View style={styles.harvestRow}>
+              <TextInput
+                style={[styles.entryInput, { flex: 1 }]}
+                value={entryQty}
+                onChangeText={setEntryQty}
+                placeholder="Quantité"
+                placeholderTextColor={colors.textMuted}
+                keyboardType="decimal-pad"
+              />
+              <View style={styles.unitTabs}>
+                {(['kg', 'g', 'pièces'] as const).map(u => (
+                  <TouchableOpacity
+                    key={u}
+                    style={[styles.unitBtn, entryUnit === u && styles.unitBtnActive]}
+                    onPress={() => setEntryUnit(u)}
+                  >
+                    <Text style={[styles.unitBtnText, entryUnit === u && styles.unitBtnTextActive]}>{u}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
+
+          <TouchableOpacity style={styles.addEntryBtn} onPress={handleAddEntry}>
+            <Text style={styles.addEntryBtnText}>+ Ajouter</Text>
+          </TouchableOpacity>
+        </View>
+
+        {plantEntries.map(entry => (
+          <View key={entry.id} style={styles.entryCard}>
+            <View style={styles.entryCardHeader}>
+              <Text style={styles.entryCardIcon}>{entry.type === 'note' ? '📓' : '🌾'}</Text>
+              <Text style={styles.entryCardDate}>
+                {format(new Date(entry.date), 'd MMM yyyy', { locale: fr })}
+              </Text>
+              <TouchableOpacity
+                onPress={() => deleteEntry(entry.id)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Text style={styles.entryCardDelete}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            {entry.type === 'note'
+              ? <Text style={styles.entryCardText}>{entry.text}</Text>
+              : <Text style={styles.entryCardHarvest}>{entry.quantity} {entry.unit}</Text>
+            }
+          </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
@@ -229,4 +327,46 @@ const styles = StyleSheet.create({
   issueText: { fontSize: 12, color: colors.warning },
   historyList: { gap: 4 },
   historyItem: { fontSize: 13, color: colors.textSecondary },
+  journalForm: {
+    backgroundColor: colors.surface, borderRadius: borderRadius.md,
+    borderWidth: 1, borderColor: colors.border, padding: spacing.md, gap: spacing.sm,
+  },
+  entryTypeTabs: { flexDirection: 'row', gap: spacing.xs },
+  typeTab: {
+    flex: 1, paddingVertical: spacing.xs, borderRadius: borderRadius.full,
+    borderWidth: 1.5, borderColor: colors.border, alignItems: 'center',
+  },
+  typeTabActive: { borderColor: colors.primary, backgroundColor: '#EDF7F1' },
+  typeTabText: { fontSize: 13, color: colors.textSecondary, fontWeight: '500' },
+  typeTabTextActive: { color: colors.primary, fontWeight: '600' },
+  entryInput: {
+    backgroundColor: colors.background, borderWidth: 1.5, borderColor: colors.border,
+    borderRadius: borderRadius.md, padding: spacing.sm, fontSize: 14, color: colors.text,
+    textAlignVertical: 'top',
+  },
+  harvestRow: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center' },
+  unitTabs: { flexDirection: 'row', gap: 4 },
+  unitBtn: {
+    paddingHorizontal: spacing.sm, paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full, borderWidth: 1.5, borderColor: colors.border,
+  },
+  unitBtnActive: { borderColor: colors.primary, backgroundColor: '#EDF7F1' },
+  unitBtnText: { fontSize: 12, color: colors.textSecondary },
+  unitBtnTextActive: { color: colors.primary, fontWeight: '600' },
+  addEntryBtn: {
+    backgroundColor: colors.primary, borderRadius: borderRadius.md,
+    padding: spacing.sm, alignItems: 'center',
+  },
+  addEntryBtnText: { color: '#FFFFFF', fontWeight: '600', fontSize: 14 },
+  entryCard: {
+    backgroundColor: colors.surface, borderRadius: borderRadius.md,
+    borderWidth: 1, borderColor: colors.border, padding: spacing.md,
+    marginTop: spacing.xs,
+  },
+  entryCardHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: 4 },
+  entryCardIcon: { fontSize: 14 },
+  entryCardDate: { flex: 1, fontSize: 12, color: colors.textMuted },
+  entryCardDelete: { color: colors.textMuted, fontSize: 14 },
+  entryCardText: { fontSize: 14, color: colors.text, lineHeight: 20 },
+  entryCardHarvest: { fontSize: 16, fontWeight: '700', color: colors.success },
 });

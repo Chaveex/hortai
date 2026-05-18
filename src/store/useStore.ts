@@ -1,15 +1,16 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType } from '../types';
+import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry } from '../types';
 import { fetchWeather } from '../services/weather';
 import { isFrostRisk as checkFrost, isHeatWave as checkHeat } from '../services/weather';
 import { getWateringRecommendation, generateTips } from '../services/recommendations';
-import { scheduleDailyWateringNotification, sendWeatherAlert } from '../services/notifications';
+import { scheduleDailyWateringNotification, sendWeatherAlert, scheduleMonthlysSowingNotification } from '../services/notifications';
 
 interface StoreState {
   profile: UserProfile | null;
   plants: Plant[];
+  entries: PlantEntry[];
   weather: WeatherData | null;
   recommendations: WateringRecommendation[];
   tips: GardeningTip[];
@@ -22,6 +23,8 @@ interface StoreState {
   updatePlant: (id: string, partial: Partial<Plant>) => void;
   deletePlant: (id: string) => void;
   markWatered: (plantId: string) => void;
+  addEntry: (entry: Omit<PlantEntry, 'id'>) => void;
+  deleteEntry: (id: string) => void;
   setWeather: (weather: WeatherData) => void;
   refreshWeather: () => Promise<void>;
   refreshRecommendations: () => void;
@@ -36,6 +39,7 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       profile: null,
       plants: [],
+      entries: [],
       weather: null,
       recommendations: [],
       tips: [],
@@ -45,6 +49,9 @@ export const useStore = create<StoreState>()(
       setProfile: (profile) => {
         set({ profile });
         get().refreshWeather();
+        if (profile.sowingNotificationsEnabled !== false) {
+          scheduleMonthlysSowingNotification(profile);
+        }
       },
 
       updateProfile: (partial) => {
@@ -74,7 +81,17 @@ export const useStore = create<StoreState>()(
         set(s => ({
           plants: s.plants.filter(p => p.id !== id),
           recommendations: s.recommendations.filter(r => r.plantId !== id),
+          entries: s.entries.filter(e => e.plantId !== id),
         }));
+      },
+
+      addEntry: (entry) => {
+        const newEntry: PlantEntry = { ...entry, id: generateId() };
+        set(s => ({ entries: [newEntry, ...s.entries] }));
+      },
+
+      deleteEntry: (id) => {
+        set(s => ({ entries: s.entries.filter(e => e.id !== id) }));
       },
 
       markWatered: (plantId) => {
@@ -134,6 +151,7 @@ export const useStore = create<StoreState>()(
       partialize: (state) => ({
         profile: state.profile,
         plants: state.plants,
+        entries: state.entries,
         weather: state.weather,
       }),
     }

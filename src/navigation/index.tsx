@@ -8,6 +8,7 @@ import GardenScreen from '../screens/GardenScreen';
 import AddPlantScreen from '../screens/AddPlantScreen';
 import PlantDetailScreen from '../screens/PlantDetailScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import SowingCalendarScreen from '../screens/SowingCalendarScreen';
 import { colors } from '../constants/theme';
 
 const Tab = createBottomTabNavigator();
@@ -54,6 +55,11 @@ export default function Navigation() {
           name="Jardin"
           component={GardenStack}
           options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} /> }}
+        />
+        <Tab.Screen
+          name="Calendrier"
+          component={SowingCalendarScreen}
+          options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="📅" focused={focused} /> }}
         />
         <Tab.Screen
           name="Réglages"

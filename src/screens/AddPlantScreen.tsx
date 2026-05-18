@@ -10,6 +10,7 @@ import { PlantType } from '../types';
 import { PLANT_TYPES, getPlantInfo } from '../constants/plants';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { format } from 'date-fns';
+import DatePickerField from '../components/DatePickerField';
 
 export default function AddPlantScreen() {
   const navigation = useNavigation();
@@ -27,11 +28,8 @@ export default function AddPlantScreen() {
   const selectedInfo = getPlantInfo(selectedType);
 
   function handleAdd() {
-    if (!plantedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      return Alert.alert('Date invalide', 'Utilisez le format AAAA-MM-JJ pour la date de plantation');
-    }
-    if (lastWatered && !lastWatered.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      return Alert.alert('Date invalide', 'Utilisez le format AAAA-MM-JJ pour le dernier arrosage');
+    if (!plantedDate) {
+      return Alert.alert('Date requise', 'Veuillez choisir une date de plantation');
     }
     addPlant({
       type: selectedType,
@@ -102,24 +100,17 @@ export default function AddPlantScreen() {
           <Field label="Nom personnalisé" placeholder={selectedInfo.frenchName} value={name} onChangeText={setName} />
           <Field label="Variété" placeholder="Ex: Cœur de Bœuf, Cornichon de Paris…" value={variety} onChangeText={setVariety} />
 
-          <Text style={styles.label}>Date de plantation *</Text>
-          <TextInput
-            style={styles.input}
+          <DatePickerField
+            label="Date de plantation"
             value={plantedDate}
-            onChangeText={setPlantedDate}
-            placeholder="AAAA-MM-JJ"
-            placeholderTextColor={colors.textMuted}
-            keyboardType="numeric"
+            onChange={setPlantedDate}
           />
 
-          <Text style={styles.label}>Dernier arrosage</Text>
-          <TextInput
-            style={styles.input}
+          <DatePickerField
+            label="Dernier arrosage"
             value={lastWatered}
-            onChangeText={setLastWatered}
-            placeholder="AAAA-MM-JJ (laisser vide si jamais arrosé)"
-            placeholderTextColor={colors.textMuted}
-            keyboardType="numeric"
+            onChange={setLastWatered}
+            optional
           />
 
           <Field label="Emplacement" placeholder="Ex: Carré nord, Serre, Pot balcon…" value={location} onChangeText={setLocation} />

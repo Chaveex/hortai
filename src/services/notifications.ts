@@ -3,6 +3,7 @@ import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { Plant, WeatherData, UserProfile, WateringRecommendation } from '../types';
 import { getPlantInfo } from '../constants/plants';
+import { detectZone, getPlantsForMonth, ClimateZone } from '../constants/sowingCalendar';
 
 const BACKGROUND_TASK = 'GARDEN_WEATHER_UPDATE';
 const isExpoGo = Constants.executionEnvironment === 'storeClient';
@@ -94,6 +95,41 @@ export async function scheduleHarvestReminder(plantName: string, icon: string, d
       },
       trigger: { seconds: daysUntilHarvest * 24 * 3600 },
     });
+  } catch {
+    // silent
+  }
+}
+
+export async function scheduleMonthlysSowingNotification(profile: UserProfile): Promise<void> {
+  if (isExpoGo) return;
+  try {
+    const Notifications = require('expo-notifications');
+    const zone = detectZone(profile.latitude, profile.longitude);
+
+    // Schedule for 1st of next 3 months
+    const now = new Date();
+    for (let i = 1; i <= 3; i++) {
+      const target = new Date(now.getFullYear(), now.getMonth() + i, 1, 8, 0, 0);
+      const month = target.getMonth() + 1;
+      const data = getPlantsForMonth(month, zone);
+
+      const allPlants = [
+        ...data.sowIndoor.slice(0, 2).map(t => `🏠 ${getPlantInfo(t).frenchName}`),
+        ...data.sowOutdoor.slice(0, 2).map(t => `🌍 ${getPlantInfo(t).frenchName}`),
+        ...data.transplant.slice(0, 1).map(t => `🪴 ${getPlantInfo(t).frenchName}`),
+      ];
+
+      if (allPlants.length === 0) continue;
+
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: '📅 Calendrier des semis',
+          body: allPlants.join(' · '),
+          data: { type: 'sowing_calendar' },
+        },
+        trigger: { date: target },
+      });
+    }
   } catch {
     // silent
   }

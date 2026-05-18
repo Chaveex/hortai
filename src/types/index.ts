@@ -10,6 +10,7 @@ export interface UserProfile {
   onboardingComplete: boolean;
   notificationsEnabled: boolean;
   notificationHour: number;
+  sowingNotificationsEnabled?: boolean;
 }
 
 export type PlantType =
@@ -61,6 +62,16 @@ export interface WateringRecommendation {
   urgency: 'low' | 'medium' | 'high';
   nextWateringDate: string;
   skipReason?: string;
+}
+
+export interface PlantEntry {
+  id: string;
+  plantId: string;
+  date: string;
+  type: 'note' | 'harvest';
+  text?: string;
+  quantity?: number;
+  unit?: 'kg' | 'g' | 'pièces';
 }
 
 export interface GardeningTip {

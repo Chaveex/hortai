@@ -118,6 +118,18 @@ export default function SettingsScreen() {
               thumbColor="#FFFFFF"
             />
           </View>
+          <View style={styles.switchRow}>
+            <View>
+              <Text style={styles.optionLabel}>Rappels de semis</Text>
+              <Text style={styles.optionSub}>Notification le 1er de chaque mois</Text>
+            </View>
+            <Switch
+              value={profile.sowingNotificationsEnabled ?? true}
+              onValueChange={v => updateProfile({ sowingNotificationsEnabled: v })}
+              trackColor={{ true: colors.primary }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
           {profile.notificationsEnabled && (
             <View style={styles.hourRow}>
               <Text style={styles.label}>Heure de notification</Text>
