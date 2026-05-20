@@ -21,6 +21,7 @@ Add to `src/store/useStore.ts` state:
 interface State {
   // Streaks
   streakDays: number;              // Current watering streak
+  longestStreakDays: number;       // Longest streak ever (for milestones)
   lastWatered: string | null;      // Last date watered any plant (YYYY-MM-DD)
   streakResetAt: string | null;    // When streak will auto-reset
 
@@ -41,6 +42,7 @@ interface State {
 Add actions:
 ```tsx
 updateStreakDays(days: number)
+setLongestStreakDays(days: number)      // Update max milestone
 setLastWatered(date: string | null)
 setHarvestGoal(kg: number)
 setDailyTipEnabled(enabled: boolean)
@@ -72,9 +74,18 @@ recordDailyTip(date: string)
 - Badge size: 48×48pt, tappable (tap → modal with streak details)
 - Animation: Slight bounce on mark watered action
 
+**Streak at-risk warning** (NEW):
+- Show orange banner in HomeScreen header if any plant overdue at 1.5x frequency
+  - Copy: "🔥 Ta série est en danger! {PlantName} n'a pas eu d'eau depuis {X} jours."
+  - Tap → jump to PlantDetailScreen for that plant (quick water action)
+  - Prevents silent streak breaks; drives daily engagement
+
 **Modal (new component: src/components/StreakDetailModal.tsx)**:
 - Title: "🔥 Watering Streak"
-- Shows: current days, longest streak, plants watered today
+- Shows: 
+  - Current days
+  - Longest streak ever: "🏅 Meilleure série: {N} jours"
+  - Plants watered today
 - CTA: "Keep the streak alive! Water N plants today"
 
 ### Store Integration
@@ -89,15 +100,28 @@ if (lastWatered && differenceInDays(now, parseISO(lastWatered)) < 1) {
   updateStreakDays(streakDays + 1);
 }
 
-// Auto-reset check (run in useMemo on HomeScreen):
+// Auto-reset check + warning (run in useMemo on HomeScreen):
+let streakAtRiskPlant: Plant | null = null;
 plants.forEach(p => {
   if (!p.lastWatered) return;
   const daysSince = differenceInDays(now, parseISO(p.lastWatered));
   const wateringFreq = PLANT_DATABASE[p.type].wateringFrequencyDays;
+  
+  // Check 1.5x threshold for warning
+  if (daysSince > wateringFreq * 1.5 && !streakAtRiskPlant) {
+    streakAtRiskPlant = p; // Show warning banner
+  }
+  
+  // Check 2x threshold for reset
   if (daysSince > wateringFreq * 2) {
     updateStreakDays(0); // Streak broken
   }
 });
+
+// Update longestStreakDays if current > previous
+if (streakDays > longestStreakDays) {
+  setLongestStreakDays(streakDays);
+}
 ```
 
 ---
@@ -237,6 +261,19 @@ if (newLevel > gardenerLevel) {
   - First harvest of plant: "🎉 Première récolte! C'est magnifique!"
   - Monthly goal hit: "🎉 Objectif du mois atteint!"
 
+### Implementation Method (Designer spec)
+
+Use **React Native `Alert.alert()` with custom styling** (existing pattern in app):
+```tsx
+Alert.alert(
+  '🎉 Récolte',
+  'Première récolte! Bravo!',
+  [{ text: 'Merci 🙌', onPress: () => {} }]
+);
+```
+
+**Rationale**: MVP simplicity, native feel, no new deps. Can migrate to `react-native-toast-message` post-launch if polish needed.
+
 ### Store Integration
 
 ```tsx
@@ -295,7 +332,21 @@ if (isFirstHarvest) {
 └─────────────────────────────────────┘
 ```
 
-**Style**: Inline row of 3 rounded badges, green accent, spacing 12pt between them. Tappable for details.
+**Badge Visual States** (NEW — Designer spec):
+- **Default**: 
+  - Shape: Pill-shaped container (borderRadius.full / 24pt)
+  - Size: 48×48pt (touch target compliant)
+  - Background: `colors.surface` (white #FFFFFF)
+  - Border: 1pt `colors.border` (light gray)
+  - Text/emoji: `colors.text` (dark gray)
+- **Active (tap)**:
+  - Border: 2pt `colors.primary` (green)
+  - Elevation: 4pt shadow
+- **Pressed**:
+  - Opacity: 90%
+- **Layout**: `flexDirection: 'row'`, `gap: spacing.md`, center-aligned in header
+
+**Implementation**: Use shared BadgeButton component or inline styling in HomeScreen header.
 
 ---
 
