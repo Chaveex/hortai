@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Platform } from 'react-native';
 import { colors, spacing, borderRadius, typography } from '../../constants/theme';
+import type { ChoreType } from '../../types/chores';
 
 export interface AlertItem {
   id: string;
@@ -9,6 +10,8 @@ export interface AlertItem {
   icon?: string;
   action?: { label: string; onPress: () => void };
   dismissible?: boolean;
+  choreTypeFilter?: ChoreType[];
+  onNavigate?: (filterChoreType?: ChoreType[]) => void;
 }
 
 interface AlertBannerProps {
@@ -62,9 +65,16 @@ export function AlertBanner({ alerts, onDismiss }: AlertBannerProps) {
   return (
     <View style={styles.container}>
       {visibleAlerts.map(alert => (
-        <View
+        <TouchableOpacity
           key={alert.id}
           style={[styles.alert, { borderLeftColor: getAlertColor(alert.type) }]}
+          onPress={() => {
+            if (alert.choreTypeFilter && alert.onNavigate) {
+              alert.onNavigate(alert.choreTypeFilter);
+            }
+          }}
+          activeOpacity={alert.choreTypeFilter ? 0.7 : 1}
+          disabled={!alert.choreTypeFilter}
         >
           <View style={styles.alertContent}>
             <Text style={styles.alertIcon}>{getAlertIcon(alert.type, alert.icon)}</Text>
@@ -73,6 +83,9 @@ export function AlertBanner({ alerts, onDismiss }: AlertBannerProps) {
             </View>
           </View>
           <View style={styles.alertActions}>
+            {alert.choreTypeFilter && (
+              <Text style={styles.chevron}>›</Text>
+            )}
             {alert.action && (
               <TouchableOpacity
                 onPress={alert.action.onPress}
@@ -92,7 +105,7 @@ export function AlertBanner({ alerts, onDismiss }: AlertBannerProps) {
               </TouchableOpacity>
             )}
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -116,6 +129,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+    overflow: 'hidden',
   },
   alertContent: {
     flex: 1,
@@ -157,5 +171,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.textMuted,
     fontWeight: '600' as const,
+  },
+  chevron: {
+    fontSize: 20,
+    color: colors.textMuted,
+    fontWeight: '600' as const,
+    marginRight: spacing.xs,
   },
 });

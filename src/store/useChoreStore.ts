@@ -45,6 +45,7 @@ interface ChoreStoreState {
 
   generateAutoChores: (plants: Plant[], recommendations: WateringRecommendation[], profile: UserProfile) => void;
   cleanupOrphanChores: (plantIds: string[]) => void;
+  getChoresForPlant: (plantId: string, statusFilter?: 'pending' | 'upcoming') => Chore[];
 }
 
 function generateId(): string {
@@ -231,6 +232,29 @@ export const useChoreStore = create<ChoreStoreState>()(
             (c) => !c.plantId || plantIds.includes(c.plantId)
           ),
         }));
+      },
+
+      getChoresForPlant: (plantId, statusFilter) => {
+        const { chores } = get();
+        const now = new Date();
+        const today = format(now, 'yyyy-MM-dd');
+
+        return chores.filter((c) => {
+          // Must match plant ID
+          if (c.plantId !== plantId) return false;
+
+          // Apply status filter if provided
+          if (statusFilter === 'pending') {
+            // Only pending chores
+            if (c.status !== 'pending') return false;
+          } else if (statusFilter === 'upcoming') {
+            // Pending and upcoming (not completed/skipped, and not overdue)
+            if (c.status !== 'pending') return false;
+            // Include all pending chores (past and future)
+          }
+
+          return true;
+        });
       },
     }),
     {

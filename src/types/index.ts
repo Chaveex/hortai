@@ -236,3 +236,17 @@ export interface BarChartDataPoint {
   value: number;
   color?: string;
 }
+
+// ====== Alert Types ======
+export type { ChoreType } from './chores';
+
+export interface AlertItem {
+  id: string;
+  type: 'warning' | 'error' | 'info' | 'success';
+  message: string;
+  icon?: string;
+  action?: { label: string; onPress: () => void };
+  dismissible?: boolean;
+  choreTypeFilter?: Array<'watering' | 'fertilizing' | 'pruning' | 'harvesting' | 'pest' | 'weeding' | 'mulching' | 'other'>;
+  onNavigate?: (filterChoreType?: Array<'watering' | 'fertilizing' | 'pruning' | 'harvesting' | 'pest' | 'weeding' | 'mulching' | 'other'>) => void;
+}
