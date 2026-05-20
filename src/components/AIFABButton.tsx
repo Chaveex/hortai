@@ -34,7 +34,7 @@ export default function AIFABButton({ onPress }: Props) {
           style={styles.button}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={styles.emoji}>🤖</Text>
+          <Text style={styles.emoji}>🧚</Text>
         </Pressable>
       </Animated.View>
     </View>
