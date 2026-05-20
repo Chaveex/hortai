@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import {
   View, Text, ScrollView, RefreshControl, StyleSheet, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
@@ -10,7 +10,9 @@ import WateringCard from '../components/WateringCard';
 import TipCard from '../components/TipCard';
 import TodayChoreWidget from '../components/TodayChoreWidget';
 import HarvestGoalCard from '../components/HarvestGoalCard';
-import { colors, spacing, typography } from '../constants/theme';
+import StreakDetailModal from '../components/StreakDetailModal';
+import LevelDetailModal from '../components/LevelDetailModal';
+import { colors, spacing, typography, borderRadius } from '../constants/theme';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -19,7 +21,11 @@ export default function HomeScreen() {
   const {
     profile, weather, plants, recommendations, tips, entries,
     isLoadingWeather, weatherError, refreshWeather, refreshRecommendations, markWatered,
+    streakDays, longestStreakDays, gardenerLevel,
   } = useStore();
+
+  const [streakModalVisible, setStreakModalVisible] = useState(false);
+  const [levelModalVisible, setLevelModalVisible] = useState(false);
 
   // Calculate harvest for current month
   const harvestData = useMemo(() => {
@@ -63,9 +69,50 @@ export default function HomeScreen() {
             <Text style={styles.greeting}>Bonjour 👋</Text>
             <Text style={styles.date}>{capitalize(today)}</Text>
           </View>
-          <View style={styles.statsChip}>
-            <Text style={styles.statsText}>{plants.length} plant{plants.length > 1 ? 's' : ''}</Text>
-          </View>
+        </View>
+
+        {/* Badge row: Streak, Level, Harvest */}
+        <View style={styles.badgeRow}>
+          {/* Streak Badge */}
+          <TouchableOpacity
+            style={styles.badge}
+            onPress={() => setStreakModalVisible(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.badgeEmoji}>🔥</Text>
+            <View style={styles.badgeContent}>
+              <Text style={styles.badgeValue}>{streakDays}</Text>
+              <Text style={styles.badgeLabel}>Série</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Level Badge */}
+          <TouchableOpacity
+            style={styles.badge}
+            onPress={() => setLevelModalVisible(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.badgeEmoji}>🏆</Text>
+            <View style={styles.badgeContent}>
+              <Text style={styles.badgeValue}>{gardenerLevel}</Text>
+              <Text style={styles.badgeLabel}>Niveau</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Harvest Goal Badge */}
+          <TouchableOpacity
+            style={styles.badge}
+            onPress={() => navigation.navigate('DashboardStack', { screen: 'ProductionDashboard' })}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.badgeEmoji}>📊</Text>
+            <View style={styles.badgeContent}>
+              <Text style={styles.badgeValue}>
+                {harvestData.actual}/{harvestData.goal}
+              </Text>
+              <Text style={styles.badgeLabel}>kg</Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         {isLoadingWeather && !weather && (
@@ -123,6 +170,23 @@ export default function HomeScreen() {
           </>
         )}
       </ScrollView>
+
+      <StreakDetailModal
+        visible={streakModalVisible}
+        onClose={() => setStreakModalVisible(false)}
+        streakDays={streakDays}
+        longestStreakDays={longestStreakDays}
+        plants={plants}
+      />
+
+      <LevelDetailModal
+        visible={levelModalVisible}
+        onClose={() => setLevelModalVisible(false)}
+        gardenerLevel={gardenerLevel}
+        plants={plants}
+        entries={entries}
+        profile={profile}
+      />
     </SafeAreaView>
   );
 }
@@ -136,12 +200,41 @@ const styles = StyleSheet.create({
   },
   greeting: { ...typography.h1, fontSize: 24 },
   date: { ...typography.caption, fontSize: 13, textTransform: 'capitalize' },
-  statsChip: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.md, paddingVertical: spacing.xs,
-    borderRadius: 20,
+  badgeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    gap: spacing.md,
   },
-  statsText: { color: '#FFFFFF', fontSize: 13, fontWeight: '600' },
+  badge: {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: borderRadius.lg,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeEmoji: {
+    fontSize: 24,
+    marginBottom: spacing.xs,
+  },
+  badgeContent: {
+    alignItems: 'center',
+  },
+  badgeValue: {
+    ...typography.h3,
+    color: colors.primary,
+    marginBottom: 2,
+  },
+  badgeLabel: {
+    ...typography.caption,
+    fontSize: 11,
+  },
   sectionTitle: { ...typography.h3, paddingHorizontal: spacing.md, marginBottom: spacing.sm, marginTop: spacing.xs },
   tipsContainer: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
   loadingBox: { alignItems: 'center', padding: spacing.xl, gap: spacing.sm },
