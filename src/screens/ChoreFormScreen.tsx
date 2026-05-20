@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput,
   Platform, KeyboardAvoidingView, Alert,
@@ -21,6 +21,8 @@ export default function ChoreFormScreen() {
   const route = useRoute<any>();
   const editingId: string | undefined = route.params?.choreId;
   const initialDate: string | undefined = route.params?.date;
+  const initialPlantId: string | undefined = route.params?.plantId;
+  const initialType: ChoreType | undefined = route.params?.type;
 
   const chores = useChoreStore((s) => s.chores);
   const addChore = useChoreStore((s) => s.addChore);
@@ -29,23 +31,50 @@ export default function ChoreFormScreen() {
 
   const existing = editingId ? chores.find((c) => c.id === editingId) : undefined;
 
-  const [type, setType] = useState<ChoreType>(existing?.type ?? 'watering');
+  const [type, setType] = useState<ChoreType>(existing?.type ?? initialType ?? 'watering');
   const [title, setTitle] = useState<string>(existing?.title ?? '');
   const [description, setDescription] = useState<string>(existing?.description ?? '');
   const [date, setDate] = useState<string>(existing?.date ?? initialDate ?? format(new Date(), 'yyyy-MM-dd'));
-  const [plantId, setPlantId] = useState<string | undefined>(existing?.plantId);
+  const [plantId, setPlantId] = useState<string | undefined>(existing?.plantId ?? initialPlantId);
   const [priority, setPriority] = useState<ChorePriority>(existing?.priority ?? 'medium');
   const [recurrence, setRecurrence] = useState<string>(
     existing?.recurrenceDays ? String(existing.recurrenceDays) : ''
   );
   const [showPicker, setShowPicker] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const parsedDate = date ? parseISO(date) : new Date();
   const validDate = isValid(parsedDate) ? parsedDate : new Date();
 
+  // Track unsaved changes (for all fields except when editing)
+  useEffect(() => {
+    if (!editingId) {
+      setHasUnsavedChanges(true);
+    }
+  }, [editingId]);
+
   function handleDateChange(_: DateTimePickerEvent, selected?: Date) {
     setShowPicker(Platform.OS === 'ios');
-    if (selected) setDate(format(selected, 'yyyy-MM-dd'));
+    if (selected) {
+      setDate(format(selected, 'yyyy-MM-dd'));
+      setHasUnsavedChanges(true);
+    }
+  }
+
+  function handleBackPress() {
+    if (!editingId && hasUnsavedChanges && (title.trim() || description.trim())) {
+      Alert.alert(
+        'Abandonner les modifications ?',
+        'Les modifications non enregistrées seront perdues.',
+        [
+          { text: 'Continuer', style: 'cancel' },
+          { text: 'Abandonner', style: 'destructive', onPress: () => navigation.goBack() },
+        ]
+      );
+    } else {
+      navigation.goBack();
+    }
   }
 
   function handleSave() {
@@ -74,6 +103,7 @@ export default function ChoreFormScreen() {
         priority,
         recurrenceDays,
       });
+      navigation.goBack();
     } else {
       addChore({
         type,
@@ -85,19 +115,29 @@ export default function ChoreFormScreen() {
         source: 'custom',
         recurrenceDays,
       });
+      // Show success toast
+      setShowToast(true);
+      // Auto-dismiss form after toast delay
+      setTimeout(() => {
+        navigation.goBack();
+      }, 300);
     }
-    navigation.goBack();
   }
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
+      {showToast && (
+        <View style={styles.toastBanner}>
+          <Text style={styles.toastText}>✅ Tâche créée!</Text>
+        </View>
+      )}
       <View style={styles.navHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={handleBackPress}>
           <Text style={styles.backBtn}>← Annuler</Text>
         </TouchableOpacity>
         <Text style={styles.navTitle}>{editingId ? 'Modifier' : 'Nouvelle tâche'}</Text>
         <TouchableOpacity onPress={handleSave}>
-          <Text style={styles.saveBtn}>Enregistrer</Text>
+          <Text style={styles.saveBtn}>{editingId ? 'Enregistrer' : 'Créer'}</Text>
         </TouchableOpacity>
       </View>
 
@@ -118,7 +158,10 @@ export default function ChoreFormScreen() {
                     styles.chip,
                     active && { backgroundColor: m.backgroundColor, borderColor: m.color },
                   ]}
-                  onPress={() => setType(t)}
+                  onPress={() => {
+                    setType(t);
+                    setHasUnsavedChanges(true);
+                  }}
                 >
                   <Text style={styles.chipIcon}>{m.icon}</Text>
                   <Text style={[styles.chipText, active && { color: m.color, fontWeight: '700' }]}>
@@ -132,7 +175,10 @@ export default function ChoreFormScreen() {
           <Text style={styles.label}>Titre *</Text>
           <TextInput
             value={title}
-            onChangeText={setTitle}
+            onChangeText={(t) => {
+              setTitle(t);
+              setHasUnsavedChanges(true);
+            }}
             placeholder="Ex : Tailler les tomates"
             placeholderTextColor={colors.textMuted}
             style={styles.input}
@@ -142,7 +188,10 @@ export default function ChoreFormScreen() {
           <Text style={styles.label}>Description</Text>
           <TextInput
             value={description}
-            onChangeText={setDescription}
+            onChangeText={(d) => {
+              setDescription(d);
+              setHasUnsavedChanges(true);
+            }}
             placeholder="Détails, méthode, dosage…"
             placeholderTextColor={colors.textMuted}
             style={[styles.input, styles.textarea]}
@@ -176,7 +225,10 @@ export default function ChoreFormScreen() {
                 <TouchableOpacity
                   key={p}
                   style={[styles.chip, active && { borderColor: c, backgroundColor: c + '20' }]}
-                  onPress={() => setPriority(p)}
+                  onPress={() => {
+                    setPriority(p);
+                    setHasUnsavedChanges(true);
+                  }}
                 >
                   <Text style={[styles.chipText, active && { color: c, fontWeight: '700' }]}>
                     {PRIORITY_LABELS[p]}
@@ -192,7 +244,10 @@ export default function ChoreFormScreen() {
               <View style={styles.row}>
                 <TouchableOpacity
                   style={[styles.chip, !plantId && styles.chipActive]}
-                  onPress={() => setPlantId(undefined)}
+                  onPress={() => {
+                    setPlantId(undefined);
+                    setHasUnsavedChanges(true);
+                  }}
                 >
                   <Text style={[styles.chipText, !plantId && styles.chipTextActive]}>Aucune</Text>
                 </TouchableOpacity>
@@ -203,7 +258,10 @@ export default function ChoreFormScreen() {
                     <TouchableOpacity
                       key={p.id}
                       style={[styles.chip, active && styles.chipActive]}
-                      onPress={() => setPlantId(p.id)}
+                      onPress={() => {
+                        setPlantId(p.id);
+                        setHasUnsavedChanges(true);
+                      }}
                     >
                       <Text style={styles.chipIcon}>{info.icon}</Text>
                       <Text style={[styles.chipText, active && styles.chipTextActive]}>
@@ -219,7 +277,10 @@ export default function ChoreFormScreen() {
           <Text style={styles.label}>Récurrence (jours, optionnel)</Text>
           <TextInput
             value={recurrence}
-            onChangeText={setRecurrence}
+            onChangeText={(r) => {
+              setRecurrence(r);
+              setHasUnsavedChanges(true);
+            }}
             placeholder="Ex : 7 pour chaque semaine"
             placeholderTextColor={colors.textMuted}
             style={styles.input}
@@ -237,6 +298,18 @@ export default function ChoreFormScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
+  toastBanner: {
+    backgroundColor: colors.success,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  toastText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   navHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
