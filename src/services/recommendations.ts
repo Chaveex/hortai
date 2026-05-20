@@ -196,3 +196,200 @@ export function getSeason(month: number): 'spring' | 'summer' | 'autumn' | 'wint
   if (month >= 9 && month <= 11) return 'autumn';
   return 'winter';
 }
+
+// ====== Dashboard Narrative Helpers (Phase 4) ======
+
+/**
+ * Calculate how many days ahead the garden is compared to expected seasonal progress
+ */
+export function getGardenSeasonProgress(plants: Plant[]): {
+  daysAhead: number;
+  stage: string;
+  narrative: string;
+} {
+  if (plants.length === 0) {
+    return {
+      daysAhead: 0,
+      stage: 'empty',
+      narrative: 'Commencez par planter vos premiers légumes !',
+    };
+  }
+
+  const now = new Date();
+  let totalDaysAlive = 0;
+  let totalExpectedDays = 0;
+
+  plants.forEach(plant => {
+    const info = getPlantInfo(plant.type);
+    const daysAlive = differenceInDays(now, parseISO(plant.plantedDate));
+    const expectedDays = info.harvestDays;
+
+    totalDaysAlive += daysAlive;
+    totalExpectedDays += expectedDays;
+  });
+
+  const avgDaysAlive = totalDaysAlive / plants.length;
+  const avgExpectedDays = totalExpectedDays / plants.length;
+  const daysAhead = Math.round((avgDaysAlive / avgExpectedDays - 1) * avgExpectedDays);
+
+  let stage = 'en retard';
+  if (daysAhead > 0) stage = 'en avance';
+  else if (daysAhead > -7) stage = 'à l\'heure';
+
+  const narrativePrefix = daysAhead > 0
+    ? `🌱 Votre jardin est ${Math.abs(daysAhead)} jours en avance — continuez cet excellent entretien !`
+    : daysAhead < -7
+      ? `⏰ Votre jardin est ${Math.abs(daysAhead)} jours en retard — augmentez les arrosages et engrais.`
+      : `🌱 Votre jardin progresse à l'heure prévue — bon rythme !`;
+
+  return {
+    daysAhead,
+    stage,
+    narrative: narrativePrefix,
+  };
+}
+
+/**
+ * Calculate harvest progress toward monthly goal
+ */
+export function getProductionNarrative(
+  currentHarvest: number,
+  goalHarvest: number,
+): string {
+  if (goalHarvest <= 0) {
+    return 'Définissez un objectif de récolte mensuelle pour voir votre progression.';
+  }
+
+  const remaining = Math.max(0, goalHarvest - currentHarvest);
+  const percentProgress = (currentHarvest / goalHarvest) * 100;
+
+  if (percentProgress >= 100) {
+    const excess = currentHarvest - goalHarvest;
+    return `🏆 Objectif atteint ! Vous avez dépassé votre but de ${excess.toFixed(1)} kg — excellent !`;
+  }
+
+  if (percentProgress >= 75) {
+    return `🎯 Presque là ! Il vous manque ${remaining.toFixed(1)} kg pour atteindre votre objectif de ${goalHarvest} kg.`;
+  }
+
+  if (percentProgress >= 50) {
+    return `📈 Bonne progression : ${currentHarvest.toFixed(1)} kg / ${goalHarvest} kg. Continuez vos récoltes !`;
+  }
+
+  return `🌾 Commencez à récolter ! Vous avez actuellement ${currentHarvest.toFixed(1)} kg / ${goalHarvest} kg.`;
+}
+
+/**
+ * Calculate plant outperformance vs regional average
+ * (Returns percentage above regional average for display in ProductionDashboard)
+ */
+export function getPlantProductionNarrative(
+  plantHarvest: number,
+  regionalAverage: number,
+): string | null {
+  if (regionalAverage <= 0 || plantHarvest <= 0) {
+    return null;
+  }
+
+  const outperformance = ((plantHarvest / regionalAverage) - 1) * 100;
+
+  if (outperformance >= 30) {
+    return `Vos rendements dépassent la moyenne régionale de ${outperformance.toFixed(0)}% — excellent travail !`;
+  }
+
+  if (outperformance >= 10) {
+    return `Vos rendements surpassent la moyenne régionale de ${outperformance.toFixed(0)}% — bonne maîtrise !`;
+  }
+
+  return null;
+}
+
+/**
+ * Generate water consumption narrative for WaterDashboard
+ */
+export function getWateringNarrative(
+  weekTotalLiters: number,
+  expectedLiters: number,
+  weather: WeatherData,
+): string {
+  if (weekTotalLiters === 0) {
+    return 'Aucun arrosage cette semaine. Vérifiez si vos plants ne manquent pas d\'eau.';
+  }
+
+  const ratio = expectedLiters > 0 ? (weekTotalLiters / expectedLiters) : 1;
+  const difference = weekTotalLiters - expectedLiters;
+
+  if (ratio >= 0.95 && ratio <= 1.05) {
+    return `💧 Arrosage optimal cette semaine : ${weekTotalLiters.toFixed(0)}L (adapté à la météo actuelle)`;
+  }
+
+  if (ratio > 1.05) {
+    const excess = Math.round(difference);
+    if (excess > 0 && weather.humidity > 60) {
+      return `💧 Vous avez arrosé ${excess}L de plus que prévu, mais c'était justifié par la faible humidité (${weather.humidity}%).`;
+    }
+    return `⚠️ Vous avez arrosé ${excess}L de plus que recommandé — ajustez pour la semaine prochaine.`;
+  }
+
+  const deficit = Math.round(Math.abs(difference));
+  if (weather.humidity > 70) {
+    return `✅ Économie d'eau réussie ! Vous avez utilisé ${deficit}L de moins grâce à la bonne humidité (${weather.humidity}%).`;
+  }
+
+  return `⚠️ Vous avez arrosé ${deficit}L de moins que prévu — augmentez légèrement.`;
+}
+
+/**
+ * Generate health trend narrative for HealthScoreDashboard
+ */
+export function getHealthNarrative(
+  healthTrend: { label: string; value: number }[],
+  plants: Plant[],
+): string {
+  if (healthTrend.length === 0 || plants.length === 0) {
+    return 'Pas assez de données pour générer une narrative de santé.';
+  }
+
+  // Check if trend is increasing (last 2 months vs first 2 months)
+  const oldAvg = healthTrend.slice(0, 2).reduce((sum, m) => sum + m.value, 0) / 2;
+  const recentAvg = healthTrend.slice(-2).reduce((sum, m) => sum + m.value, 0) / 2;
+  const isTrendingUp = recentAvg > oldAvg;
+
+  // Identify best and worst factors
+  const now = new Date();
+  let underwatered = 0;
+  let overwatered = 0;
+
+  plants.forEach(p => {
+    const info = getPlantInfo(p.type);
+    if (!p.lastWatered) {
+      underwatered++;
+    } else {
+      const daysSince = differenceInDays(now, parseISO(p.lastWatered));
+      if (daysSince > info.wateringFrequencyDays * 1.5) {
+        underwatered++;
+      } else if (daysSince < info.wateringFrequencyDays * 0.5) {
+        overwatered++;
+      }
+    }
+  });
+
+  const factors: string[] = [];
+  if (underwatered === 0 && overwatered === 0) {
+    factors.push('arrosage optimal');
+  } else if (underwatered > 0) {
+    factors.push('⚠️ sous-arrosage');
+  } else if (overwatered > 0) {
+    factors.push('⚠️ sur-arrosage');
+  } else {
+    factors.push('arrosage équilibré');
+  }
+
+  const prefix = isTrendingUp
+    ? '📈 Santé du jardin en amélioration'
+    : recentAvg > 70
+      ? '✅ Santé stable et bonne'
+      : '⚠️ Santé déclinante';
+
+  return `${prefix} — ${factors.slice(0, 2).join(', ')}`;
+}

@@ -12,6 +12,7 @@ import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { getLastNMonths } from '../services/statistics';
 import { PLANT_DATABASE } from '../constants/plants';
 import { getHealthData } from '../services/dashboardAggregation';
+import { getHealthNarrative } from '../services/recommendations';
 
 interface HealthFactor {
   label: string;
@@ -161,6 +162,11 @@ export function HealthScoreDashboard() {
 
   const overallHealth = stats?.healthScore ?? 75;
 
+  // Health narrative banner (based on trend and factors)
+  const healthNarrative = useMemo(() => {
+    return getHealthNarrative(healthTrend, plants);
+  }, [healthTrend, plants]);
+
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -214,6 +220,13 @@ export function HealthScoreDashboard() {
             lineColor={colors.success}
             backgroundColor={colors.surface}
           />
+        </View>
+
+        {/* Health narrative banner */}
+        <View style={styles.narrativeSection}>
+          <View style={styles.narrativeCard}>
+            <Text style={styles.narrativeText}>{healthNarrative}</Text>
+          </View>
         </View>
 
         {/* Problematic plants */}
@@ -374,6 +387,22 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
+  },
+  narrativeSection: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  narrativeCard: {
+    backgroundColor: '#F0FFE8',
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.success,
+  },
+  narrativeText: {
+    ...typography.body,
+    color: colors.text,
+    lineHeight: 20,
   },
   problemList: {
     backgroundColor: colors.surface,

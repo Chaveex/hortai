@@ -16,6 +16,7 @@ import { colors, spacing, typography, borderRadius } from '../constants/theme';
 import { format, differenceInDays, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { PLANT_DATABASE } from '../constants/plants';
+import { getGardenSeasonProgress, getProductionNarrative } from '../services/recommendations';
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
@@ -59,6 +60,17 @@ export default function HomeScreen() {
     }
     return null;
   }, [plants]);
+
+  // Narrative cards: garden season progress + production goal
+  const narratives = useMemo(() => {
+    const seasonProgress = getGardenSeasonProgress(plants);
+    const productionNarr = getProductionNarrative(harvestData.actual, harvestData.goal);
+
+    return {
+      season: seasonProgress.narrative,
+      production: productionNarr,
+    };
+  }, [plants, harvestData.actual, harvestData.goal]);
 
   useEffect(() => {
     const lastUpdated = weather?.lastUpdated;
@@ -143,6 +155,18 @@ export default function HomeScreen() {
             </View>
           </TouchableOpacity>
         </View>
+
+        {/* Narrative Cards */}
+        {plants.length > 0 && (
+          <View style={styles.narrativeContainer}>
+            <View style={styles.narrativeCard}>
+              <Text style={styles.narrativeText}>{narratives.season}</Text>
+            </View>
+            <View style={styles.narrativeCard}>
+              <Text style={styles.narrativeText}>{narratives.production}</Text>
+            </View>
+          </View>
+        )}
 
         {isLoadingWeather && !weather && (
           <View style={styles.loadingBox}>
@@ -283,6 +307,23 @@ const styles = StyleSheet.create({
   badgeLabel: {
     ...typography.caption,
     fontSize: 11,
+  },
+  narrativeContainer: {
+    marginHorizontal: spacing.md,
+    marginVertical: spacing.md,
+    gap: spacing.sm,
+  },
+  narrativeCard: {
+    backgroundColor: '#F5F7FA',
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.primary,
+  },
+  narrativeText: {
+    ...typography.body,
+    color: colors.text,
+    lineHeight: 20,
   },
   sectionTitle: { ...typography.h3, paddingHorizontal: spacing.md, marginBottom: spacing.sm, marginTop: spacing.xs },
   tipsContainer: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl },
