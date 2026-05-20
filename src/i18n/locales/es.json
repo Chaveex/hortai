@@ -65,7 +65,14 @@
     "streakAtRisk": "¡Tu racha está en peligro! {plant} no ha sido regada en {days} días.",
     "waterNow": "Regar ahora →",
     "goalProgress": "{actual}/{goal}",
-    "todayChores": "Tareas de Hoy"
+    "todayChores": "Tareas de Hoy",
+    "streakAtRiskA11y": "Alerta: {plant} no ha sido regada en {days} días",
+    "streakAtRiskHint": "Toca para ir a detalles de la planta",
+    "streakBadgeA11y": "{streak} días",
+    "streakBadgeHint": "Toca para ver detalles de tu racha",
+    "levelBadgeHint": "Toca para ver detalles de tu nivel",
+    "harvestBadgeA11y": "{actual} de {goal} kg",
+    "harvestBadgeHint": "Toca para ver el panel completo"
   },
   "dashboard": {
     "production": "Producción",
@@ -202,7 +209,26 @@
     "permissionCameraDesc": "Permite el acceso a la cámara para tomar una foto.",
     "error": "Error",
     "errorMessage": "Ocurrió un error. Por favor, inténtalo de nuevo.",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "clear": "Borrar historial",
+    "clearConfirm": "¿Eliminar todos los mensajes de chat?",
+    "loadError": "Error de carga.",
+    "photoError": "Error al seleccionar foto.",
+    "cameraError": "Error de cámara.",
+    "unknownError": "Error desconocido.",
+    "photoSource": "Elige una fuente",
+    "photoSourceCamera": "Cámara",
+    "photoSourceGallery": "Galería",
+    "questionUsedSingular": "pregunta utilizada hoy",
+    "questionUsedPlural": "preguntas utilizadas hoy",
+    "emptyTitle": "Haz tu pregunta",
+    "emptyText": "Enfermedades, riego, poda, siembra, asociaciones de plantas… Adjunta una foto para diagnóstico visual.",
+    "emptyLimit": "3 preguntas por día (se reinicia a medianoche UTC).",
+    "loadingBotanist": "El botánico está pensando…",
+    "photoLabel": "Foto lista para enviar",
+    "attachPhoto": "Adjuntar una foto",
+    "sendMessage": "Enviar",
+    "resetMidnight": "medianoche UTC"
   },
   "backup": {
     "title": "Copias de Seguridad",

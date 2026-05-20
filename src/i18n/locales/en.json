@@ -65,7 +65,14 @@
     "streakAtRisk": "Your streak is at risk! {plant} hasn't been watered for {days} days.",
     "waterNow": "Water now →",
     "goalProgress": "{actual}/{goal}",
-    "todayChores": "Today's Chores"
+    "todayChores": "Today's Chores",
+    "streakAtRiskA11y": "Alert: {plant} hasn't been watered for {days} days",
+    "streakAtRiskHint": "Tap to navigate to plant details",
+    "streakBadgeA11y": "{streak} days",
+    "streakBadgeHint": "Tap to see your streak details",
+    "levelBadgeHint": "Tap to see your level details",
+    "harvestBadgeA11y": "{actual} of {goal} kg",
+    "harvestBadgeHint": "Tap to view the full dashboard"
   },
   "dashboard": {
     "production": "Production",
@@ -202,7 +209,26 @@
     "permissionCameraDesc": "Allow access to camera to take a photo.",
     "error": "Error",
     "errorMessage": "An error occurred. Please try again.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "clear": "Clear history",
+    "clearConfirm": "Delete all chat messages?",
+    "loadError": "Loading error.",
+    "photoError": "Photo selection error.",
+    "cameraError": "Camera error.",
+    "unknownError": "Unknown error.",
+    "photoSource": "Choose a source",
+    "photoSourceCamera": "Camera",
+    "photoSourceGallery": "Gallery",
+    "questionUsedSingular": "question used today",
+    "questionUsedPlural": "questions used today",
+    "emptyTitle": "Ask your question",
+    "emptyText": "Diseases, watering, pruning, sowing, plant associations… Attach a photo for visual diagnosis.",
+    "emptyLimit": "3 questions per day (reset at midnight UTC).",
+    "loadingBotanist": "The botanist is thinking…",
+    "photoLabel": "Photo ready to send",
+    "attachPhoto": "Attach a photo",
+    "sendMessage": "Send",
+    "resetMidnight": "midnight UTC"
   },
   "backup": {
     "title": "Backups",

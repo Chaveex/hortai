@@ -15,12 +15,12 @@ import StreakDetailModal from '../components/StreakDetailModal';
 import LevelDetailModal from '../components/LevelDetailModal';
 import { colors, spacing, typography, borderRadius } from '../constants/theme';
 import { format, differenceInDays, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { getDateLocale } from '../utils/dateLocale';
 import { PLANT_DATABASE } from '../constants/plants';
 import { getGardenSeasonProgress, getProductionNarrative } from '../services/recommendations';
 
 export default function HomeScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigation = useNavigation<any>();
   const {
     profile, weather, plants, recommendations, tips, entries,
@@ -35,7 +35,7 @@ export default function HomeScreen() {
   const harvestData = useMemo(() => {
     const now = new Date();
     const currentMonth = format(now, 'yyyy-MM');
-    const currentMonthStr = format(now, 'MMMM yyyy', { locale: fr });
+    const currentMonthStr = format(now, 'MMMM yyyy', { locale: getDateLocale(i18n.language) });
 
     const monthlyHarvest = entries
       .filter(e => e.type === 'harvest' && e.date.startsWith(currentMonth))
@@ -47,7 +47,7 @@ export default function HomeScreen() {
       actual: monthlyHarvest,
       goal: profile?.harvestGoal || 10, // Default 10kg
     };
-  }, [entries, profile]);
+  }, [entries, profile, i18n.language]);
 
   // Check for streak at-risk plants (overdue at 1.5x watering frequency)
   const streakAtRiskPlant = useMemo(() => {
@@ -83,7 +83,7 @@ export default function HomeScreen() {
 
   const onRefresh = useCallback(() => { refreshWeather(); }, []);
 
-  const today = format(new Date(), 'EEEE d MMMM yyyy', { locale: fr });
+  const today = format(new Date(), 'EEEE d MMMM yyyy', { locale: getDateLocale(i18n.language) });
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
   return (
@@ -107,8 +107,8 @@ export default function HomeScreen() {
             onPress={() => navigation.navigate('GardenStack', { screen: 'PlantDetailScreen', params: { plantId: streakAtRiskPlant.id } })}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel={`Alerte: ${streakAtRiskPlant.name} n'a pas d'eau depuis longtemps`}
-            accessibilityHint="Appuyez pour aller aux détails de la plante"
+            accessibilityLabel={t('home.streakAtRiskA11y', { plant: streakAtRiskPlant.name, days: Math.floor(differenceInDays(new Date(), parseISO(streakAtRiskPlant.lastWatered || ''))) })}
+            accessibilityHint={t('home.streakAtRiskHint')}
           >
             <Text style={styles.warningText}>
               🔥 {t('home.streakAtRisk', { plant: streakAtRiskPlant.name, days: Math.floor(differenceInDays(new Date(), parseISO(streakAtRiskPlant.lastWatered || ''))) })}
@@ -125,8 +125,8 @@ export default function HomeScreen() {
             onPress={() => setStreakModalVisible(true)}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel={`${t('home.streak')}: ${streakDays} jours`}
-            accessibilityHint="Appuyez pour voir les détails de votre série"
+            accessibilityLabel={`${t('home.streak')}: ${t('home.streakBadgeA11y', { streak: streakDays })}`}
+            accessibilityHint={t('home.streakBadgeHint')}
           >
             <Text style={styles.badgeEmoji}>🔥</Text>
             <View style={styles.badgeContent}>
@@ -142,7 +142,7 @@ export default function HomeScreen() {
             activeOpacity={0.7}
             accessibilityRole="button"
             accessibilityLabel={`${t('home.level')}: ${gardenerLevel}`}
-            accessibilityHint="Appuyez pour voir les détails de votre niveau"
+            accessibilityHint={t('home.levelBadgeHint')}
           >
             <Text style={styles.badgeEmoji}>🏆</Text>
             <View style={styles.badgeContent}>
@@ -157,8 +157,8 @@ export default function HomeScreen() {
             onPress={() => navigation.navigate('DashboardStack', { screen: 'ProductionDashboard' })}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel={`${t('dashboard.production')}: ${harvestData.actual.toFixed(1)}${t('home.kg')} sur ${harvestData.goal}${t('home.kg')}`}
-            accessibilityHint="Appuyez pour voir le tableau de bord complet"
+            accessibilityLabel={`${t('dashboard.production')}: ${t('home.harvestBadgeA11y', { actual: harvestData.actual.toFixed(1), goal: harvestData.goal })}`}
+            accessibilityHint={t('home.harvestBadgeHint')}
           >
             <Text style={styles.badgeEmoji}>📊</Text>
             <View style={styles.badgeContent}>
@@ -207,7 +207,7 @@ export default function HomeScreen() {
           onPress={() => navigation.navigate('DashboardStack', { screen: 'ProductionDashboard' })}
         />
 
-        <TodayChoreWidget onPress={() => navigation.navigate('Tâches')} />
+        <TodayChoreWidget onPress={() => navigation.navigate('Chores')} />
 
         {plants.length === 0 ? (
           <View style={styles.emptyBox}>

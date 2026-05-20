@@ -65,7 +65,14 @@
     "streakAtRisk": "Ta série est en danger ! {plant} n'a pas eu d'eau depuis {days} jours.",
     "waterNow": "Arroser maintenant →",
     "goalProgress": "{actual}/{goal}",
-    "todayChores": "Tâches du jour"
+    "todayChores": "Tâches du jour",
+    "streakAtRiskA11y": "Alerte: {plant} n'a pas d'eau depuis {days} jours",
+    "streakAtRiskHint": "Appuyez pour aller aux détails de la plante",
+    "streakBadgeA11y": "{streak} jours",
+    "streakBadgeHint": "Appuyez pour voir les détails de votre série",
+    "levelBadgeHint": "Appuyez pour voir les détails de votre niveau",
+    "harvestBadgeA11y": "{actual} sur {goal} kg",
+    "harvestBadgeHint": "Appuyez pour voir le tableau de bord complet"
   },
   "dashboard": {
     "production": "Production",
@@ -202,7 +209,26 @@
     "permissionCameraDesc": "Autorisez l'accès à la caméra pour prendre une photo.",
     "error": "Erreur",
     "errorMessage": "Une erreur s'est produite. Veuillez réessayer.",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "clear": "Effacer l'historique",
+    "clearConfirm": "Supprimer tous les messages de chat ?",
+    "loadError": "Erreur de chargement.",
+    "photoError": "Erreur sélection photo.",
+    "cameraError": "Erreur caméra.",
+    "unknownError": "Erreur inconnue.",
+    "photoSource": "Choisissez une source",
+    "photoSourceCamera": "Caméra",
+    "photoSourceGallery": "Galerie",
+    "questionUsedSingular": "question utilisée aujourd'hui",
+    "questionUsedPlural": "questions utilisées aujourd'hui",
+    "emptyTitle": "Posez votre question",
+    "emptyText": "Maladies, arrosage, taille, semis, associations… Joignez une photo pour un diagnostic visuel.",
+    "emptyLimit": "3 questions par jour (réinitialisé à minuit UTC).",
+    "loadingBotanist": "Le botaniste réfléchit…",
+    "photoLabel": "Photo prête à envoyer",
+    "attachPhoto": "Joindre une photo",
+    "sendMessage": "Envoyer",
+    "resetMidnight": "minuit UTC"
   },
   "backup": {
     "title": "Sauvegardes",

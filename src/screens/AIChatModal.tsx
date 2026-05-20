@@ -17,7 +17,7 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { format, parseISO } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { getDateLocale } from '../utils/dateLocale';
 import { borderRadius, colors, spacing, typography } from '../constants/theme';
 import { AIChatMessage as AIChatMessageType, RateLimitStatus } from '../types';
 import { useStore } from '../store/useStore';
@@ -38,7 +38,7 @@ interface Props {
 }
 
 export default function AIChatModal({ visible, onClose }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const profile = useStore(s => s.profile);
   const setAIChatMessages = useStore(s => s.setAIChatMessages);
@@ -65,9 +65,9 @@ export default function AIChatModal({ visible, onClose }: Props) {
       setAIChatMessages(history);
       setAIChatRateLimit(limit);
     } catch (e: any) {
-      setError(e?.message ?? 'Erreur de chargement.');
+      setError(e?.message ?? t('aiChat.loadError'));
     }
-  }, [setAIChatMessages, setAIChatRateLimit]);
+  }, [setAIChatMessages, setAIChatRateLimit, t]);
 
   useEffect(() => {
     if (visible) {
@@ -103,7 +103,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
         setPhotoUri(result.assets[0].uri);
       }
     } catch (e: any) {
-      setError(e?.message ?? 'Erreur sélection photo.');
+      setError(e?.message ?? t('aiChat.photoError'));
     }
   }
 
@@ -123,17 +123,17 @@ export default function AIChatModal({ visible, onClose }: Props) {
         setPhotoUri(result.assets[0].uri);
       }
     } catch (e: any) {
-      setError(e?.message ?? 'Erreur caméra.');
+      setError(e?.message ?? t('aiChat.cameraError'));
     }
   }
 
   function promptPhotoSource() {
     Alert.alert(
       t('aiChat.addPhoto'),
-      'Choisissez une source',
+      t('aiChat.photoSource'),
       [
-        { text: 'Caméra', onPress: handleTakePhoto },
-        { text: 'Galerie', onPress: handlePickPhoto },
+        { text: t('aiChat.photoSourceCamera'), onPress: handleTakePhoto },
+        { text: t('aiChat.photoSourceGallery'), onPress: handlePickPhoto },
         { text: t('common.cancel'), style: 'cancel' },
       ],
       { cancelable: true },
@@ -159,7 +159,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
       setPhotoUri(null);
       setLastAttempt(null);
     } catch (e: any) {
-      setError(e?.message ?? 'Erreur inconnue.');
+      setError(e?.message ?? t('aiChat.unknownError'));
     } finally {
       setIsLoading(false);
     }
@@ -168,7 +168,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
   async function handleClearHistory() {
     Alert.alert(
       t('aiChat.clear'),
-      'Supprimer tous les messages de chat ?',
+      t('aiChat.clearConfirm'),
       [
         { text: t('common.cancel'), style: 'cancel' },
         {
@@ -191,7 +191,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
   const limitHit = !!rateLimit && !rateLimit.allowed;
   const remaining = rateLimit?.remaining ?? 3;
   const used = 3 - remaining;
-  const resetsAt = rateLimit ? formatResetTime(rateLimit.resetsAt) : '';
+  const resetsAt = rateLimit ? formatResetTime({ iso: rateLimit.resetsAt, resetMidnightLabel: t('aiChat.resetMidnight'), locale: getDateLocale(i18n.language) }) : '';
 
   const canSend = !isLoading && !limitHit && (inputText.trim().length > 0 || photoUri !== null);
 
@@ -202,7 +202,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
           <View style={styles.headerLeft}>
             <Text style={styles.headerTitle}>{t('aiChat.title')}</Text>
             <Text style={styles.headerSub}>
-              {used}/3 question{used > 1 ? 's' : ''} utilisée{used > 1 ? 's' : ''} aujourd'hui
+              {used}/3 {used === 1 ? t('aiChat.questionUsedSingular') : t('aiChat.questionUsedPlural')}
             </Text>
           </View>
           <View style={styles.headerRight}>
@@ -258,11 +258,11 @@ export default function AIChatModal({ visible, onClose }: Props) {
             {messages.length === 0 && !isLoading && (
               <View style={styles.emptyState}>
                 <Text style={styles.emptyEmoji}>🌱</Text>
-                <Text style={styles.emptyTitle}>Posez votre question</Text>
+                <Text style={styles.emptyTitle}>{t('aiChat.emptyTitle')}</Text>
                 <Text style={styles.emptyText}>
-                  Maladies, arrosage, taille, semis, associations… Joignez une photo pour un diagnostic visuel.
+                  {t('aiChat.emptyText')}
                 </Text>
-                <Text style={styles.emptyLimit}>3 questions par jour (réinitialisé à minuit UTC).</Text>
+                <Text style={styles.emptyLimit}>{t('aiChat.emptyLimit')}</Text>
               </View>
             )}
             {messages.map(m =>
@@ -273,7 +273,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
             {isLoading && (
               <View style={styles.loadingRow}>
                 <ActivityIndicator color={colors.primary} />
-                <Text style={styles.loadingText}>Le botaniste réfléchit…</Text>
+                <Text style={styles.loadingText}>{t('aiChat.loadingBotanist')}</Text>
               </View>
             )}
           </ScrollView>
@@ -282,7 +282,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
             {photoUri && (
               <View style={styles.photoPreviewRow}>
                 <PhotoPreview source={photoUri} onRemove={() => setPhotoUri(null)} size={64} />
-                <Text style={styles.photoLabel}>Photo prête à envoyer</Text>
+                <Text style={styles.photoLabel}>{t('aiChat.photoLabel')}</Text>
               </View>
             )}
             <View style={styles.inputRow}>
@@ -290,13 +290,13 @@ export default function AIChatModal({ visible, onClose }: Props) {
                 style={[styles.iconBtn, (limitHit || isLoading) && styles.iconBtnDisabled]}
                 onPress={promptPhotoSource}
                 disabled={limitHit || isLoading}
-                accessibilityLabel="Joindre une photo"
+                accessibilityLabel={t('aiChat.attachPhoto')}
               >
                 <Text style={styles.iconBtnText}>📷</Text>
               </TouchableOpacity>
               <TextInput
                 style={[styles.input, limitHit && styles.inputDisabled]}
-                placeholder={limitHit ? 'Limite atteinte' : 'Votre question…'}
+                placeholder={limitHit ? t('aiChat.placeholderLimited') : t('aiChat.placeholder')}
                 placeholderTextColor={colors.textMuted}
                 value={inputText}
                 onChangeText={setInputText}
@@ -308,7 +308,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
                 style={[styles.sendBtn, !canSend && styles.sendBtnDisabled]}
                 onPress={handleSend}
                 disabled={!canSend}
-                accessibilityLabel="Envoyer"
+                accessibilityLabel={t('aiChat.sendMessage')}
               >
                 {isLoading
                   ? <ActivityIndicator color="#FFFFFF" size="small" />
@@ -322,11 +322,18 @@ export default function AIChatModal({ visible, onClose }: Props) {
   );
 }
 
-function formatResetTime(iso: string): string {
+interface FormatResetTimeProps {
+  iso: string;
+  resetMidnightLabel: string;
+  locale: any;
+}
+
+function formatResetTime({ iso, resetMidnightLabel, locale }: FormatResetTimeProps): string {
   try {
-    return format(parseISO(iso), "d MMM 'à' HH'h'mm", { locale: fr });
+    const formatStr = "d MMM HH'h'mm";
+    return format(parseISO(iso), formatStr, { locale });
   } catch {
-    return 'minuit UTC';
+    return resetMidnightLabel;
   }
 }
 
