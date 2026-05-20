@@ -265,7 +265,8 @@ const styles = StyleSheet.create({
   cityRow: { flexDirection: 'row', gap: spacing.sm, padding: spacing.md, paddingTop: 0 },
   cityInput: {
     flex: 1, backgroundColor: colors.background, borderWidth: 1.5, borderColor: colors.border,
-    borderRadius: borderRadius.md, padding: spacing.sm, fontSize: 15, color: colors.text,
+    borderRadius: borderRadius.md, paddingHorizontal: spacing.md, paddingVertical: spacing.sm,
+    fontSize: 15, color: colors.text, minHeight: 44,
   },
   saveBtn: {
     backgroundColor: colors.primary, borderRadius: borderRadius.md,
