@@ -65,14 +65,14 @@ export default function HomeScreen() {
 
   // Narrative cards: garden season progress + production goal
   const narratives = useMemo(() => {
-    const seasonProgress = getGardenSeasonProgress(plants);
-    const productionNarr = getProductionNarrative(harvestData.actual, harvestData.goal);
+    const seasonProgress = getGardenSeasonProgress(plants, t);
+    const productionNarr = getProductionNarrative(harvestData.actual, harvestData.goal, t);
 
     return {
       season: seasonProgress.narrative,
       production: productionNarr,
     };
-  }, [plants, harvestData.actual, harvestData.goal]);
+  }, [plants, harvestData.actual, harvestData.goal, t]);
 
   useEffect(() => {
     const lastUpdated = weather?.lastUpdated;

@@ -202,16 +202,21 @@ export function getSeason(month: number): 'spring' | 'summer' | 'autumn' | 'wint
 /**
  * Calculate how many days ahead the garden is compared to expected seasonal progress
  */
-export function getGardenSeasonProgress(plants: Plant[]): {
+export function getGardenSeasonProgress(
+  plants: Plant[],
+  t?: (key: string, options?: any) => string,
+): {
   daysAhead: number;
   stage: string;
   narrative: string;
 } {
+  const translate = (key: string, options?: any) => t ? t(key, options) : key;
+
   if (plants.length === 0) {
     return {
       daysAhead: 0,
       stage: 'empty',
-      narrative: 'Commencez par planter vos premiers légumes !',
+      narrative: translate('recommendations.gardenEmpty'),
     };
   }
 
@@ -232,15 +237,15 @@ export function getGardenSeasonProgress(plants: Plant[]): {
   const avgExpectedDays = totalExpectedDays / plants.length;
   const daysAhead = Math.round((avgDaysAlive / avgExpectedDays - 1) * avgExpectedDays);
 
-  let stage = 'en retard';
-  if (daysAhead > 0) stage = 'en avance';
-  else if (daysAhead > -7) stage = 'à l\'heure';
+  let stage = 'late';
+  if (daysAhead > 0) stage = 'early';
+  else if (daysAhead > -7) stage = 'onTime';
 
   const narrativePrefix = daysAhead > 0
-    ? `🌱 Votre jardin est ${Math.abs(daysAhead)} jours en avance — continuez cet excellent entretien !`
+    ? translate('recommendations.gardenAhead', { days: Math.abs(daysAhead) })
     : daysAhead < -7
-      ? `⏰ Votre jardin est ${Math.abs(daysAhead)} jours en retard — augmentez les arrosages et engrais.`
-      : `🌱 Votre jardin progresse à l'heure prévue — bon rythme !`;
+      ? translate('recommendations.gardenBehind', { days: Math.abs(daysAhead) })
+      : translate('recommendations.gardenOnTime');
 
   return {
     daysAhead,
@@ -255,9 +260,12 @@ export function getGardenSeasonProgress(plants: Plant[]): {
 export function getProductionNarrative(
   currentHarvest: number,
   goalHarvest: number,
+  t?: (key: string, options?: any) => string,
 ): string {
+  const translate = (key: string, options?: any) => t ? t(key, options) : key;
+
   if (goalHarvest <= 0) {
-    return 'Définissez un objectif de récolte mensuelle pour voir votre progression.';
+    return translate('recommendations.noHarvestGoal');
   }
 
   const remaining = Math.max(0, goalHarvest - currentHarvest);
@@ -265,18 +273,18 @@ export function getProductionNarrative(
 
   if (percentProgress >= 100) {
     const excess = currentHarvest - goalHarvest;
-    return `🏆 Objectif atteint ! Vous avez dépassé votre but de ${excess.toFixed(1)} kg — excellent !`;
+    return translate('recommendations.harvestGoalExceeded', { excess: excess.toFixed(1) });
   }
 
   if (percentProgress >= 75) {
-    return `🎯 Presque là ! Il vous manque ${remaining.toFixed(1)} kg pour atteindre votre objectif de ${goalHarvest} kg.`;
+    return translate('recommendations.harvestAlmostThere', { remaining: remaining.toFixed(1), goal: goalHarvest });
   }
 
   if (percentProgress >= 50) {
-    return `📈 Bonne progression : ${currentHarvest.toFixed(1)} kg / ${goalHarvest} kg. Continuez vos récoltes !`;
+    return translate('recommendations.harvestGoodProgress', { actual: currentHarvest.toFixed(1), goal: goalHarvest });
   }
 
-  return `🌾 Commencez à récolter ! Vous avez actuellement ${currentHarvest.toFixed(1)} kg / ${goalHarvest} kg.`;
+  return translate('recommendations.harvestStarting', { actual: currentHarvest.toFixed(1), goal: goalHarvest });
 }
 
 /**

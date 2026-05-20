@@ -291,5 +291,16 @@
     "serverError": "Erreur serveur",
     "permissionDenied": "Permission refusée",
     "notFound": "Non trouvé"
+  },
+  "recommendations": {
+    "gardenEmpty": "Commencez par planter vos premiers légumes !",
+    "gardenAhead": "🌱 Votre jardin est {days} jours en avance — continuez cet excellent entretien !",
+    "gardenBehind": "⏰ Votre jardin est {days} jours en retard — augmentez les arrosages et engrais.",
+    "gardenOnTime": "🌱 Votre jardin progresse à l'heure prévue — bon rythme !",
+    "noHarvestGoal": "Définissez un objectif de récolte mensuelle pour voir votre progression.",
+    "harvestGoalExceeded": "🏆 Objectif atteint ! Vous avez dépassé votre but de {excess} kg — excellent !",
+    "harvestAlmostThere": "🎯 Presque là ! Il vous manque {remaining} kg pour atteindre votre objectif de {goal} kg.",
+    "harvestGoodProgress": "📈 Bonne progression : {actual} kg / {goal} kg. Continuez vos récoltes !",
+    "harvestStarting": "🌾 Commencez à récolter ! Vous avez actuellement {actual} kg / {goal} kg."
   }
 }
