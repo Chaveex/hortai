@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Text, View, StyleSheet, Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import HomeScreen from '../screens/HomeScreen';
 import GardenScreen from '../screens/GardenScreen';
 import AddPlantScreen from '../screens/AddPlantScreen';
@@ -35,6 +36,7 @@ const Stack = createStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
 
 function GardenTabs() {
+  const { t } = useTranslation();
   return (
     <TopTab.Navigator
       screenOptions={{
@@ -56,14 +58,14 @@ function GardenTabs() {
         name="Plantes"
         component={GardenScreen}
         options={{
-          tabBarLabel: 'Plantes',
+          tabBarLabel: t('screens.plants'),
         }}
       />
       <TopTab.Screen
         name="Planification"
         component={GardenBedsScreen}
         options={{
-          tabBarLabel: 'Planification',
+          tabBarLabel: t('screens.planning'),
         }}
       />
     </TopTab.Navigator>
@@ -128,6 +130,7 @@ function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
 export default function Navigation() {
   const [chatOpen, setChatOpen] = useState(false);
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <NavigationContainer>
@@ -155,6 +158,7 @@ export default function Navigation() {
                     name="Accueil"
                     component={HomeScreen}
                     options={{
+                      tabBarLabel: t('navigation.home'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} />,
                     }}
                   />
@@ -162,6 +166,7 @@ export default function Navigation() {
                     name="Jardin"
                     component={GardenStack}
                     options={{
+                      tabBarLabel: t('navigation.garden'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} />,
                     }}
                   />
@@ -169,6 +174,7 @@ export default function Navigation() {
                     name="Tâches"
                     component={ChoreStack}
                     options={{
+                      tabBarLabel: t('navigation.chores'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🗓️" focused={focused} />,
                     }}
                   />
@@ -176,6 +182,7 @@ export default function Navigation() {
                     name="Réglages"
                     component={SettingsStack}
                     options={{
+                      tabBarLabel: t('navigation.settings'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="⚙️" focused={focused} />,
                     }}
                   />

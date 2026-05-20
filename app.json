@@ -59,7 +59,8 @@
       ],
       "expo-background-fetch",
       "expo-task-manager",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "expo-localization"
     ],
     "extra": {
       "eas": {

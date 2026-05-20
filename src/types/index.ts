@@ -16,6 +16,7 @@ export interface UserProfile {
   dailyTipEnabled?: boolean;
   dailyTipTime?: string; // HH:mm
   onboardingDate?: string; // YYYY-MM-DD
+  language?: 'fr' | 'en' | 'es'; // NEW
 }
 
 export type PlantType =

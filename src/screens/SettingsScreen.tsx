@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import i18next from '../i18n/config';
 import { useStore } from '../store/useStore';
 import { GardeningStyle, FertilizerType } from '../types';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
@@ -23,7 +25,14 @@ const FERTILIZERS: { value: FertilizerType; label: string; icon: string }[] = [
   { value: 'aucun', label: 'Aucun', icon: '🚫' },
 ];
 
+const LANGUAGES = [
+  { value: 'fr', label: 'Français', icon: '🇫🇷' },
+  { value: 'en', label: 'English', icon: '🇺🇸' },
+  { value: 'es', label: 'Español', icon: '🇪🇸' },
+] as const;
+
 export default function SettingsScreen() {
+  const { t } = useTranslation();
   const { profile, updateProfile, refreshWeather, lastBackupTime } = useStore();
   const navigation = useNavigation<import('@react-navigation/stack').StackNavigationProp<{ BackupSettings: undefined }>>();
   const [cityInput, setCityInput] = useState(profile?.city ?? '');
@@ -50,7 +59,7 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Paramètres</Text>
+        <Text style={styles.title}>{t('settings.title')}</Text>
 
         <Text style={styles.sectionHeader}>Localisation</Text>
         <View style={styles.card}>
@@ -118,6 +127,29 @@ export default function SettingsScreen() {
               <Text style={styles.optionLabel}>{item.label}</Text>
               <View style={[styles.radio, profile.fertilizerType === item.value && styles.radioSelected]}>
                 {profile.fertilizerType === item.value && <View style={styles.radioDot} />}
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <Text style={styles.sectionHeader}>Langue / Language</Text>
+        <View style={styles.card}>
+          {LANGUAGES.map(item => (
+            <TouchableOpacity
+              key={item.value}
+              style={styles.optionRow}
+              onPress={() => {
+                updateProfile({ language: item.value });
+                i18next.changeLanguage(item.value);
+              }}
+              accessibilityRole="radio"
+              accessibilityLabel={`Language: ${item.label}`}
+              accessibilityState={{ selected: (profile.language || 'fr') === item.value }}
+            >
+              <Text style={styles.optionIcon}>{item.icon}</Text>
+              <Text style={styles.optionLabel}>{item.label}</Text>
+              <View style={[styles.radio, (profile.language || 'fr') === item.value && styles.radioSelected]}>
+                {(profile.language || 'fr') === item.value && <View style={styles.radioDot} />}
               </View>
             </TouchableOpacity>
           ))}
