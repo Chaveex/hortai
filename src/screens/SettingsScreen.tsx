@@ -261,8 +261,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface, borderRadius: borderRadius.md,
     borderWidth: 1, borderColor: colors.border, overflow: 'hidden',
   },
-  label: { fontSize: 13, color: colors.text, fontWeight: '500' },
-  cityRow: { flexDirection: 'row', gap: spacing.sm, padding: spacing.md, paddingTop: 0 },
+  label: { fontSize: 13, color: colors.text, fontWeight: '500', marginBottom: spacing.xs },
+  cityRow: { flexDirection: 'row', gap: spacing.sm, padding: spacing.md, paddingTop: spacing.sm },
   cityInput: {
     flex: 1, backgroundColor: colors.background, borderWidth: 1.5, borderColor: colors.border,
     borderRadius: borderRadius.md, paddingHorizontal: spacing.md, paddingVertical: spacing.sm,
