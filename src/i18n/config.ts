@@ -5,7 +5,11 @@ import fr from './locales/fr.json';
 import en from './locales/en.json';
 import es from './locales/es.json';
 
-const resources = { fr, en, es };
+const resources = {
+  fr: { translation: fr },
+  en: { translation: en },
+  es: { translation: es },
+};
 
 const deviceLanguage = Localization.getLocales()[0]?.languageCode || 'fr';
 const defaultLanguage = ['fr', 'en', 'es'].includes(deviceLanguage) ? deviceLanguage : 'fr';
@@ -16,6 +20,7 @@ i18next
     resources,
     lng: defaultLanguage,
     fallbackLng: 'fr',
+    defaultNS: 'translation',
     interpolation: { escapeValue: false },
     compatibilityJSON: 'v4',
   });
