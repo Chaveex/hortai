@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import Svg, { Rect, Text as SvgText, Line } from 'react-native-svg';
 import { colors, spacing, borderRadius, typography } from '../../constants/theme';
 
@@ -21,7 +21,8 @@ export function PerformanceVsAverage({
   title,
   maxValue,
 }: PerformanceVsAverageProps) {
-  const width = 300;
+  const { width: windowWidth } = useWindowDimensions();
+  const width = Math.min(windowWidth - 48, 300);
   const height = 200;
   const padding = 30;
   const barHeight = 30;

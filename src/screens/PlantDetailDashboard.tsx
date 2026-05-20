@@ -183,7 +183,7 @@ export function PlantDetailDashboard() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right', 'bottom']}>
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
   plantOption: {
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.md,
     paddingHorizontal: spacing.md,
     backgroundColor: colors.surface,
     borderRadius: borderRadius.full,
