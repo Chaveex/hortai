@@ -114,7 +114,7 @@ export function PlantDetailDashboard() {
       },
       {
         label: 'Étape',
-        value: plantMetrics.growthStage.substring(0, 8),
+        value: plantMetrics.growthStage,
         icon: '🌱',
         color: colors.warning,
       },
