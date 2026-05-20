@@ -24,7 +24,7 @@ export function PerformanceVsAverage({
   const { width: windowWidth } = useWindowDimensions();
   const width = Math.min(windowWidth - 48, 300);
   const height = 200;
-  const padding = 30;
+  const padding = 60;
   const barHeight = 30;
   const gap = 10;
 
