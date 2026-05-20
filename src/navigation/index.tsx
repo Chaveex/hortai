@@ -78,6 +78,7 @@ function GardenStack() {
       <Stack.Screen name="BedGrid" component={BedGridScreen} />
       <Stack.Screen name="BedForm" component={BedFormScreen} />
       <Stack.Screen name="SowingCalendar" component={SowingCalendarScreen} />
+      <Stack.Screen name="PlantDetailDashboard" component={PlantDetailDashboard} />
     </Stack.Navigator>
   );
 }
