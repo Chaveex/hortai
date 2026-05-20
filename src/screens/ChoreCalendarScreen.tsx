@@ -232,7 +232,8 @@ const styles = StyleSheet.create({
   body: { flex: 1, paddingBottom: spacing.xl },
   fab: {
     position: 'absolute',
-    right: spacing.md,
+    left: '50%',
+    marginLeft: -28,
     bottom: spacing.xl + spacing.md,
     width: 56, height: 56, borderRadius: 28,
     backgroundColor: colors.primary,
