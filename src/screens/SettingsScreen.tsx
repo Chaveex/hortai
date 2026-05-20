@@ -152,6 +152,42 @@ export default function SettingsScreen() {
           )}
         </View>
 
+        <Text style={styles.sectionHeader}>Objectifs du jardin</Text>
+        <View style={styles.card}>
+          <View style={styles.harvestGoalRow}>
+            <View>
+              <Text style={styles.optionLabel}>Récolte mensuelle cible</Text>
+              <Text style={styles.optionSub}>kg par mois</Text>
+            </View>
+            <View style={styles.harvestGoalInputBox}>
+              <TouchableOpacity
+                style={styles.harvestGoalBtn}
+                onPress={() => updateProfile({ harvestGoal: Math.max(1, (profile.harvestGoal || 10) - 1) })}
+              >
+                <Text style={styles.harvestGoalBtnText}>−</Text>
+              </TouchableOpacity>
+              <TextInput
+                style={styles.harvestGoalInput}
+                value={String(profile.harvestGoal || 10)}
+                onChangeText={(text) => {
+                  const val = parseInt(text, 10);
+                  if (!isNaN(val) && val > 0) {
+                    updateProfile({ harvestGoal: val });
+                  }
+                }}
+                keyboardType="number-pad"
+                maxLength={3}
+              />
+              <TouchableOpacity
+                style={styles.harvestGoalBtn}
+                onPress={() => updateProfile({ harvestGoal: (profile.harvestGoal || 10) + 1 })}
+              >
+                <Text style={styles.harvestGoalBtnText}>+</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
         <Text style={styles.sectionHeader}>Sauvegarde & Export</Text>
         <View style={styles.card}>
           <TouchableOpacity
@@ -232,5 +268,21 @@ const styles = StyleSheet.create({
   hourBtnActive: { borderColor: colors.primary, backgroundColor: '#EDF7F1' },
   hourBtnText: { fontSize: 13, color: colors.text },
   hourBtnTextActive: { color: colors.primary, fontWeight: '600' },
+  harvestGoalRow: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    padding: spacing.md, borderBottomWidth: 0,
+  },
+  harvestGoalInputBox: {
+    flexDirection: 'row', alignItems: 'center', gap: spacing.xs,
+  },
+  harvestGoalBtn: {
+    width: 36, height: 36, borderRadius: 18,
+    backgroundColor: colors.primary, justifyContent: 'center', alignItems: 'center',
+  },
+  harvestGoalBtnText: { color: '#FFFFFF', fontSize: 18, fontWeight: '600' },
+  harvestGoalInput: {
+    width: 50, textAlign: 'center', fontSize: 18, fontWeight: '600',
+    color: colors.primary, borderBottomWidth: 2, borderBottomColor: colors.primary,
+  },
   version: { textAlign: 'center', color: colors.textMuted, fontSize: 12, marginTop: spacing.xl },
 });

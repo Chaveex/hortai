@@ -312,6 +312,16 @@ export const useStore = create<StoreState>()(
           set({ streakDays: 0 });
         }
 
+        // Check if harvest goal month has changed, reset if needed
+        const now = new Date();
+        const currentMonth = new Intl.DateTimeFormat('sv-SE', {
+          year: 'numeric',
+          month: '2-digit',
+        }).format(now);
+        if (profile.harvestGoalMonth && profile.harvestGoalMonth !== currentMonth) {
+          set({ profile: { ...profile, harvestGoalMonth: currentMonth } });
+        }
+
         // Calculate gardener level
         const harvestCount = entries.filter(e => e.type === 'harvest').length;
         const onboardingDate = profile.onboardingDate ? parseISO(profile.onboardingDate) : new Date();

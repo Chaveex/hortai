@@ -47,14 +47,51 @@ export default function PlantDetailScreen() {
   function handleAddEntry() {
     if (entryType === 'note' && !entryText.trim()) return;
     if (entryType === 'harvest' && !entryQty.trim()) return;
-    addEntry({
+
+    // Prepare entry data
+    const entryData = {
       plantId,
       date: new Date().toISOString(),
       type: entryType,
       text: entryType === 'note' ? entryText.trim() : undefined,
       quantity: entryType === 'harvest' ? parseFloat(entryQty) : undefined,
       unit: entryType === 'harvest' ? entryUnit : undefined,
-    });
+    };
+
+    // Check for harvest celebration conditions
+    if (entryType === 'harvest') {
+      const harvestQty = parseFloat(entryQty);
+      const isFirstHarvest = !entries.some(e => e.type === 'harvest' && e.plantId === plantId);
+
+      // Check if goal will be hit
+      const now = new Date();
+      const currentMonth = format(now, 'yyyy-MM');
+      const monthlyHarvest = entries
+        .filter(e => e.type === 'harvest' && e.date.startsWith(currentMonth))
+        .reduce((sum, e) => sum + (e.quantity || 0), 0);
+      const harvestGoal = profile?.harvestGoal || 10;
+      const willHitGoal = monthlyHarvest + harvestQty >= harvestGoal;
+
+      addEntry(entryData);
+
+      // Show appropriate toast
+      if (isFirstHarvest) {
+        Alert.alert('🎉 Récolte', 'Première récolte ! C\'est magnifique !', [
+          { text: 'Bravo 🙌', onPress: () => {} },
+        ]);
+      } else if (willHitGoal) {
+        Alert.alert('🎉 Récolte', 'Objectif du mois atteint !', [
+          { text: 'Excellent ! 🎯', onPress: () => {} },
+        ]);
+      } else {
+        Alert.alert('✅ Récolte', 'Récolte enregistrée !', [
+          { text: 'Merci 🙏', onPress: () => {} },
+        ]);
+      }
+    } else {
+      addEntry(entryData);
+    }
+
     setEntryText('');
     setEntryQty('');
   }
