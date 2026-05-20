@@ -54,21 +54,23 @@ export default function SettingsScreen() {
 
         <Text style={styles.sectionHeader}>Localisation</Text>
         <View style={styles.card}>
-          <Text style={styles.label}>Ville</Text>
-          <View style={styles.cityRow}>
-            <TextInput
-              style={styles.cityInput}
-              value={cityInput}
-              onChangeText={setCityInput}
-              placeholder="Votre ville"
-              placeholderTextColor={colors.textMuted}
-              autoCapitalize="words"
-            />
-            <TouchableOpacity style={styles.saveBtn} onPress={handleCitySave} disabled={isSavingCity}>
-              {isSavingCity
-                ? <ActivityIndicator color="#fff" size="small" />
-                : <Text style={styles.saveBtnText}>Mettre à jour</Text>}
-            </TouchableOpacity>
+          <View style={styles.citySection}>
+            <Text style={styles.label}>Ville</Text>
+            <View style={styles.cityInputRow}>
+              <TextInput
+                style={styles.cityInput}
+                value={cityInput}
+                onChangeText={setCityInput}
+                placeholder="Votre ville"
+                placeholderTextColor={colors.textMuted}
+                autoCapitalize="words"
+              />
+              <TouchableOpacity style={styles.saveBtn} onPress={handleCitySave} disabled={isSavingCity}>
+                {isSavingCity
+                  ? <ActivityIndicator color="#fff" size="small" />
+                  : <Text style={styles.saveBtnText}>Mettre à jour</Text>}
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -261,8 +263,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface, borderRadius: borderRadius.md,
     borderWidth: 1, borderColor: colors.border, overflow: 'hidden',
   },
-  label: { fontSize: 13, color: colors.text, fontWeight: '500', marginBottom: spacing.xs },
-  cityRow: { flexDirection: 'row', gap: spacing.sm, padding: spacing.md, paddingTop: spacing.sm },
+  label: { fontSize: 13, color: colors.text, fontWeight: '500', marginBottom: spacing.sm },
+  citySection: {
+    padding: spacing.md, paddingTop: spacing.md, gap: spacing.sm, flexDirection: 'column',
+  },
+  cityInputRow: {
+    flexDirection: 'row', gap: spacing.md, alignItems: 'center',
+  },
   cityInput: {
     flex: 1, backgroundColor: colors.background, borderWidth: 1.5, borderColor: colors.border,
     borderRadius: borderRadius.md, paddingHorizontal: spacing.md, paddingVertical: spacing.sm,
