@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Text, View, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeScreen from '../screens/HomeScreen';
 import GardenScreen from '../screens/GardenScreen';
 import AddPlantScreen from '../screens/AddPlantScreen';
@@ -82,6 +83,7 @@ function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
 
 export default function Navigation() {
   const [chatOpen, setChatOpen] = useState(false);
+  const insets = useSafeAreaInsets();
 
   return (
     <NavigationContainer>
@@ -95,8 +97,8 @@ export default function Navigation() {
               backgroundColor: '#FFFFFF',
               borderTopColor: colors.border,
               borderTopWidth: 1,
-              paddingBottom: 4,
-              height: 60,
+              paddingBottom: Math.max(4, insets.bottom),
+              height: 60 + insets.bottom,
             },
             tabBarLabelStyle: { fontSize: 11, fontWeight: '500' },
           }}
