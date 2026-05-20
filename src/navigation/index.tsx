@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Text, View, StyleSheet, Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import HomeScreen from '../screens/HomeScreen';
 import GardenScreen from '../screens/GardenScreen';
 import AddPlantScreen from '../screens/AddPlantScreen';
@@ -23,6 +24,7 @@ import AIChatModal from '../screens/AIChatModal';
 import AIFABButton from '../components/AIFABButton';
 import ContextFAB from '../components/ContextFAB';
 import { colors } from '../constants/theme';
+import i18n from '../i18n/config';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { ProductionDashboard } from '../screens/ProductionDashboard';
 import { WaterDashboard } from '../screens/WaterDashboard';
@@ -56,14 +58,14 @@ function GardenTabs() {
         name="Plantes"
         component={GardenScreen}
         options={{
-          tabBarLabel: 'Plantes',
+          tabBarLabel: i18n.t('navigation.plants'),
         }}
       />
       <TopTab.Screen
         name="Planification"
         component={GardenBedsScreen}
         options={{
-          tabBarLabel: 'Planification',
+          tabBarLabel: i18n.t('navigation.planning'),
         }}
       />
     </TopTab.Navigator>
@@ -127,7 +129,18 @@ function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
 
 export default function Navigation() {
   const [chatOpen, setChatOpen] = useState(false);
+  const [, setLanguage] = useState<string>(i18n.language);
   const insets = useSafeAreaInsets();
+
+  React.useEffect(() => {
+    const handleLanguageChange = () => {
+      setLanguage(i18n.language);
+    };
+    i18n.on('languageChanged', handleLanguageChange);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, []);
 
   return (
     <NavigationContainer>
@@ -137,6 +150,7 @@ export default function Navigation() {
             {() => (
               <View style={styles.root}>
                 <Tab.Navigator
+                  key={i18n.language}
                   screenOptions={{
                     headerShown: false,
                     tabBarActiveTintColor: colors.primary,
@@ -155,6 +169,7 @@ export default function Navigation() {
                     name="Accueil"
                     component={HomeScreen}
                     options={{
+                      tabBarLabel: i18n.t('navigation.home'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} />,
                     }}
                   />
@@ -162,6 +177,7 @@ export default function Navigation() {
                     name="Jardin"
                     component={GardenStack}
                     options={{
+                      tabBarLabel: i18n.t('navigation.garden'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} />,
                     }}
                   />
@@ -169,6 +185,7 @@ export default function Navigation() {
                     name="Tâches"
                     component={ChoreStack}
                     options={{
+                      tabBarLabel: i18n.t('navigation.chores'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🗓️" focused={focused} />,
                     }}
                   />
@@ -176,6 +193,7 @@ export default function Navigation() {
                     name="Réglages"
                     component={SettingsStack}
                     options={{
+                      tabBarLabel: i18n.t('navigation.settings'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="⚙️" focused={focused} />,
                     }}
                   />

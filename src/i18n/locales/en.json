@@ -3,7 +3,9 @@
     "home": "Home",
     "garden": "Garden",
     "chores": "Chores",
-    "settings": "Settings"
+    "settings": "Settings",
+    "plants": "Plants",
+    "planning": "Planning"
   },
   "screens": {
     "homeTitle": "Welcome",

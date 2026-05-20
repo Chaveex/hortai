@@ -3,7 +3,9 @@
     "home": "Inicio",
     "garden": "Jardín",
     "chores": "Tareas",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "plants": "Plantas",
+    "planning": "Planificación"
   },
   "screens": {
     "homeTitle": "Bienvenido",
