@@ -12,6 +12,7 @@ import { LeaderboardRow } from '../components/Insights/LeaderboardRow';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { getLastNMonths } from '../services/statistics';
 import { PLANT_DATABASE } from '../constants/plants';
+import { getWateringNarrative } from '../services/recommendations';
 
 export function WaterDashboard() {
   const navigation = useNavigation<any>();
@@ -91,6 +92,14 @@ export function WaterDashboard() {
       .slice(0, 5);
   }, [recommendations]);
 
+  // Water narrative banner (estimated week total)
+  const wateringNarrative = useMemo(() => {
+    // Estimate this week's total based on actual usage (simplified)
+    const weekTotal = waterMetrics.actual / 4.3; // Roughly 1 week of monthly average
+    const weekExpected = waterMetrics.recommended / 4.3;
+    return getWateringNarrative(weekTotal, weekExpected, weather || { humidity: 60, temperature: 20 } as any);
+  }, [waterMetrics, weather]);
+
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -127,6 +136,13 @@ export function WaterDashboard() {
               {waterMetrics.actual.toFixed(0)}
               <Text style={styles.metricUnit}> L</Text>
             </Text>
+          </View>
+        </View>
+
+        {/* Watering narrative banner */}
+        <View style={styles.narrativeSection}>
+          <View style={styles.narrativeCard}>
+            <Text style={styles.narrativeText}>{wateringNarrative}</Text>
           </View>
         </View>
 
@@ -273,6 +289,22 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
+  },
+  narrativeSection: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  narrativeCard: {
+    backgroundColor: '#E8F4F8',
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.secondary,
+  },
+  narrativeText: {
+    ...typography.body,
+    color: colors.text,
+    lineHeight: 20,
   },
   sectionTitle: {
     ...typography.h3,

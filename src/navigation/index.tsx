@@ -18,6 +18,7 @@ import ChoreFormScreen from '../screens/ChoreFormScreen';
 import { GardenBedsScreen } from '../screens/GardenBedsScreen';
 import { BedGridScreen } from '../screens/BedGridScreen';
 import { BedFormScreen } from '../screens/BedFormScreen';
+import { BedSettingsModal } from '../screens/BedSettingsModal';
 import AIChatModal from '../screens/AIChatModal';
 import AIFABButton from '../components/AIFABButton';
 import ContextFAB from '../components/ContextFAB';
@@ -79,6 +80,11 @@ function GardenStack() {
       <Stack.Screen name="BedForm" component={BedFormScreen} />
       <Stack.Screen name="SowingCalendar" component={SowingCalendarScreen} />
       <Stack.Screen name="PlantDetailDashboard" component={PlantDetailDashboard} />
+      <Stack.Screen
+        name="BedSettings"
+        component={BedSettingsModal}
+        options={{ presentation: 'modal' }}
+      />
     </Stack.Navigator>
   );
 }

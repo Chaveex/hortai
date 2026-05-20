@@ -64,8 +64,17 @@ export default function SettingsScreen() {
                 placeholder="Votre ville"
                 placeholderTextColor={colors.textMuted}
                 autoCapitalize="words"
+                accessibilityLabel="Entrez votre ville"
+                accessibilityHint="Saisissez le nom de votre ville pour mettre à jour la météo"
               />
-              <TouchableOpacity style={styles.saveBtn} onPress={handleCitySave} disabled={isSavingCity}>
+              <TouchableOpacity
+                style={styles.saveBtn}
+                onPress={handleCitySave}
+                disabled={isSavingCity}
+                accessibilityRole="button"
+                accessibilityLabel="Mettre à jour la ville"
+                accessibilityHint="Appuyez pour enregistrer les changements"
+              >
                 {isSavingCity
                   ? <ActivityIndicator color="#fff" size="small" />
                   : <Text style={styles.saveBtnText}>Mettre à jour</Text>}
@@ -81,6 +90,9 @@ export default function SettingsScreen() {
               key={item.value}
               style={styles.optionRow}
               onPress={() => updateProfile({ gardeningStyle: item.value })}
+              accessibilityRole="radio"
+              accessibilityLabel={`Style de jardinage: ${item.label}`}
+              accessibilityState={{ selected: profile.gardeningStyle === item.value }}
             >
               <Text style={styles.optionIcon}>{item.icon}</Text>
               <Text style={styles.optionLabel}>{item.label}</Text>
@@ -98,6 +110,9 @@ export default function SettingsScreen() {
               key={item.value}
               style={styles.optionRow}
               onPress={() => updateProfile({ fertilizerType: item.value })}
+              accessibilityRole="radio"
+              accessibilityLabel={`Type d'engrais: ${item.label}`}
+              accessibilityState={{ selected: profile.fertilizerType === item.value }}
             >
               <Text style={styles.optionIcon}>{item.icon}</Text>
               <Text style={styles.optionLabel}>{item.label}</Text>

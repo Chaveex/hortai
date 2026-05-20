@@ -83,6 +83,12 @@ interface StoreState {
   // Garden bed actions
   addGardenBed: (bed: Omit<GardenBed, 'id'>) => void;
   updateGardenBed: (bedId: string, partial: Partial<Omit<GardenBed, 'id' | 'cells'>>) => void;
+  updateBedMetadata: (bedId: string, metadata: {
+    dimensions?: { length: number; width: number; unit: 'm' | 'ft' };
+    soilType?: string;
+    cropRotation?: { plant: PlantType; date: string }[];
+    lastPrepared?: string;
+  }) => void;
   deleteGardenBed: (bedId: string) => void;
   setBedCell: (bedId: string, row: number, col: number, plantId: string | undefined) => void;
   resizeBed: (bedId: string, rows: number, cols: number) => void;
@@ -382,6 +388,22 @@ export const useStore = create<StoreState>()(
         set(s => ({
           gardenBeds: s.gardenBeds.map(bed =>
             bed.id === bedId ? { ...bed, ...partial } : bed
+          ),
+        }));
+      },
+
+      updateBedMetadata: (bedId, metadata) => {
+        set(s => ({
+          gardenBeds: s.gardenBeds.map(bed =>
+            bed.id === bedId
+              ? {
+                  ...bed,
+                  dimensions: metadata.dimensions !== undefined ? metadata.dimensions : bed.dimensions,
+                  soilType: (metadata.soilType as any) !== undefined ? (metadata.soilType as 'loam' | 'clay' | 'sandy' | 'mixed') : bed.soilType,
+                  cropRotation: metadata.cropRotation !== undefined ? metadata.cropRotation : bed.cropRotation,
+                  lastPrepared: metadata.lastPrepared !== undefined ? metadata.lastPrepared : bed.lastPrepared,
+                }
+              : bed
           ),
         }));
       },

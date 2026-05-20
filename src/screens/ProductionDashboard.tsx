@@ -14,6 +14,7 @@ import { LeaderboardRow } from '../components/Insights/LeaderboardRow';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { getLastNMonths } from '../services/statistics';
 import { PLANT_DATABASE } from '../constants/plants';
+import { getPlantProductionNarrative } from '../services/recommendations';
 
 export function ProductionDashboard() {
   const navigation = useNavigation<any>();
@@ -100,6 +101,16 @@ export function ProductionDashboard() {
 
   const maxHarvest = Math.max(...topPlants.map(p => p.total), 0);
 
+  // Generate narrative for top plant (if outperforming)
+  const topPlantNarrative = useMemo(() => {
+    if (topPlants.length === 0) return null;
+
+    const topPlant = topPlants[0];
+    // Regional average (simplified: using 10kg as default regional average for any plant)
+    const regionalAverage = 10;
+    return getPlantProductionNarrative(topPlant.total, regionalAverage);
+  }, [topPlants]);
+
   // Helper to get plant info safely
   const getPlantIcon = (type: any): string => {
     const plantType = type as PlantType;
@@ -159,6 +170,15 @@ export function ProductionDashboard() {
               size={180}
               showLegend
             />
+          </View>
+        )}
+
+        {/* Production narrative banner */}
+        {topPlantNarrative && (
+          <View style={styles.narrativeSection}>
+            <View style={styles.narrativeCard}>
+              <Text style={styles.narrativeText}>{topPlantNarrative}</Text>
+            </View>
           </View>
         )}
 
@@ -227,6 +247,22 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
+  },
+  narrativeSection: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  narrativeCard: {
+    backgroundColor: '#F0F7FF',
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.primary,
+  },
+  narrativeText: {
+    ...typography.body,
+    color: colors.text,
+    lineHeight: 20,
   },
   sectionTitle: {
     ...typography.h3,

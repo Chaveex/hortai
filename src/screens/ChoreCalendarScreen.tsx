@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import {
   format,
 } from 'date-fns';
@@ -45,6 +46,7 @@ export default function ChoreCalendarScreen() {
   }
 
   function handleAddChore() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     navigation.navigate('ChoreForm', { date: format(new Date(), 'yyyy-MM-dd') });
   }
 

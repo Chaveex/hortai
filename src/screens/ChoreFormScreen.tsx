@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import * as Haptics from 'expo-haptics';
 import { format, parseISO, isValid } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useChoreStore } from '../store/useChoreStore';
@@ -79,19 +80,24 @@ export default function ChoreFormScreen() {
 
   function handleSave() {
     if (!title.trim()) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       Alert.alert('Titre requis', 'Donnez un titre à votre tâche.');
       return;
     }
     if (!date) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       Alert.alert('Date requise', 'Choisissez une date pour la tâche.');
       return;
     }
 
     const recurrenceDays = recurrence.trim() ? parseInt(recurrence, 10) : undefined;
     if (recurrence.trim() && (isNaN(recurrenceDays!) || recurrenceDays! < 1)) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       Alert.alert('Récurrence invalide', 'Entrez un nombre de jours valide.');
       return;
     }
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     if (editingId) {
       updateChore(editingId, {

@@ -129,6 +129,12 @@ export interface GardenBed {
   rows: number;
   cols: number;
   cells: GardenCell[];
+
+  // NEW (Phase 4):
+  dimensions?: { length: number; width: number; unit: 'm' | 'ft' };
+  soilType?: 'loam' | 'clay' | 'sandy' | 'mixed';
+  cropRotation?: { plant: PlantType; date: string }[];
+  lastPrepared?: string; // YYYY-MM-DD
 }
 
 // ====== Advanced Metrics & Dashboard Types ======
