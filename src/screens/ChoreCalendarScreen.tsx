@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import {
   format,
@@ -18,6 +19,7 @@ import ChoreAgendaView from '../components/ChoreAgendaView';
 import FilterBottomSheet from '../components/FilterBottomSheet';
 
 export default function ChoreCalendarScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const {
@@ -55,10 +57,10 @@ export default function ChoreCalendarScreen() {
       <View style={styles.header}>
         <View style={styles.titleRow}>
           <View style={styles.titleArea}>
-            <Text style={styles.title}>Tâches</Text>
+            <Text style={styles.title}>{t('chores.agenda')}</Text>
             {filterChoreType && filterChoreType.length > 0 && (
               <View style={styles.filterBadgeTitle}>
-                <Text style={styles.filterBadgeTitleText}>Filtrée</Text>
+                <Text style={styles.filterBadgeTitleText}>{t('chores.filtered')}</Text>
               </View>
             )}
           </View>

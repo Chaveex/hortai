@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -15,6 +16,7 @@ import { differenceInDays, parseISO, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
 export function GardenBedsScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const gardenBeds = useStore(s => s.gardenBeds);
   const deleteGardenBed = useStore(s => s.deleteGardenBed);

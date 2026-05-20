@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -37,6 +38,7 @@ interface Props {
 }
 
 export default function AIChatModal({ visible, onClose }: Props) {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const profile = useStore(s => s.profile);
   const setAIChatMessages = useStore(s => s.setAIChatMessages);
@@ -88,7 +90,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
     try {
       const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (!perm.granted) {
-        Alert.alert('Permission requise', 'Autorisez l\'accès aux photos pour joindre une image.');
+        Alert.alert(t('aiChat.permissionPhoto'), t('aiChat.permissionPhotoDesc'));
         return;
       }
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -109,7 +111,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
     try {
       const perm = await ImagePicker.requestCameraPermissionsAsync();
       if (!perm.granted) {
-        Alert.alert('Permission requise', 'Autorisez l\'accès à la caméra pour prendre une photo.');
+        Alert.alert(t('aiChat.permissionCamera'), t('aiChat.permissionCameraDesc'));
         return;
       }
       const result = await ImagePicker.launchCameraAsync({
@@ -127,12 +129,12 @@ export default function AIChatModal({ visible, onClose }: Props) {
 
   function promptPhotoSource() {
     Alert.alert(
-      'Ajouter une photo',
+      t('aiChat.addPhoto'),
       'Choisissez une source',
       [
         { text: 'Caméra', onPress: handleTakePhoto },
         { text: 'Galerie', onPress: handlePickPhoto },
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
       ],
       { cancelable: true },
     );
@@ -165,12 +167,12 @@ export default function AIChatModal({ visible, onClose }: Props) {
 
   async function handleClearHistory() {
     Alert.alert(
-      'Effacer historique',
+      t('aiChat.clear'),
       'Supprimer tous les messages de chat ?',
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Supprimer',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             await deleteChatHistory();
@@ -198,7 +200,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
       <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Text style={styles.headerTitle}>Aide Jardinage</Text>
+            <Text style={styles.headerTitle}>{t('aiChat.title')}</Text>
             <Text style={styles.headerSub}>
               {used}/3 question{used > 1 ? 's' : ''} utilisée{used > 1 ? 's' : ''} aujourd'hui
             </Text>
@@ -206,7 +208,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
           <View style={styles.headerRight}>
             {messages.length > 0 && (
               <TouchableOpacity onPress={handleClearHistory} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                <Text style={styles.clearBtn}>Effacer</Text>
+                <Text style={styles.clearBtn}>{t('common.clear')}</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity onPress={onClose} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
@@ -217,7 +219,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
 
         {limitHit && (
           <View style={styles.limitBanner}>
-            <Text style={styles.limitText}>3/3 ❌ Limite atteinte — revenez après {resetsAt}</Text>
+            <Text style={styles.limitText}>{t('aiChat.limitReached', { time: resetsAt })}</Text>
           </View>
         )}
 
@@ -232,7 +234,7 @@ export default function AIChatModal({ visible, onClose }: Props) {
                   setError(null);
                   handleSend();
                 }}>
-                  <Text style={styles.retryButton}>Réessayer</Text>
+                  <Text style={styles.retryButton}>{t('common.retry')}</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity onPress={() => setError(null)}>

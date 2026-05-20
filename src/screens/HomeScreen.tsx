@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../store/useStore';
 import WeatherCard from '../components/WeatherCard';
 import WateringCard from '../components/WateringCard';
@@ -19,6 +20,7 @@ import { PLANT_DATABASE } from '../constants/plants';
 import { getGardenSeasonProgress, getProductionNarrative } from '../services/recommendations';
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const {
     profile, weather, plants, recommendations, tips, entries,
@@ -93,7 +95,7 @@ export default function HomeScreen() {
       >
         <View style={styles.header}>
           <View>
-            <Text style={styles.greeting}>Bonjour 👋</Text>
+            <Text style={styles.greeting}>{t('home.greeting')}</Text>
             <Text style={styles.date}>{capitalize(today)}</Text>
           </View>
         </View>
@@ -109,9 +111,9 @@ export default function HomeScreen() {
             accessibilityHint="Appuyez pour aller aux détails de la plante"
           >
             <Text style={styles.warningText}>
-              🔥 Ta série est en danger ! {streakAtRiskPlant.name} n'a pas eu d'eau depuis {Math.floor(differenceInDays(new Date(), parseISO(streakAtRiskPlant.lastWatered || '')))} jours.
+              🔥 {t('home.streakAtRisk', { plant: streakAtRiskPlant.name, days: Math.floor(differenceInDays(new Date(), parseISO(streakAtRiskPlant.lastWatered || ''))) })}
             </Text>
-            <Text style={styles.warningAction}>Arroser maintenant →</Text>
+            <Text style={styles.warningAction}>{t('home.waterNow')}</Text>
           </TouchableOpacity>
         )}
 
@@ -123,13 +125,13 @@ export default function HomeScreen() {
             onPress={() => setStreakModalVisible(true)}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel={`Série: ${streakDays} jours`}
+            accessibilityLabel={`${t('home.streak')}: ${streakDays} jours`}
             accessibilityHint="Appuyez pour voir les détails de votre série"
           >
             <Text style={styles.badgeEmoji}>🔥</Text>
             <View style={styles.badgeContent}>
               <Text style={styles.badgeValue}>{streakDays}</Text>
-              <Text style={styles.badgeLabel}>Série</Text>
+              <Text style={styles.badgeLabel}>{t('home.streak')}</Text>
             </View>
           </TouchableOpacity>
 
@@ -139,13 +141,13 @@ export default function HomeScreen() {
             onPress={() => setLevelModalVisible(true)}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel={`Niveau de jardinier: ${gardenerLevel}`}
+            accessibilityLabel={`${t('home.level')}: ${gardenerLevel}`}
             accessibilityHint="Appuyez pour voir les détails de votre niveau"
           >
             <Text style={styles.badgeEmoji}>🏆</Text>
             <View style={styles.badgeContent}>
               <Text style={styles.badgeValue}>{gardenerLevel}</Text>
-              <Text style={styles.badgeLabel}>Niveau</Text>
+              <Text style={styles.badgeLabel}>{t('home.level')}</Text>
             </View>
           </TouchableOpacity>
 
@@ -155,7 +157,7 @@ export default function HomeScreen() {
             onPress={() => navigation.navigate('DashboardStack', { screen: 'ProductionDashboard' })}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel={`Tableau de bord de production: ${harvestData.actual.toFixed(1)}kg sur ${harvestData.goal}kg`}
+            accessibilityLabel={`${t('dashboard.production')}: ${harvestData.actual.toFixed(1)}${t('home.kg')} sur ${harvestData.goal}${t('home.kg')}`}
             accessibilityHint="Appuyez pour voir le tableau de bord complet"
           >
             <Text style={styles.badgeEmoji}>📊</Text>
@@ -163,7 +165,7 @@ export default function HomeScreen() {
               <Text style={styles.badgeValue}>
                 {harvestData.actual}/{harvestData.goal}
               </Text>
-              <Text style={styles.badgeLabel}>kg</Text>
+              <Text style={styles.badgeLabel}>{t('home.kg')}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -183,7 +185,7 @@ export default function HomeScreen() {
         {isLoadingWeather && !weather && (
           <View style={styles.loadingBox}>
             <ActivityIndicator color={colors.primary} size="large" />
-            <Text style={styles.loadingText}>Chargement de la météo…</Text>
+            <Text style={styles.loadingText}>{t('home.loading')}</Text>
           </View>
         )}
 
@@ -191,7 +193,7 @@ export default function HomeScreen() {
           <View style={styles.errorBox}>
             <Text style={styles.errorText}>⚠️ {weatherError}</Text>
             <TouchableOpacity onPress={refreshWeather} style={styles.retryBtn}>
-              <Text style={styles.retryText}>Réessayer</Text>
+              <Text style={styles.retryText}>{t('common.retry')}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -210,12 +212,12 @@ export default function HomeScreen() {
         {plants.length === 0 ? (
           <View style={styles.emptyBox}>
             <Text style={styles.emptyEmoji}>🌱</Text>
-            <Text style={styles.emptyTitle}>Aucun plant pour l'instant</Text>
-            <Text style={styles.emptyDesc}>Ajoutez votre premier plant depuis l'onglet Jardin.</Text>
+            <Text style={styles.emptyTitle}>{t('home.noPlants')}</Text>
+            <Text style={styles.emptyDesc}>{t('home.noPlantDesc')}</Text>
           </View>
         ) : (
           <>
-            <Text style={styles.sectionTitle}>Arrosage</Text>
+            <Text style={styles.sectionTitle}>{t('home.watering')}</Text>
             <View style={{ paddingHorizontal: spacing.md }}>
               <WateringCard
                 recommendations={recommendations}
@@ -228,7 +230,7 @@ export default function HomeScreen() {
 
         {tips.length > 0 && (
           <>
-            <Text style={styles.sectionTitle}>Conseils du jour</Text>
+            <Text style={styles.sectionTitle}>{t('home.tips')}</Text>
             <View style={styles.tipsContainer}>
               {tips.slice(0, 4).map(tip => <TipCard key={tip.id} tip={tip} />)}
             </View>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert,
@@ -16,6 +17,7 @@ import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import ChoreTypeIcon from '../components/ChoreTypeIcon';
 
 export default function ChoreDetailScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { choreId } = route.params as { choreId: string };

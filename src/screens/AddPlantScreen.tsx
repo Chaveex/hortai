@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../store/useStore';
 import { PlantType } from '../types';
 import { PLANT_TYPES, getPlantInfo } from '../constants/plants';
@@ -13,6 +14,7 @@ import { format } from 'date-fns';
 import DatePickerField from '../components/DatePickerField';
 
 export default function AddPlantScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const addPlant = useStore(s => s.addPlant);
 
@@ -29,7 +31,7 @@ export default function AddPlantScreen() {
 
   function handleAdd() {
     if (!plantedDate) {
-      return Alert.alert('Date requise', 'Veuillez choisir une date de plantation');
+      return Alert.alert(t('plants.dateRequired'));
     }
     addPlant({
       type: selectedType,
@@ -48,16 +50,16 @@ export default function AddPlantScreen() {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <View style={styles.navHeader}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backBtn}>← Retour</Text>
+            <Text style={styles.backBtn}>{t('common.back')}</Text>
           </TouchableOpacity>
-          <Text style={styles.navTitle}>Nouveau plant</Text>
+          <Text style={styles.navTitle}>{t('plants.newPlant')}</Text>
           <TouchableOpacity onPress={handleAdd}>
-            <Text style={styles.saveBtn}>Ajouter</Text>
+            <Text style={styles.saveBtn}>{t('common.add')}</Text>
           </TouchableOpacity>
         </View>
 
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-          <Text style={styles.label}>Type de plante *</Text>
+          <Text style={styles.label}>{t('plants.type')}</Text>
           <TouchableOpacity
             style={styles.selector}
             onPress={() => setShowTypePicker(!showTypePicker)}

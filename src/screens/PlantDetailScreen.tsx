@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { differenceInDays, parseISO, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useStore } from '../store/useStore';
@@ -16,6 +17,7 @@ import { getSeason } from '../services/recommendations';
 import { CHORE_TYPE_META } from '../types/chores';
 
 export default function PlantDetailScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { plantId } = route.params as { plantId: string };
@@ -32,7 +34,7 @@ export default function PlantDetailScreen() {
   if (!plant) {
     return (
       <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
-        <Text style={{ padding: spacing.md }}>Plant introuvable.</Text>
+        <Text style={{ padding: spacing.md }}>{t('plants.plantNotFound')}</Text>
       </SafeAreaView>
     );
   }
@@ -80,16 +82,16 @@ export default function PlantDetailScreen() {
 
       // Show appropriate toast
       if (isFirstHarvest) {
-        Alert.alert('🎉 Récolte', 'Première récolte ! C\'est magnifique !', [
-          { text: 'Bravo 🙌', onPress: () => {} },
+        Alert.alert('🎉 ' + t('plants.harvest'), t('plants.firstHarvest'), [
+          { text: t('plants.congratulations'), onPress: () => {} },
         ]);
       } else if (willHitGoal) {
-        Alert.alert('🎉 Récolte', 'Objectif du mois atteint !', [
-          { text: 'Excellent ! 🎯', onPress: () => {} },
+        Alert.alert('🎉 ' + t('plants.harvest'), t('plants.goalAchieved'), [
+          { text: t('plants.excellent'), onPress: () => {} },
         ]);
       } else {
-        Alert.alert('✅ Récolte', 'Récolte enregistrée !', [
-          { text: 'Merci 🙏', onPress: () => {} },
+        Alert.alert('✅ ' + t('plants.harvest'), t('plants.harvestRecorded'), [
+          { text: t('plants.thanks'), onPress: () => {} },
         ]);
       }
     } else {
@@ -102,12 +104,12 @@ export default function PlantDetailScreen() {
 
   function handleDelete() {
     Alert.alert(
-      'Supprimer ce plant ?',
-      'Cette action est irréversible.',
+      t('plants.deletePlant'),
+      t('plants.deleteDesc'),
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Supprimer',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: () => { deletePlant(plantId); navigation.goBack(); },
         },
@@ -120,25 +122,25 @@ export default function PlantDetailScreen() {
       <View style={styles.navHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          accessibilityLabel="Retour vers le jardin"
+          accessibilityLabel={t('common.back')}
           accessibilityRole="button"
         >
-          <Text style={styles.backBtn}>← Retour</Text>
+          <Text style={styles.backBtn}>{t('common.back')}</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', gap: spacing.sm }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('PlantDetailDashboard', { plantId })}
-            accessibilityLabel="Statistiques du plant"
+            accessibilityLabel={t('plants.stats')}
             accessibilityRole="button"
           >
-            <Text style={styles.statsBtn}>📊 Stats</Text>
+            <Text style={styles.statsBtn}>{t('plants.stats')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleDelete}
-            accessibilityLabel="Supprimer ce plant"
+            accessibilityLabel={t('plants.deletePlant')}
             accessibilityRole="button"
           >
-            <Text style={styles.deleteBtn}>Supprimer</Text>
+            <Text style={styles.deleteBtn}>{t('common.delete')}</Text>
           </TouchableOpacity>
         </View>
       </View>

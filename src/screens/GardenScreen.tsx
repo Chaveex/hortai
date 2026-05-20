@@ -4,11 +4,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '../store/useStore';
 import PlantCard from '../components/PlantCard';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 
 export default function GardenScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { plants, recommendations, markWatered } = useStore();
 
@@ -18,10 +20,10 @@ export default function GardenScreen() {
     <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.title}>Mon Jardin</Text>
+          <Text style={styles.title}>{t('garden.title')}</Text>
           {toWaterCount > 0 && (
             <Text style={styles.subtitle}>
-              💧 {toWaterCount} plant{toWaterCount > 1 ? 's' : ''} à arroser
+              💧 {toWaterCount} plant{toWaterCount > 1 ? 's' : ''} {t('home.watering')}
             </Text>
           )}
         </View>
@@ -36,7 +38,7 @@ export default function GardenScreen() {
             style={styles.addBtn}
             onPress={() => navigation.navigate('AddPlant')}
           >
-            <Text style={styles.addBtnText}>+ Ajouter</Text>
+            <Text style={styles.addBtnText}>+ {t('common.add')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -44,7 +46,7 @@ export default function GardenScreen() {
       {plants.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyEmoji}>🌱</Text>
-          <Text style={styles.emptyTitle}>Votre jardin est vide</Text>
+          <Text style={styles.emptyTitle}>{t('garden.noBeds')}</Text>
           <Text style={styles.emptyDesc}>
             Ajoutez vos plants, semis et légumes pour commencer à recevoir des conseils personnalisés.
           </Text>
@@ -52,7 +54,7 @@ export default function GardenScreen() {
             style={styles.addBtnLarge}
             onPress={() => navigation.navigate('AddPlant')}
           >
-            <Text style={styles.addBtnText}>+ Ajouter mon premier plant</Text>
+            <Text style={styles.addBtnText}>+ {t('plants.addPlant')}</Text>
           </TouchableOpacity>
         </View>
       ) : (

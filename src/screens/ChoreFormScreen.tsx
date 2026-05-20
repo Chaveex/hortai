@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput,
@@ -18,6 +19,7 @@ import {
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 
 export default function ChoreFormScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const editingId: string | undefined = route.params?.choreId;
@@ -81,19 +83,19 @@ export default function ChoreFormScreen() {
   function handleSave() {
     if (!title.trim()) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      Alert.alert('Titre requis', 'Donnez un titre à votre tâche.');
+      Alert.alert(t('chores.titleRequired'));
       return;
     }
     if (!date) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      Alert.alert('Date requise', 'Choisissez une date pour la tâche.');
+      Alert.alert(t('chores.dateRequired'));
       return;
     }
 
     const recurrenceDays = recurrence.trim() ? parseInt(recurrence, 10) : undefined;
     if (recurrence.trim() && (isNaN(recurrenceDays!) || recurrenceDays! < 1)) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      Alert.alert('Récurrence invalide', 'Entrez un nombre de jours valide.');
+      Alert.alert(t('chores.recurrenceInvalid'), t('chores.daysInvalid'));
       return;
     }
 

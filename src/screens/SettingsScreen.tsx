@@ -48,9 +48,9 @@ export default function SettingsScreen() {
       updateProfile({ city: geo.name, latitude: geo.lat, longitude: geo.lon });
       setCityInput(geo.name);
       await refreshWeather();
-      Alert.alert('Ville mise à jour', `Météo de ${geo.name} chargée.`);
+      Alert.alert(t('settings.cityUpdated'), t('settings.weatherLoaded', { city: geo.name }));
     } catch {
-      Alert.alert('Ville introuvable', 'Vérifiez l\'orthographe.');
+      Alert.alert(t('settings.cityNotFound'), t('settings.cityCheckSpelling'));
     } finally {
       setIsSavingCity(false);
     }
@@ -61,19 +61,19 @@ export default function SettingsScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>{t('settings.title')}</Text>
 
-        <Text style={styles.sectionHeader}>Localisation</Text>
+        <Text style={styles.sectionHeader}>{t('settings.location')}</Text>
         <View style={styles.card}>
           <View style={styles.citySection}>
-            <Text style={styles.label}>Ville</Text>
+            <Text style={styles.label}>{t('settings.city')}</Text>
             <View style={styles.cityInputRow}>
               <TextInput
                 style={styles.cityInput}
                 value={cityInput}
                 onChangeText={setCityInput}
-                placeholder="Votre ville"
+                placeholder={t('settings.cityPlaceholder')}
                 placeholderTextColor={colors.textMuted}
                 autoCapitalize="words"
-                accessibilityLabel="Entrez votre ville"
+                accessibilityLabel={t('settings.city')}
                 accessibilityHint="Saisissez le nom de votre ville pour mettre à jour la météo"
               />
               <TouchableOpacity
@@ -81,18 +81,18 @@ export default function SettingsScreen() {
                 onPress={handleCitySave}
                 disabled={isSavingCity}
                 accessibilityRole="button"
-                accessibilityLabel="Mettre à jour la ville"
+                accessibilityLabel={t('settings.cityUpdated')}
                 accessibilityHint="Appuyez pour enregistrer les changements"
               >
                 {isSavingCity
                   ? <ActivityIndicator color="#fff" size="small" />
-                  : <Text style={styles.saveBtnText}>Mettre à jour</Text>}
+                  : <Text style={styles.saveBtnText}>{t('common.update')}</Text>}
               </TouchableOpacity>
             </View>
           </View>
         </View>
 
-        <Text style={styles.sectionHeader}>Style de jardinage</Text>
+        <Text style={styles.sectionHeader}>{t('settings.gardeningStyle')}</Text>
         <View style={styles.card}>
           {STYLES.map(item => (
             <TouchableOpacity
@@ -112,7 +112,7 @@ export default function SettingsScreen() {
           ))}
         </View>
 
-        <Text style={styles.sectionHeader}>Type d'engrais</Text>
+        <Text style={styles.sectionHeader}>{t('settings.fertilizerType')}</Text>
         <View style={styles.card}>
           {FERTILIZERS.map(item => (
             <TouchableOpacity
@@ -132,7 +132,7 @@ export default function SettingsScreen() {
           ))}
         </View>
 
-        <Text style={styles.sectionHeader}>Langue / Language</Text>
+        <Text style={styles.sectionHeader}>{t('settings.language')} / Language</Text>
         <View style={styles.card}>
           {LANGUAGES.map(item => (
             <TouchableOpacity
@@ -155,11 +155,11 @@ export default function SettingsScreen() {
           ))}
         </View>
 
-        <Text style={styles.sectionHeader}>Notifications</Text>
+        <Text style={styles.sectionHeader}>{t('settings.notifications')}</Text>
         <View style={styles.card}>
           <View style={styles.switchRow}>
             <View>
-              <Text style={styles.optionLabel}>Rappels d'arrosage</Text>
+              <Text style={styles.optionLabel}>{t('settings.wateringReminders')}</Text>
               <Text style={styles.optionSub}>Notification quotidienne à {profile.notificationHour}h00</Text>
             </View>
             <Switch
@@ -171,8 +171,8 @@ export default function SettingsScreen() {
           </View>
           <View style={styles.switchRow}>
             <View>
-              <Text style={styles.optionLabel}>Rappels de semis</Text>
-              <Text style={styles.optionSub}>Notification le 1er de chaque mois</Text>
+              <Text style={styles.optionLabel}>{t('settings.sowingReminders')}</Text>
+              <Text style={styles.optionSub}>{t('settings.sowingMonthly')}</Text>
             </View>
             <Switch
               value={profile.sowingNotificationsEnabled ?? true}
@@ -183,7 +183,7 @@ export default function SettingsScreen() {
           </View>
           {profile.notificationsEnabled && (
             <View style={styles.hourRow}>
-              <Text style={styles.label}>Heure de notification</Text>
+              <Text style={styles.label}>{t('settings.notificationHour')}</Text>
               <View style={styles.hourBtns}>
                 {[6, 7, 8, 9, 10].map(h => (
                   <TouchableOpacity
@@ -201,7 +201,7 @@ export default function SettingsScreen() {
           )}
           <View style={styles.switchRow}>
             <View>
-              <Text style={styles.optionLabel}>Conseil quotidien</Text>
+              <Text style={styles.optionLabel}>{t('settings.dailyTip')}</Text>
               <Text style={styles.optionSub}>Conseil du jardinier chaque matin</Text>
             </View>
             <Switch
@@ -213,7 +213,7 @@ export default function SettingsScreen() {
           </View>
           {profile.dailyTipEnabled && (
             <View style={styles.hourRow}>
-              <Text style={styles.label}>Heure du conseil</Text>
+              <Text style={styles.label}>{t('settings.tipTime')}</Text>
               <View style={styles.hourBtns}>
                 {[6, 7, 8, 9, 10].map(h => (
                   <TouchableOpacity
@@ -231,12 +231,12 @@ export default function SettingsScreen() {
           )}
         </View>
 
-        <Text style={styles.sectionHeader}>Objectifs du jardin</Text>
+        <Text style={styles.sectionHeader}>{t('settings.gardenObjectives')}</Text>
         <View style={styles.card}>
           <View style={styles.harvestGoalRow}>
             <View>
-              <Text style={styles.optionLabel}>Récolte mensuelle cible</Text>
-              <Text style={styles.optionSub}>kg par mois</Text>
+              <Text style={styles.optionLabel}>{t('settings.monthlyTarget')}</Text>
+              <Text style={styles.optionSub}>{t('settings.kg')}</Text>
             </View>
             <View style={styles.harvestGoalInputBox}>
               <TouchableOpacity
@@ -267,7 +267,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <Text style={styles.sectionHeader}>Sauvegarde & Export</Text>
+        <Text style={styles.sectionHeader}>{t('settings.backup')}</Text>
         <View style={styles.card}>
           <TouchableOpacity
             style={[styles.optionRow, { borderBottomWidth: 0 }]}
@@ -276,22 +276,24 @@ export default function SettingsScreen() {
           >
             <Text style={styles.optionIcon}>💾</Text>
             <View style={{ flex: 1 }}>
-              <Text style={styles.optionLabel}>Sauvegardes</Text>
+              <Text style={styles.optionLabel}>{t('settings.backups')}</Text>
               {lastBackupTime ? (
                 <Text style={styles.optionSub}>
-                  Dernière : {new Date(lastBackupTime).toLocaleDateString('fr-FR', {
-                    day: '2-digit', month: 'short', year: 'numeric',
+                  {t('settings.lastBackup', {
+                    date: new Date(lastBackupTime).toLocaleDateString(i18next.language === 'en' ? 'en-US' : i18next.language === 'es' ? 'es-ES' : 'fr-FR', {
+                      day: '2-digit', month: 'short', year: 'numeric',
+                    })
                   })}
                 </Text>
               ) : (
-                <Text style={styles.optionSub}>Export JSON · ZIP · Cloud optionnel</Text>
+                <Text style={styles.optionSub}>{t('settings.backupFormats')}</Text>
               )}
             </View>
             <Text style={{ fontSize: 20, color: colors.textMuted }}>›</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.version}>MonJardin v1.0.0</Text>
+        <Text style={styles.version}>{t('settings.version')}</Text>
       </ScrollView>
     </SafeAreaView>
   );
