@@ -111,6 +111,14 @@ export interface AIChatMessage {
   photo?: string;
 }
 
+export interface BotanistMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+  timestamp: string;
+  photo?: string; // base64 (optional, for plant photos)
+}
+
 export interface RateLimitStatus {
   allowed: boolean;
   remaining: number;

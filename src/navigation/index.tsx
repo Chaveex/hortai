@@ -21,6 +21,7 @@ import { BedGridScreen } from '../screens/BedGridScreen';
 import { BedFormScreen } from '../screens/BedFormScreen';
 import { BedSettingsModal } from '../screens/BedSettingsModal';
 import AIChatModal from '../screens/AIChatModal';
+import BotanistModal from '../screens/BotanistModal';
 import AIFABButton from '../components/AIFABButton';
 import ContextFAB from '../components/ContextFAB';
 import { colors } from '../constants/theme';
@@ -129,6 +130,7 @@ function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
 
 export default function Navigation() {
   const [chatOpen, setChatOpen] = useState(false);
+  const [botanistOpen, setBotanistOpen] = useState(false);
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
 
@@ -200,6 +202,7 @@ export default function Navigation() {
         </Stack.Navigator>
       </View>
       <AIChatModal visible={chatOpen} onClose={() => setChatOpen(false)} />
+      <BotanistModal visible={botanistOpen} onClose={() => setBotanistOpen(false)} />
     </NavigationContainer>
   );
 }
