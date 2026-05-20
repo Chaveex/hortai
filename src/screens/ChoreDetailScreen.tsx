@@ -105,12 +105,25 @@ export default function ChoreDetailScreen() {
   const isSkipped = chore.status === 'skipped';
   const isInactive = isDone || isSkipped;
 
+  function handlePlantTap() {
+    if (plant) {
+      navigation.navigate('Jardin', { screen: 'PlantDetail', params: { plantId: plant.id } });
+    }
+  }
+
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View style={styles.navHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.backBtn}>← Retour</Text>
         </TouchableOpacity>
+        {plant && (
+          <TouchableOpacity onPress={handlePlantTap} style={styles.headerPlantLink}>
+            <Text style={styles.headerPlantText}>
+              {plant.name || plantInfo?.frenchName}
+            </Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity onPress={handleEdit}>
           <Text style={styles.editBtn}>Modifier</Text>
         </TouchableOpacity>
@@ -215,6 +228,8 @@ const styles = StyleSheet.create({
   },
   backBtn: { color: colors.primary, fontSize: 15 },
   editBtn: { color: colors.primary, fontSize: 14, fontWeight: '600' },
+  headerPlantLink: { flex: 1, alignItems: 'center' },
+  headerPlantText: { color: colors.primary, fontSize: 14, fontWeight: '600' },
   content: { padding: spacing.md, paddingBottom: spacing.xxl },
   notFound: { padding: spacing.md, color: colors.textSecondary },
   hero: {

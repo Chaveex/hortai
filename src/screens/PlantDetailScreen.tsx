@@ -8,10 +8,12 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { differenceInDays, parseISO, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useStore } from '../store/useStore';
+import { useChoreStore } from '../store/useChoreStore';
 import { getPlantInfo, getGrowthStage } from '../constants/plants';
 import TipCard from '../components/TipCard';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { getSeason } from '../services/recommendations';
+import { CHORE_TYPE_META } from '../types/chores';
 
 export default function PlantDetailScreen() {
   const navigation = useNavigation<any>();
@@ -19,11 +21,13 @@ export default function PlantDetailScreen() {
   const { plantId } = route.params as { plantId: string };
 
   const { plants, recommendations, tips, entries, markWatered, deletePlant, addEntry, deleteEntry, profile } = useStore();
+  const getChoresForPlant = useChoreStore((s) => s.getChoresForPlant);
   const [entryType, setEntryType] = useState<'note' | 'harvest'>('note');
   const [entryText, setEntryText] = useState('');
   const [entryQty, setEntryQty] = useState('');
   const [entryUnit, setEntryUnit] = useState<'kg' | 'g' | 'pièces'>('kg');
   const plant = plants.find(p => p.id === plantId);
+  const linkedChores = plant ? getChoresForPlant(plant.id, 'upcoming') : [];
 
   if (!plant) {
     return (
@@ -180,6 +184,43 @@ export default function PlantDetailScreen() {
             )}
           </View>
         )}
+
+        <View style={styles.choreSection}>
+          <View style={styles.choreHeader}>
+            <Text style={styles.label}>Tâches liées</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Tâches', { screen: 'ChoreForm', params: { plantId: plant.id } })}
+              style={styles.addChoreBtn}
+            >
+              <Text style={styles.addChoreBtnText}>➕</Text>
+            </TouchableOpacity>
+          </View>
+          {linkedChores.length > 0 ? (
+            <View style={styles.choreList}>
+              {linkedChores.map((chore) => {
+                const meta = CHORE_TYPE_META[chore.type];
+                return (
+                  <TouchableOpacity
+                    key={chore.id}
+                    style={styles.choreCard}
+                    onPress={() => navigation.navigate('Tâches', { screen: 'ChoreDetail', params: { choreId: chore.id } })}
+                  >
+                    <Text style={styles.choreIcon}>{meta.icon}</Text>
+                    <View style={styles.choreInfo}>
+                      <Text style={styles.choreTitle}>{chore.title}</Text>
+                      <Text style={styles.choreDate}>
+                        {format(parseISO(chore.date), 'd MMM', { locale: fr })}
+                      </Text>
+                    </View>
+                    <Text style={styles.choreArrow}>›</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : (
+            <Text style={styles.noChoresText}>Aucune tâche liée</Text>
+          )}
+        </View>
 
         {plantTips.length > 0 && (
           <>
@@ -424,4 +465,25 @@ const styles = StyleSheet.create({
   entryCardDelete: { color: colors.textMuted, fontSize: 14 },
   entryCardText: { fontSize: 14, color: colors.text, lineHeight: 20 },
   entryCardHarvest: { fontSize: 16, fontWeight: '700', color: colors.success },
+  choreSection: { marginTop: spacing.md, marginBottom: spacing.md },
+  choreHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
+  addChoreBtn: { width: 32, height: 32, justifyContent: 'center', alignItems: 'center' },
+  addChoreBtnText: { fontSize: 20 },
+  choreList: { gap: spacing.xs },
+  choreCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  choreIcon: { fontSize: 20 },
+  choreInfo: { flex: 1 },
+  choreTitle: { fontSize: 14, fontWeight: '600', color: colors.text },
+  choreDate: { fontSize: 12, color: colors.textSecondary, marginTop: 2 },
+  choreArrow: { fontSize: 18, color: colors.textSecondary },
+  noChoresText: { fontSize: 13, color: colors.textSecondary, fontStyle: 'italic', padding: spacing.md, textAlign: 'center' },
 });
