@@ -225,3 +225,9 @@ export interface GardenChartData {
   productivityByType: { [plantType: string]: number }; // total kg per type
   waterUsageByMonth: TimeSeriesDataPoint[]; // liters per month
 }
+
+export interface BarChartDataPoint {
+  label: string;
+  value: number;
+  color?: string;
+}

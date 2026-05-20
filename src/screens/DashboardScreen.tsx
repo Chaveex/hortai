@@ -1,131 +1,96 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View, Text, ScrollView, StyleSheet, TouchableOpacity, RefreshControl, Dimensions,
+  View, Text, ScrollView, StyleSheet, RefreshControl, SafeAreaView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { format, parseISO, subMonths } from 'date-fns';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { useStore } from '../store/useStore';
-import { QuickStatCard } from '../components/Dashboard/QuickStatCard';
-import { TrendChart } from '../components/Dashboard/TrendChart';
-import { HealthScoreGauge } from '../components/Dashboard/HealthScoreGauge';
+import { PeriodSelector, Period } from '../components/Dashboard/PeriodSelector';
+import { StatCard } from '../components/Dashboard/StatCard';
+import { BarChart } from '../components/Charts/BarChart';
+import { PlantComparisonCard } from '../components/Dashboard/PlantComparisonCard';
 import { AlertBanner, AlertItem } from '../components/Dashboard/AlertBanner';
-import { colors, spacing, borderRadius, typography } from '../constants/theme';
-import { getLastNMonths } from '../services/statistics';
-import { PLANT_DATABASE } from '../constants/plants';
+import { colors, spacing, typography } from '../constants/theme';
+import {
+  getProductionData,
+  getWaterData,
+  getHealthData,
+  getComparisonData,
+  DateRange,
+} from '../services/dashboardAggregation';
 
 export function DashboardScreen() {
   const navigation = useNavigation<any>();
-  const { plants, entries, weather, stats, refreshWeather, refreshStats } = useStore();
+  const { plants, entries, weather, refreshWeather } = useStore();
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedDateRange, setSelectedDateRange] = useState('6m');
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>('month');
 
-  useEffect(() => {
-    refreshWeather();
-    refreshStats();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      refreshWeather();
+    }, []),
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
     try {
       await refreshWeather();
-      refreshStats();
     } finally {
       setRefreshing(false);
     }
   };
 
-  // Calculate KPIs
-  const kpis = useMemo(() => {
-    const harvestEntries = entries.filter(e => e.type === 'harvest');
-    let totalHarvest = 0;
-    harvestEntries.forEach(e => {
-      const qty = e.quantity ?? 0;
-      const unit = e.unit ?? 'kg';
-      const kg = unit === 'kg' ? qty : unit === 'g' ? qty / 1000 : qty * 0.15;
-      totalHarvest += kg;
-    });
-
-    // Water consumption estimate
-    let waterConsumption = 0;
+  // Calculate date range based on selected period
+  const dateRange = useMemo((): DateRange => {
     const now = new Date();
-    plants.forEach(p => {
-      const info = PLANT_DATABASE[p.type];
-      if (info) {
-        const daysAlive = Math.min(30, Math.max(0, Math.floor((now.getTime() - parseISO(p.plantedDate).getTime()) / (1000 * 60 * 60 * 24))));
-        waterConsumption += info.dailyWaterNeed * daysAlive;
-      }
-    });
+    const end = format(now, 'yyyy-MM-dd');
+    let start: string;
 
-    return {
-      totalPlants: plants.length,
-      totalHarvest: totalHarvest.toFixed(1),
-      waterL: waterConsumption.toFixed(0),
-      healthScore: stats?.healthScore ?? 75,
-    };
-  }, [plants, entries, stats]);
+    switch (selectedPeriod) {
+      case 'week':
+        start = format(subDays(now, 7), 'yyyy-MM-dd');
+        break;
+      case 'season':
+        start = format(subMonths(now, 3), 'yyyy-MM-dd');
+        break;
+      case 'year':
+        start = format(subMonths(now, 12), 'yyyy-MM-dd');
+        break;
+      case 'month':
+      default:
+        start = format(subDays(now, 30), 'yyyy-MM-dd');
+    }
 
-  // Production trend data (last 6 months)
-  const productionData = useMemo(() => {
-    const months = getLastNMonths(6);
-    return months.map(yearMonth => {
-      const harvests = entries.filter(e => {
-        const eMonth = format(parseISO(e.date), 'yyyy-MM');
-        return e.type === 'harvest' && eMonth === yearMonth;
-      });
+    return { start, end };
+  }, [selectedPeriod]);
 
-      let total = 0;
-      harvests.forEach(e => {
-        const qty = e.quantity ?? 0;
-        const unit = e.unit ?? 'kg';
-        const kg = unit === 'kg' ? qty : unit === 'g' ? qty / 1000 : qty * 0.15;
-        total += kg;
-      });
+  // Aggregated dashboard data
+  const dashboardData = useMemo(() => {
+    const production = getProductionData(entries, plants, dateRange);
+    const water = getWaterData(plants, entries, weather, dateRange);
+    const health = getHealthData(plants, entries, weather);
+    const comparison = getComparisonData(plants, entries);
 
-      return {
-        label: yearMonth.slice(5),
-        value: total,
-      };
-    });
-  }, [entries]);
+    return { production, water, health, comparison };
+  }, [entries, plants, weather, dateRange]);
 
-  // Alert generation
+  // Top plants for comparison
+  const topPlants = useMemo(() => {
+    return dashboardData.comparison.plants
+      .sort((a, b) => b.harvest - a.harvest)
+      .slice(0, 3);
+  }, [dashboardData.comparison]);
+
+  // Alerts from health data
   const alerts: AlertItem[] = useMemo(() => {
-    const alertList: AlertItem[] = [];
-
-    // Check plants needing water
-    const wateringNeeded = plants.filter(p => {
-      if (!p.lastWatered) return true;
-      const info = PLANT_DATABASE[p.type];
-      const daysSince = Math.floor((new Date().getTime() - parseISO(p.lastWatered).getTime()) / (1000 * 60 * 60 * 24));
-      return daysSince > info.wateringFrequencyDays * 1.2;
-    });
-
-    if (wateringNeeded.length > 0) {
-      alertList.push({
-        id: 'water',
-        type: 'warning',
-        message: `${wateringNeeded.length} plante(s) nécessite(nt) d'être arrosée(s)`,
-        icon: '💧',
-        dismissible: true,
-      });
-    }
-
-    // Check weather alerts
-    if (weather && weather.description.toLowerCase().includes('rain')) {
-      alertList.push({
-        id: 'rain',
-        type: 'info',
-        message: 'Pluie prévue : arrosage moins urgent',
-        icon: '🌧️',
-        dismissible: true,
-      });
-    }
-
-    return alertList;
-  }, [plants, weather, entries]);
-
-  const dateRangeLabel = selectedDateRange === '6m' ? '6 derniers mois' : '3 derniers mois';
+    return dashboardData.health.alerts.map((alert, i) => ({
+      id: `health-${i}`,
+      type: alert.severity === 'warning' ? 'warning' : 'info',
+      message: alert.message,
+      icon: alert.severity === 'warning' ? '⚠️' : 'ℹ️',
+      dismissible: true,
+    }));
+  }, [dashboardData.health]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -142,6 +107,9 @@ export function DashboardScreen() {
           </Text>
         </View>
 
+        {/* Period Selector */}
+        <PeriodSelector selected={selectedPeriod} onSelect={setSelectedPeriod} />
+
         {/* Alerts */}
         {alerts.length > 0 && (
           <View style={styles.alertSection}>
@@ -149,109 +117,77 @@ export function DashboardScreen() {
           </View>
         )}
 
-        {/* KPI Cards */}
-        <View style={styles.kpisSection}>
-          <View style={styles.kpiRow}>
-            <View style={styles.kpiCard}>
-              <QuickStatCard
-                value={kpis.totalPlants}
-                label="Plantes"
-                color={colors.primary}
-                trendEmoji="🌱"
-              />
-            </View>
-            <View style={styles.kpiCard}>
-              <QuickStatCard
-                value={kpis.totalHarvest}
-                label="Récolte"
-                unit=" kg"
-                color={colors.accent}
-                trendEmoji="🥕"
-              />
-            </View>
-          </View>
-          <View style={styles.kpiRow}>
-            <View style={styles.kpiCard}>
-              <QuickStatCard
-                value={kpis.waterL}
-                label="Eau (mois)"
-                unit=" L"
-                color={colors.secondary}
-                trendEmoji="💧"
-              />
-            </View>
-            <View style={styles.kpiCard}>
-              <QuickStatCard
-                value={kpis.healthScore.toFixed(0)}
-                label="Santé"
-                unit="%"
-                color={colors.success}
-                trendEmoji="💪"
-              />
-            </View>
-          </View>
-        </View>
-
-        {/* Production Trend */}
-        <View style={styles.chartSection}>
-          <TrendChart
-            data={productionData}
-            title="Récoltes (6 derniers mois)"
+        {/* KPI Stat Cards */}
+        <View style={styles.statsSection}>
+          <StatCard
+            value={dashboardData.production.totalKg}
+            label="Production"
             unit=" kg"
-            color={colors.surface}
-            lineColor={colors.accent}
+            icon="🥕"
+            color={colors.accent}
+            trend={dashboardData.production.trendDirection}
+            onPress={() => navigation.navigate('ProductionDashboard')}
+          />
+          <StatCard
+            value={dashboardData.water.totalL}
+            label="Eau"
+            unit=" L"
+            icon="💧"
+            color={colors.secondary}
+            onPress={() => navigation.navigate('WaterDashboard')}
+          />
+          <StatCard
+            value={dashboardData.health.currentScore}
+            label="Santé"
+            unit="%"
+            icon="💪"
+            color={colors.success}
+            onPress={() => navigation.navigate('HealthDashboard')}
           />
         </View>
 
-        {/* Health Score */}
-        <View style={styles.gaugeSection}>
-          <HealthScoreGauge
-            score={kpis.healthScore}
-            label="Santé du jardin"
-            size={140}
+        {/* Production Chart */}
+        <View style={styles.chartSection}>
+          <BarChart
+            data={dashboardData.production.chart}
+            title="Production (6 derniers mois)"
+            unit=" kg"
+            barColor={colors.accent}
+            backgroundColor={colors.surface}
           />
         </View>
 
-        {/* Navigation to detailed dashboards */}
-        <View style={styles.navigationSection}>
-          <Text style={styles.navTitle}>Explorez les détails</Text>
-          <View style={styles.navButtons}>
-            <TouchableOpacity
-              style={styles.navButton}
-              onPress={() => navigation.navigate('ProductionDashboard')}
-            >
-              <Text style={styles.navIcon}>📊</Text>
-              <Text style={styles.navLabel}>Production</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.navButton}
-              onPress={() => navigation.navigate('WaterDashboard')}
-            >
-              <Text style={styles.navIcon}>💧</Text>
-              <Text style={styles.navLabel}>Eau</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.navButton}
-              onPress={() => navigation.navigate('HealthDashboard')}
-            >
-              <Text style={styles.navIcon}>🏥</Text>
-              <Text style={styles.navLabel}>Santé</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.navButton}
-              onPress={() => navigation.navigate('PlantDetailDashboard')}
-            >
-              <Text style={styles.navIcon}>🌿</Text>
-              <Text style={styles.navLabel}>Plante</Text>
-            </TouchableOpacity>
+        {/* Comparison Cards */}
+        {topPlants.length > 0 && (
+          <View style={styles.comparisonSection}>
+            <Text style={styles.sectionTitle}>Plantes principales</Text>
+            {topPlants.map(plant => (
+              <PlantComparisonCard
+                key={plant.name}
+                name={plant.name}
+                actual={plant.harvest}
+                regional={REGIONAL_AVERAGES[plant.name] ?? 2}
+                status={plant.status}
+                unit=" kg"
+              />
+            ))}
           </View>
-        </View>
+        )}
 
         <View style={styles.spacer} />
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+// Quick regional defaults for card display
+const REGIONAL_AVERAGES: Record<string, number> = {
+  tomato: 5, pepper: 2, zucchini: 8, cucumber: 4, lettuce: 0.5,
+  carrot: 1.5, radish: 0.3, beans: 1.5, peas: 1, basil: 0.3,
+  parsley: 0.2, mint: 0.2, strawberry: 1, potato: 4, onion: 2,
+  garlic: 0.5, leek: 1.5, spinach: 0.5, chard: 1.5, beet: 2,
+  broccoli: 1, corn: 1, sunflower: 0.5, other: 1,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -279,58 +215,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
   },
-  kpisSection: {
+  statsSection: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
-  },
-  kpiRow: {
-    flexDirection: 'row',
     gap: spacing.md,
-    marginBottom: spacing.md,
-  },
-  kpiCard: {
-    flex: 1,
   },
   chartSection: {
     paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
-  gaugeSection: {
+  comparisonSection: {
     paddingHorizontal: spacing.lg,
-    alignItems: 'center',
+    paddingVertical: spacing.md,
   },
-  navigationSection: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
-  },
-  navTitle: {
+  sectionTitle: {
     ...typography.h3,
     marginBottom: spacing.md,
-  },
-  navButtons: {
-    flexDirection: 'row',
-    gap: spacing.md,
-    flexWrap: 'wrap',
-  },
-  navButton: {
-    flex: 1,
-    minWidth: '45%',
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
-    alignItems: 'center',
-    gap: spacing.sm,
-    shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  navIcon: {
-    fontSize: 28,
-  },
-  navLabel: {
-    ...typography.label,
-    fontSize: 12,
     color: colors.text,
   },
   spacer: {

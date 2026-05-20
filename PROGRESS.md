@@ -22,7 +22,7 @@
 ✅ **P1 — Cartographie Multi-Bacs** (lits nommés + localisés, grille indépendante par bac, placement plantes, compatibilité voisinage, persistence Zustand)
 
 ## En cours
-🔄 **P2 — Tableaux de Bord Avancés** (15 métriques botaniques spécifiées, 6 screens conçues, 15 composants SVG, service d'agrégation, timeline 8 semaines)
+🔄 **P2 — Tableaux de Bord Avancés** (Home dashboard MVP implémenté: PeriodSelector, StatCard tappable, 3 KPIs, BarChart 6m, ComparisonCard plantes. Service dashboardAggregation complet. Reste: 5 détail screens, tests, optimisation)
 
 ## Backlog priorisé
 
@@ -76,4 +76,34 @@
 6. **Climat détecté par API Köppen-Geiger** — fallback local si API timeout.
 7. **IA Chat intègre profil automatiquement** — ville, style, saison contextualisés.
 
-**Dernière mise à jour:** 2026-05-18, branche `master`. P1 (Cartographie Multi-Bacs) SHIPPED. P2 (Tableaux de Bord) EN SPECS via agents parallèles (Botaniste: 15 métriques, Dev: architecture complète, UX: 6 screens + 15 components, QA: 80+ test cases). Prêt orchestration implémentation P2.
+## Implémentation P2 — Home Dashboard MVP (2026-05-20)
+
+✅ **Services**
+- `dashboardAggregation.ts`: 4 fonctions agrégation (ProductionData, WaterData, HealthData, ComparisonData)
+- Calculs < 100ms, gestion plages dates (week/month/season/year)
+
+✅ **Composants Dashboard**
+- `PeriodSelector.tsx`: sélection période (semaine/mois/saison/année) avec état persisté
+- `StatCard.tsx`: carte KPI tappable, trend badge (↑↓→), icônes personnalisables
+- `PlantComparisonCard.tsx`: comparison plante vs régional avec barre de progression
+
+✅ **Écran Home Dashboard**
+- Refactorisé `DashboardScreen.tsx` avec:
+  - PeriodSelector top (déclencheur recalcul KPIs)
+  - 3 StatCards (Production, Eau, Santé) navigable vers détail
+  - BarChart 6 derniers mois production
+  - AlertBanner depuis health.alerts
+  - RefreshControl pour sync météo
+  - PlantComparisonCard top 3 plants
+
+⏭️ **Prochaines étapes P2**
+1. **Detail Dashboards**: ProductionDash, WaterDash, HealthDash, PlantDetailDash, ComparisonDash
+2. **Charts avancées**: PieChart enhancement, StackedBarChart, HeatmapChart, RadarChart
+3. **Store integration**: Zustand dashboardFilter state, memoized selectors
+4. **Zustand store updates**: dashboardFilter persist, cache invalide on plant/entry change
+5. **Tests**: unit tests aggregation functions, component tests (React Native Testing Library)
+6. **Performance**: FlatList virtualization, cache AsyncStorage, selector memoization
+7. **Dark mode**: color adapt, contrast ratios (WCAG AA)
+8. **Polish**: animations (Reanimated), empty states, tooltips (ⓘ), localisation (DD/MM/YYYY)
+
+**Dernière mise à jour:** 2026-05-20, branche `master`. P1 SHIPPED. P2 Home Dashboard MVP DONE. Prêt implémentation detail screens.
