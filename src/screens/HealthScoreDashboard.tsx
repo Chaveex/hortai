@@ -10,6 +10,7 @@ import { LineChart } from '../components/Charts/LineChart';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { getLastNMonths } from '../services/statistics';
 import { PLANT_DATABASE } from '../constants/plants';
+import { getHealthData } from '../services/dashboardAggregation';
 
 interface HealthFactor {
   label: string;
@@ -19,7 +20,7 @@ interface HealthFactor {
 
 export function HealthScoreDashboard() {
   const navigation = useNavigation<any>();
-  const { plants, weather, stats } = useStore();
+  const { plants, entries, weather, stats } = useStore();
 
   // Calculate health factors
   const healthFactors = useMemo((): HealthFactor[] => {
@@ -89,18 +90,49 @@ export function HealthScoreDashboard() {
     ];
   }, [plants, weather, stats]);
 
-  // Health trend
+  // Health trend (real data from entries)
   const healthTrend = useMemo(() => {
+    const now = new Date();
     const months = getLastNMonths(6);
+
     return months.map(yearMonth => {
-      const baseScore = stats?.healthScore ?? 75;
-      const variation = Math.sin(Math.random() * Math.PI) * 10;
+      const [year, month] = yearMonth.split('-').map(Number);
+      const monthDate = new Date(year, month - 1, 1);
+      let monthHealthScore = 100;
+
+      // Water health for this month
+      plants.forEach(p => {
+        const info = PLANT_DATABASE[p.type];
+        if (!p.lastWatered) {
+          monthHealthScore -= 5;
+        } else {
+          const daysSince = differenceInDays(monthDate, parseISO(p.lastWatered));
+          if (daysSince > info.wateringFrequencyDays * 1.5) {
+            monthHealthScore -= 8;
+          }
+        }
+      });
+
+      // Harvest bonus (count entries in this month)
+      const monthHarvests = entries.filter(e => {
+        if (e.type !== 'harvest') return false;
+        try {
+          const eMonth = parseISO(e.date).toISOString().slice(0, 7);
+          return eMonth === yearMonth;
+        } catch {
+          return false;
+        }
+      }).length;
+      monthHealthScore += Math.min(20, monthHarvests * 4);
+
+      monthHealthScore = Math.max(0, Math.min(100, monthHealthScore));
+
       return {
         label: yearMonth.slice(5),
-        value: Math.max(0, Math.min(100, baseScore + variation)),
+        value: Math.round(monthHealthScore),
       };
     });
-  }, [stats]);
+  }, [plants, entries]);
 
   // Problematic plants
   const problematicPlants = useMemo(() => {

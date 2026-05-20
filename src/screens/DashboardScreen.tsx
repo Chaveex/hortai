@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View, Text, ScrollView, StyleSheet, RefreshControl, SafeAreaView,
+  View, Text, ScrollView, StyleSheet, RefreshControl, SafeAreaView, TouchableOpacity,
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
@@ -18,6 +18,7 @@ import {
   getComparisonData,
   DateRange,
 } from '../services/dashboardAggregation';
+import { REGIONAL_AVERAGES } from '../constants/plants';
 
 export function DashboardScreen() {
   const navigation = useNavigation<any>();
@@ -74,12 +75,17 @@ export function DashboardScreen() {
     return { production, water, health, comparison };
   }, [entries, plants, weather, dateRange]);
 
-  // Top plants for comparison
+  // Top plants for comparison (with plant type info for regional lookup)
   const topPlants = useMemo(() => {
     return dashboardData.comparison.plants
+      .map(plant => {
+        const plantInfo = plants.find(p => p.name === plant.name);
+        const regionalAvg = plantInfo ? REGIONAL_AVERAGES[plantInfo.type] ?? 1 : 1;
+        return { ...plant, regionalAvg };
+      })
       .sort((a, b) => b.harvest - a.harvest)
       .slice(0, 3);
-  }, [dashboardData.comparison]);
+  }, [dashboardData.comparison, plants]);
 
   // Alerts from health data
   const alerts: AlertItem[] = useMemo(() => {
@@ -166,7 +172,7 @@ export function DashboardScreen() {
                 key={plant.name}
                 name={plant.name}
                 actual={plant.harvest}
-                regional={REGIONAL_AVERAGES[plant.name] ?? 2}
+                regional={plant.regionalAvg}
                 status={plant.status}
                 unit=" kg"
               />
@@ -174,20 +180,21 @@ export function DashboardScreen() {
           </View>
         )}
 
+        {/* Navigation button */}
+        <View style={styles.comparisonSection}>
+          <TouchableOpacity
+            style={styles.comparisonButton}
+            onPress={() => navigation.navigate('ComparisonDashboard')}
+          >
+            <Text style={styles.comparisonButtonText}>📊 Tableau de comparaison détaillé</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.spacer} />
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-// Quick regional defaults for card display
-const REGIONAL_AVERAGES: Record<string, number> = {
-  tomato: 5, pepper: 2, zucchini: 8, cucumber: 4, lettuce: 0.5,
-  carrot: 1.5, radish: 0.3, beans: 1.5, peas: 1, basil: 0.3,
-  parsley: 0.2, mint: 0.2, strawberry: 1, potato: 4, onion: 2,
-  garlic: 0.5, leek: 1.5, spinach: 0.5, chard: 1.5, beet: 2,
-  broccoli: 1, corn: 1, sunflower: 0.5, other: 1,
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -235,5 +242,19 @@ const styles = StyleSheet.create({
   },
   spacer: {
     height: spacing.lg,
+  },
+  comparisonButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    alignItems: 'center',
+    marginTop: spacing.md,
+  },
+  comparisonButtonText: {
+    ...typography.label,
+    color: colors.surface,
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

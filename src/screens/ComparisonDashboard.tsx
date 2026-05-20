@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import { format, parseISO, subMonths } from 'date-fns';
 import { useStore } from '../store/useStore';
 import { ComparisonCard } from '../components/Dashboard/ComparisonCard';
-import { BarChart } from '../components/Charts/BarChart';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 
 type DateRangePreset = '1m' | '3m' | '6m' | '12m';

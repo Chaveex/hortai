@@ -14,7 +14,7 @@ import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { getSeason } from '../services/recommendations';
 
 export default function PlantDetailScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { plantId } = route.params as { plantId: string };
 
@@ -80,9 +80,14 @@ export default function PlantDetailScreen() {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.backBtn}>← Retour</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleDelete}>
-          <Text style={styles.deleteBtn}>Supprimer</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+          <TouchableOpacity onPress={() => navigation.navigate('PlantDetailDashboard')}>
+            <Text style={styles.statsBtn}>📊 Stats</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleDelete}>
+            <Text style={styles.deleteBtn}>Supprimer</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -281,6 +286,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.surface,
   },
   backBtn: { color: colors.primary, fontSize: 15 },
+  statsBtn: { color: colors.primary, fontSize: 14, fontWeight: '600' },
   deleteBtn: { color: colors.warning, fontSize: 14 },
   content: { padding: spacing.md, paddingBottom: spacing.xxl },
   hero: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginBottom: spacing.md },

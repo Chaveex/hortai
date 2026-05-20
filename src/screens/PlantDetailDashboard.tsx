@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, SafeAreaView, TouchableOpacity,
-  FlatList, Dimensions,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { parseISO, differenceInDays } from 'date-fns';

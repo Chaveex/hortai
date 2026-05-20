@@ -10,6 +10,7 @@ const mockPlants: Plant[] = [
     type: 'tomato',
     plantedDate: format(subDays(new Date(), 45), 'yyyy-MM-dd'),
     lastWatered: format(subDays(new Date(), 2), 'yyyy-MM-dd'),
+    wateringHistory: [],
   },
   {
     id: 'p2',
@@ -17,6 +18,7 @@ const mockPlants: Plant[] = [
     type: 'zucchini',
     plantedDate: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
     lastWatered: format(subDays(new Date(), 3), 'yyyy-MM-dd'),
+    wateringHistory: [],
   },
 ];
 

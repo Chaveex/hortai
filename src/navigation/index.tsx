@@ -40,6 +40,13 @@ function GardenStack() {
       <Stack.Screen name="BedGrid" component={BedGridScreen} />
       <Stack.Screen name="BedForm" component={BedFormScreen} />
       <Stack.Screen name="Stats" component={StatsScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function DashboardStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
       <Stack.Screen name="ProductionDashboard" component={ProductionDashboard} />
       <Stack.Screen name="WaterDashboard" component={WaterDashboard} />
@@ -115,8 +122,8 @@ export default function Navigation() {
             options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="📅" focused={focused} /> }}
           />
           <Tab.Screen
-            name="Stats"
-            component={StatsScreen}
+            name="Tableaux de Bord"
+            component={DashboardStack}
             options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="📊" focused={focused} /> }}
           />
           <Tab.Screen
