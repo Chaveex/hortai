@@ -13,8 +13,9 @@ import HarvestGoalCard from '../components/HarvestGoalCard';
 import StreakDetailModal from '../components/StreakDetailModal';
 import LevelDetailModal from '../components/LevelDetailModal';
 import { colors, spacing, typography, borderRadius } from '../constants/theme';
-import { format } from 'date-fns';
+import { format, differenceInDays, parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { PLANT_DATABASE } from '../constants/plants';
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
@@ -45,6 +46,20 @@ export default function HomeScreen() {
     };
   }, [entries, profile]);
 
+  // Check for streak at-risk plants (overdue at 1.5x watering frequency)
+  const streakAtRiskPlant = useMemo(() => {
+    const now = new Date();
+    for (const plant of plants) {
+      if (!plant.lastWatered) continue;
+      const daysSince = differenceInDays(now, parseISO(plant.lastWatered));
+      const wateringFreq = PLANT_DATABASE[plant.type].wateringFrequencyDays;
+      if (daysSince > wateringFreq * 1.5) {
+        return plant;
+      }
+    }
+    return null;
+  }, [plants]);
+
   useEffect(() => {
     const lastUpdated = weather?.lastUpdated;
     const isStale = !lastUpdated || Date.now() - new Date(lastUpdated).getTime() > 30 * 60 * 1000;
@@ -70,6 +85,20 @@ export default function HomeScreen() {
             <Text style={styles.date}>{capitalize(today)}</Text>
           </View>
         </View>
+
+        {/* Streak at-risk warning banner */}
+        {streakAtRiskPlant && (
+          <TouchableOpacity
+            style={styles.warningBanner}
+            onPress={() => navigation.navigate('GardenStack', { screen: 'PlantDetailScreen', params: { plantId: streakAtRiskPlant.id } })}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.warningText}>
+              🔥 Ta série est en danger ! {streakAtRiskPlant.name} n'a pas eu d'eau depuis {Math.floor(differenceInDays(new Date(), parseISO(streakAtRiskPlant.lastWatered || '')))} jours.
+            </Text>
+            <Text style={styles.warningAction}>Arroser maintenant →</Text>
+          </TouchableOpacity>
+        )}
 
         {/* Badge row: Streak, Level, Harvest */}
         <View style={styles.badgeRow}>
@@ -200,6 +229,26 @@ const styles = StyleSheet.create({
   },
   greeting: { ...typography.h1, fontSize: 24 },
   date: { ...typography.caption, fontSize: 13, textTransform: 'capitalize' },
+  warningBanner: {
+    marginHorizontal: spacing.md,
+    marginVertical: spacing.md,
+    backgroundColor: '#FFE8D1',
+    borderLeftWidth: 4,
+    borderLeftColor: colors.warning,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+  },
+  warningText: {
+    ...typography.body,
+    color: colors.warning,
+    fontWeight: '600',
+    marginBottom: spacing.xs,
+  },
+  warningAction: {
+    ...typography.caption,
+    color: colors.warning,
+    fontWeight: '700',
+  },
   badgeRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',

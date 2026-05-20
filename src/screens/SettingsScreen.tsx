@@ -150,6 +150,36 @@ export default function SettingsScreen() {
               </View>
             </View>
           )}
+          <View style={styles.switchRow}>
+            <View>
+              <Text style={styles.optionLabel}>Conseil quotidien</Text>
+              <Text style={styles.optionSub}>Conseil du jardinier chaque matin</Text>
+            </View>
+            <Switch
+              value={profile.dailyTipEnabled ?? false}
+              onValueChange={v => updateProfile({ dailyTipEnabled: v })}
+              trackColor={{ true: colors.primary }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+          {profile.dailyTipEnabled && (
+            <View style={styles.hourRow}>
+              <Text style={styles.label}>Heure du conseil</Text>
+              <View style={styles.hourBtns}>
+                {[6, 7, 8, 9, 10].map(h => (
+                  <TouchableOpacity
+                    key={h}
+                    style={[styles.hourBtn, (profile.dailyTipTime || '09:00') === `0${h}:00` && styles.hourBtnActive]}
+                    onPress={() => updateProfile({ dailyTipTime: `0${h}:00` })}
+                  >
+                    <Text style={[styles.hourBtnText, (profile.dailyTipTime || '09:00') === `0${h}:00` && styles.hourBtnTextActive]}>
+                      {h}h
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
 
         <Text style={styles.sectionHeader}>Objectifs du jardin</Text>
