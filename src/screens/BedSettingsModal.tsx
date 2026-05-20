@@ -20,6 +20,7 @@ import { PLANT_DATABASE } from '@/constants/plants';
 import { PlantType } from '@/types';
 
 export function BedSettingsModal() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { bedId } = route.params || {};

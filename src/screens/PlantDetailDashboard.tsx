@@ -16,6 +16,7 @@ import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { PLANT_DATABASE, REGIONAL_AVERAGES } from '../constants/plants';
 
 export function PlantDetailDashboard() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { plants, entries } = useStore();
   const [selectedPlantId, setSelectedPlantId] = useState(plants[0]?.id || '');

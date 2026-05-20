@@ -19,6 +19,7 @@ interface DateRange {
 }
 
 export function ComparisonDashboard() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { plants, entries } = useStore();
   const [period1Preset, setPeriod1Preset] = useState<DateRangePreset>('3m');

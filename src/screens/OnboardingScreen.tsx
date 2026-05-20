@@ -27,6 +27,7 @@ const FERTILIZER_TYPES: { value: FertilizerType; label: string; desc: string; ic
 ];
 
 export default function OnboardingScreen() {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [city, setCity] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,14 +36,14 @@ export default function OnboardingScreen() {
   const setProfile = useStore(s => s.setProfile);
 
   async function handleCityNext() {
-    if (!city.trim()) return Alert.alert('Ville requise', 'Veuillez saisir votre ville.');
+    if (!city.trim()) return Alert.alert(t('settings.city'), t('settings.cityRequired'));
     setIsLoading(true);
     try {
       const geo = await geocodeCity(city.trim());
       setCity(geo.name);
       setStep(1);
     } catch {
-      Alert.alert('Ville introuvable', 'Vérifiez l\'orthographe et réessayez.');
+      Alert.alert(t('settings.cityNotFound'), t('settings.cityCheckSpelling'));
     } finally {
       setIsLoading(false);
     }

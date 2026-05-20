@@ -156,6 +156,7 @@ const TREND_CONFIG = {
 // ─── Main screen ─────────────────────────────────────────────────────────────
 
 export default function StatsScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const { stats, plants, entries, weather, refreshStats, isLoadingWeather } = useStore();
 

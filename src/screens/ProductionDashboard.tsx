@@ -18,6 +18,7 @@ import { PLANT_DATABASE } from '../constants/plants';
 import { getPlantProductionNarrative } from '../services/recommendations';
 
 export function ProductionDashboard() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { plants, entries } = useStore();
 

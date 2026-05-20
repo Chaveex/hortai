@@ -22,6 +22,7 @@ interface HealthFactor {
 }
 
 export function HealthScoreDashboard() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { plants, entries, weather, stats } = useStore();
 

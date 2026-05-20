@@ -15,6 +15,7 @@ import { useStore } from '@/store/useStore';
 import { colors, spacing, typography } from '@/constants/theme';
 
 export function BedFormScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { bedId } = route.params ?? {};

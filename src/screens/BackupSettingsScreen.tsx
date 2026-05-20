@@ -132,6 +132,7 @@ function BackupRow({ meta, onRestore, onDelete, last }: BackupRowProps) {
 // ─── Main screen ─────────────────────────────────────────────────────────────
 
 export default function BackupSettingsScreen() {
+  const { t } = useTranslation();
   const {
     profile, plants, entries,
     setProfile, setPlants, setEntries,

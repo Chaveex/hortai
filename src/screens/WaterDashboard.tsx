@@ -16,6 +16,7 @@ import { PLANT_DATABASE } from '../constants/plants';
 import { getWateringNarrative } from '../services/recommendations';
 
 export function WaterDashboard() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { plants, recommendations, weather } = useStore();
 

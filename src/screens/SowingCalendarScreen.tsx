@@ -22,6 +22,7 @@ const SECTIONS: { key: 'sowIndoor' | 'sowOutdoor' | 'transplant' | 'harvest'; la
 ];
 
 export default function SowingCalendarScreen() {
+  const { t } = useTranslation();
   const profile = useStore(s => s.profile);
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);

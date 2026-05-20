@@ -24,6 +24,7 @@ import { REGIONAL_AVERAGES } from '../constants/plants';
 import type { ChoreType } from '../types/chores';
 
 export function DashboardScreen() {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const { plants, entries, weather, refreshWeather } = useStore();
   const [refreshing, setRefreshing] = useState(false);
