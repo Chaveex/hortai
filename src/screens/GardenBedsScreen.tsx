@@ -5,9 +5,9 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  SafeAreaView,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useStore } from '@/store/useStore';
 import { colors, spacing, typography } from '@/constants/theme';
@@ -54,7 +54,7 @@ export function GardenBedsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>Mes Bacs</Text>
@@ -232,8 +232,9 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    bottom: spacing.lg,
-    right: spacing.lg,
+    bottom: spacing.md,
+    left: '50%',
+    marginLeft: -28,
     width: 56,
     height: 56,
     borderRadius: 28,

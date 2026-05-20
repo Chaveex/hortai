@@ -93,7 +93,7 @@ export function GardenGrid({
       contentContainerStyle={styles.content}
     >
       <ScrollView scrollEventThrottle={16} style={styles.verticalScroll}>
-        <View style={styles.grid}>
+        <View style={[styles.grid, { width: gardenMap.cols * 48 }]}>
           {gardenMap.cells.map(cell => (
             <GardenCell
               key={`${cell.row}-${cell.col}`}
@@ -126,6 +126,5 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: 44 * 12 + 50,
   },
 });

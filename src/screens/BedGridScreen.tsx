@@ -4,9 +4,9 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  SafeAreaView,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useStore } from '@/store/useStore';
 import { GardenGrid } from '@/components/GardenGrid';
@@ -30,7 +30,7 @@ export function BedGridScreen() {
 
   if (!bed) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <Text>Bac non trouvé</Text>
       </SafeAreaView>
     );
