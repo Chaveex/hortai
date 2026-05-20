@@ -102,6 +102,7 @@ export function DashboardScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView
         style={styles.content}
+        contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         showsVerticalScrollIndicator={false}
       >
@@ -203,6 +204,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: spacing.xxl,
   },
   header: {
     paddingHorizontal: spacing.lg,
