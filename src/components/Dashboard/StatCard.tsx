@@ -102,8 +102,9 @@ const styles = StyleSheet.create({
   },
   label: {
     ...typography.label,
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: '#FFFFFF',
     fontSize: 12,
+    fontWeight: '500',
   },
   value: {
     fontSize: 32,

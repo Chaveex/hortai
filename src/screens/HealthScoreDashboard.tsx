@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   },
   factorScoreBar: {
     width: '100%',
-    height: 4,
+    height: 10,
     backgroundColor: colors.border,
     borderRadius: borderRadius.full,
     marginBottom: spacing.xs,
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   problemScoreBar: {
-    height: 6,
+    height: 10,
     backgroundColor: colors.border,
     borderRadius: borderRadius.full,
     overflow: 'hidden',
