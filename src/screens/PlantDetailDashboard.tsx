@@ -93,9 +93,9 @@ export function PlantDetailDashboard() {
         color: colors.primary,
       },
       {
-        label: 'Rendement',
+        label: 'Récoltes',
         value: plantMetrics.harvestCount,
-        unit: 'fois',
+        unit: 'entrées',
         icon: '📈',
         color: colors.success,
       },
