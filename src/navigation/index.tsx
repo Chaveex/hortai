@@ -15,7 +15,6 @@ import SowingCalendarScreen from '../screens/SowingCalendarScreen';
 import ChoreCalendarScreen from '../screens/ChoreCalendarScreen';
 import ChoreDetailScreen from '../screens/ChoreDetailScreen';
 import ChoreFormScreen from '../screens/ChoreFormScreen';
-import StatsScreen from '../screens/StatsScreen';
 import { GardenBedsScreen } from '../screens/GardenBedsScreen';
 import { BedGridScreen } from '../screens/BedGridScreen';
 import { BedFormScreen } from '../screens/BedFormScreen';
@@ -79,7 +78,6 @@ function GardenStack() {
       <Stack.Screen name="BedGrid" component={BedGridScreen} />
       <Stack.Screen name="BedForm" component={BedFormScreen} />
       <Stack.Screen name="SowingCalendar" component={SowingCalendarScreen} />
-      <Stack.Screen name="Stats" component={StatsScreen} />
     </Stack.Navigator>
   );
 }
