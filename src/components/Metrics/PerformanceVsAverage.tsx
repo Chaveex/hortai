@@ -62,8 +62,9 @@ export function PerformanceVsAverage({
   return (
     <View style={[styles.container]}>
       <Text style={styles.title}>{title}</Text>
-      <Svg width={width} height={Math.min(height + rows.length * 20, 400)}>
-        {rows.map((row, i) => (
+      <View style={{ alignItems: 'center', overflow: 'hidden' }}>
+        <Svg width={width} height={Math.min(height + rows.length * 20, 400)}>
+          {rows.map((row, i) => (
           <React.Fragment key={i}>
             {/* Plant value bar */}
             <Rect
@@ -125,7 +126,8 @@ export function PerformanceVsAverage({
             )}
           </React.Fragment>
         ))}
-      </Svg>
+        </Svg>
+      </View>
 
       {/* Legend */}
       <View style={styles.legend}>

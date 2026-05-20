@@ -35,7 +35,7 @@ export function PlantMetricsGrid({
       {title && <Text style={styles.title}>{title}</Text>}
       <View style={[styles.grid, { gap: spacing.md }]}>
         {metrics.map((metric, idx) => (
-          <View key={idx} style={[styles.gridItem, { flex: 1 / columns }]}>
+          <View key={idx} style={[styles.gridItem, { flex: 1, minWidth: '48%' }]}>
             <MetricCard
               value={metric.value}
               label={metric.label}
