@@ -18,6 +18,7 @@ export default function AIFABButton({ onPress }: Props) {
   function pressIn() {
     Animated.spring(scale, { toValue: 0.9, useNativeDriver: true, friction: 6 }).start();
   }
+
   function pressOut() {
     Animated.spring(scale, { toValue: 1, useNativeDriver: true, friction: 6 }).start();
   }
@@ -30,7 +31,8 @@ export default function AIFABButton({ onPress }: Props) {
           onPressIn={pressIn}
           onPressOut={pressOut}
           accessibilityRole="button"
-          accessibilityLabel="Aide jardinage IA"
+          accessibilityLabel="Aide jardinage IA — Nymph"
+          accessibilityHint="Appuyez pour poser une question sur le jardinage"
           style={styles.button}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >

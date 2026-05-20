@@ -11,6 +11,7 @@ export interface UserProfile {
   notificationsEnabled: boolean;
   notificationHour: number;
   sowingNotificationsEnabled?: boolean;
+  harvestGoal?: number; // kg per month
 }
 
 export type PlantType =

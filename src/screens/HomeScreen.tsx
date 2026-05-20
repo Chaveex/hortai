@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import {
   View, Text, ScrollView, RefreshControl, StyleSheet, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
@@ -9,6 +9,7 @@ import WeatherCard from '../components/WeatherCard';
 import WateringCard from '../components/WateringCard';
 import TipCard from '../components/TipCard';
 import TodayChoreWidget from '../components/TodayChoreWidget';
+import HarvestGoalCard from '../components/HarvestGoalCard';
 import { colors, spacing, typography } from '../constants/theme';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -16,9 +17,27 @@ import { fr } from 'date-fns/locale';
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
   const {
-    profile, weather, plants, recommendations, tips,
+    profile, weather, plants, recommendations, tips, entries,
     isLoadingWeather, weatherError, refreshWeather, refreshRecommendations, markWatered,
   } = useStore();
+
+  // Calculate harvest for current month
+  const harvestData = useMemo(() => {
+    const now = new Date();
+    const currentMonth = format(now, 'yyyy-MM');
+    const currentMonthStr = format(now, 'MMMM yyyy', { locale: fr });
+
+    const monthlyHarvest = entries
+      .filter(e => e.type === 'harvest' && e.date.startsWith(currentMonth))
+      .reduce((sum, e) => sum + (e.quantity || 0), 0);
+
+    return {
+      month: currentMonthStr,
+      monthKey: currentMonth,
+      actual: monthlyHarvest,
+      goal: profile?.harvestGoal || 10, // Default 10kg
+    };
+  }, [entries, profile]);
 
   useEffect(() => {
     const lastUpdated = weather?.lastUpdated;
@@ -66,6 +85,13 @@ export default function HomeScreen() {
         )}
 
         {weather && <WeatherCard weather={weather} />}
+
+        <HarvestGoalCard
+          harvestMonth={harvestData.month}
+          harvestGoal={harvestData.goal}
+          harvestActual={harvestData.actual}
+          onPress={() => navigation.navigate('DashboardStack', { screen: 'ProductionDashboard' })}
+        />
 
         <TodayChoreWidget onPress={() => navigation.navigate('Tâches')} />
 

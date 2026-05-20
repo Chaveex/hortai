@@ -53,15 +53,28 @@ export function GardenBedsScreen() {
     ]);
   };
 
+  const handleSowingCalendarPress = () => {
+    navigation.navigate('SowingCalendar');
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.title}>Mes Bacs</Text>
           <Text style={styles.subtitle}>
             {gardenBeds.length} bac{gardenBeds.length !== 1 ? 's' : ''}
           </Text>
         </View>
+        <Pressable
+          style={styles.calendarButton}
+          onPress={handleSowingCalendarPress}
+          accessibilityRole="button"
+          accessibilityLabel="Calendrier des semis"
+          accessibilityHint="Appuyez pour voir le calendrier de semis"
+        >
+          <Text style={styles.calendarButtonText}>📅 Semis</Text>
+        </Pressable>
       </View>
 
       {gardenBeds.length === 0 ? (
@@ -136,6 +149,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   title: {
     ...typography.h2,
@@ -251,5 +267,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 28,
     fontWeight: '300',
+  },
+  calendarButton: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: 8,
+  },
+  calendarButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 13,
   },
 });

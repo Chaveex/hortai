@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Text, View, StyleSheet } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Text, View, StyleSheet, Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeScreen from '../screens/HomeScreen';
 import GardenScreen from '../screens/GardenScreen';
@@ -20,6 +21,7 @@ import { BedGridScreen } from '../screens/BedGridScreen';
 import { BedFormScreen } from '../screens/BedFormScreen';
 import AIChatModal from '../screens/AIChatModal';
 import AIFABButton from '../components/AIFABButton';
+import ContextFAB from '../components/ContextFAB';
 import { colors } from '../constants/theme';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { ProductionDashboard } from '../screens/ProductionDashboard';
@@ -30,16 +32,53 @@ import { ComparisonDashboard } from '../screens/ComparisonDashboard';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const TopTab = createMaterialTopTabNavigator();
+
+function GardenTabs() {
+  return (
+    <TopTab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+          textTransform: 'none',
+        },
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderBottomColor: colors.border,
+          borderBottomWidth: 1,
+        },
+      }}
+    >
+      <TopTab.Screen
+        name="Plantes"
+        component={GardenScreen}
+        options={{
+          tabBarLabel: 'Plantes',
+        }}
+      />
+      <TopTab.Screen
+        name="Planification"
+        component={GardenBedsScreen}
+        options={{
+          tabBarLabel: 'Planification',
+        }}
+      />
+    </TopTab.Navigator>
+  );
+}
 
 function GardenStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="GardenList" component={GardenScreen} />
+      <Stack.Screen name="GardenTabs" component={GardenTabs} />
       <Stack.Screen name="AddPlant" component={AddPlantScreen} />
       <Stack.Screen name="PlantDetail" component={PlantDetailScreen} />
-      <Stack.Screen name="GardenBeds" component={GardenBedsScreen} />
       <Stack.Screen name="BedGrid" component={BedGridScreen} />
       <Stack.Screen name="BedForm" component={BedFormScreen} />
+      <Stack.Screen name="SowingCalendar" component={SowingCalendarScreen} />
       <Stack.Screen name="Stats" component={StatsScreen} />
     </Stack.Navigator>
   );
@@ -88,53 +127,65 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <View style={styles.root}>
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false,
-            tabBarActiveTintColor: colors.primary,
-            tabBarInactiveTintColor: colors.textMuted,
-            tabBarStyle: {
-              backgroundColor: '#FFFFFF',
-              borderTopColor: colors.border,
-              borderTopWidth: 1,
-              paddingBottom: Math.max(4, insets.bottom),
-              height: 60 + insets.bottom,
-            },
-            tabBarLabelStyle: { fontSize: 11, fontWeight: '500' },
-          }}
-        >
-          <Tab.Screen
-            name="Accueil"
-            component={HomeScreen}
-            options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} /> }}
-          />
-          <Tab.Screen
-            name="Jardin"
-            component={GardenStack}
-            options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} /> }}
-          />
-          <Tab.Screen
-            name="Tâches"
-            component={ChoreStack}
-            options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="🗓️" focused={focused} /> }}
-          />
-          <Tab.Screen
-            name="Semis"
-            component={SowingCalendarScreen}
-            options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="📅" focused={focused} /> }}
-          />
-          <Tab.Screen
-            name="Tableaux de Bord"
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="MainTabs">
+            {() => (
+              <View style={styles.root}>
+                <Tab.Navigator
+                  screenOptions={{
+                    headerShown: false,
+                    tabBarActiveTintColor: colors.primary,
+                    tabBarInactiveTintColor: colors.textMuted,
+                    tabBarStyle: {
+                      backgroundColor: '#FFFFFF',
+                      borderTopColor: colors.border,
+                      borderTopWidth: 1,
+                      paddingBottom: Math.max(4, insets.bottom),
+                      height: 60 + insets.bottom,
+                    },
+                    tabBarLabelStyle: { fontSize: 11, fontWeight: '500' },
+                  }}
+                >
+                  <Tab.Screen
+                    name="Accueil"
+                    component={HomeScreen}
+                    options={{
+                      tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} />,
+                    }}
+                  />
+                  <Tab.Screen
+                    name="Jardin"
+                    component={GardenStack}
+                    options={{
+                      tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} />,
+                    }}
+                  />
+                  <Tab.Screen
+                    name="Tâches"
+                    component={ChoreStack}
+                    options={{
+                      tabBarIcon: ({ focused }) => <TabIcon emoji="🗓️" focused={focused} />,
+                    }}
+                  />
+                  <Tab.Screen
+                    name="Réglages"
+                    component={SettingsStack}
+                    options={{
+                      tabBarIcon: ({ focused }) => <TabIcon emoji="⚙️" focused={focused} />,
+                    }}
+                  />
+                </Tab.Navigator>
+                <AIFABButton onPress={() => setChatOpen(true)} />
+                <ContextFAB onChatPress={() => setChatOpen(true)} />
+              </View>
+            )}
+          </Stack.Screen>
+          <Stack.Screen
+            name="DashboardStack"
             component={DashboardStack}
-            options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="📊" focused={focused} /> }}
+            options={{ headerShown: false }}
           />
-          <Tab.Screen
-            name="Réglages"
-            component={SettingsStack}
-            options={{ tabBarIcon: ({ focused }) => <TabIcon emoji="⚙️" focused={focused} /> }}
-          />
-        </Tab.Navigator>
-        <AIFABButton onPress={() => setChatOpen(true)} />
+        </Stack.Navigator>
       </View>
       <AIChatModal visible={chatOpen} onClose={() => setChatOpen(false)} />
     </NavigationContainer>
