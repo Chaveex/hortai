@@ -1,0 +1,39 @@
+{
+  "navigation": {
+    "home": "Home",
+    "garden": "Garden",
+    "chores": "Chores",
+    "settings": "Settings"
+  },
+  "screens": {
+    "homeTitle": "Welcome",
+    "homeGreeting": "Hello 👋",
+    "plantDetail": "Plant Details",
+    "choreDetail": "Chore Details",
+    "gardening": "Garden",
+    "plants": "Plants",
+    "planning": "Planning"
+  },
+  "dashboard": {
+    "production": "Production",
+    "water": "Water",
+    "health": "Health",
+    "metrics": "Metrics"
+  },
+  "chores": {
+    "agenda": "Chores",
+    "overdue": "Overdue",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "later": "Later",
+    "addChore": "Add Chore"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "gardeningStyle": "Gardening Style",
+    "fertilizerType": "Fertilizer Type",
+    "notifications": "Notifications",
+    "harvestGoal": "Harvest Goal"
+  }
+}

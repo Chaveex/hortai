@@ -1,0 +1,39 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "garden": "Jardin",
+    "chores": "Tâches",
+    "settings": "Réglages"
+  },
+  "screens": {
+    "homeTitle": "Bienvenue",
+    "homeGreeting": "Bonjour 👋",
+    "plantDetail": "Détail Plante",
+    "choreDetail": "Détail Tâche",
+    "gardening": "Jardin",
+    "plants": "Plantes",
+    "planning": "Planification"
+  },
+  "dashboard": {
+    "production": "Production",
+    "water": "Eau",
+    "health": "Santé",
+    "metrics": "Métriques"
+  },
+  "chores": {
+    "agenda": "Tâches",
+    "overdue": "En retard",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "later": "Plus tard",
+    "addChore": "Ajouter une tâche"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "gardeningStyle": "Style de jardinage",
+    "fertilizerType": "Type d'engrais",
+    "notifications": "Notifications",
+    "harvestGoal": "Objectif de récolte"
+  }
+}
