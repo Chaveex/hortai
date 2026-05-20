@@ -50,12 +50,20 @@ Transform ChoreCalendarScreen from confusing Day/Week/Month toggle to **agenda-b
 └─────────────────────────────┘
 ```
 
-**Implementation**:
+**Implementation** (Designer-approved):
 - Component: `src/components/ChoreAgendaView.tsx`
-- Data structure: Group chores by date (today, tomorrow, +3d, +7d)
-- Virtualized list if >50 chores
-- Swipe-left for quick-complete (optional, Phase 4)
+- Data structure: Group chores by **date sections with sticky headers**
+  - **Overdue** section (chores with date < today) — pinned at top with red header
+  - **Today** (default view on open)
+  - **Tomorrow**
+  - **+3 days**
+  - **+7 days**
+  - Scroll-on-demand beyond +7d
+- Scroll behavior: **Forward-only** (no scrolling backward to past chores; overdue is sticky)
+- Virtualized SectionList if >50 chores (native performance)
+- Sticky section headers (always visible while scrolling)
 - Tap chore → ChoreDetailScreen
+- Swipe-left for quick-complete (optional, Phase 4)
 
 ### Feature 2: Color-Coded Chore Types
 
@@ -88,56 +96,98 @@ const choreTypeColors = {
 
 ### Feature 3: Quick-Add Chore Form
 
-**Trigger**: Floating action button (FAB) + inline "+" in header
+**Trigger**: Single floating action button (FAB) only (centered at bottom)
 
-**Behavior**:
-- Tap FAB → slide-up form (modal with keyboard focus)
+**Behavior** (Designer-approved):
+- Tap FAB → bottom-sheet slide-up form (NOT full-screen modal)
+- Swipe down or tap outside to dismiss
+- If user has unsaved changes → show "Discard changes?" confirmation
 - Form fields (minimal):
   - Date picker (default: today)
   - Chore type dropdown (watering, fertilizing, pest, maintenance)
   - Plant selector (optional, pre-filled if coming from PlantDetail)
+  - Priority toggle (Low/Med/High, optional)
   - Notes textarea (optional)
 - Action buttons: "Créer" (save), "Annuler"
-- Dismiss on outside tap or back gesture
+- On success: Show "✅ Tâche créée!" toast, auto-dismiss form
+
+**Route params** (for pre-fill):
+```tsx
+navigation.navigate('ChoreForm', {
+  date?: string,           // YYYY-MM-DD (default: today)
+  plantId?: string,        // Pre-select plant
+  type?: ChoreType,        // Pre-select type (optional)
+})
+```
 
 **Component**: `src/screens/ChoreFormModal.tsx` (reuse existing, improve)
 
-### Feature 4: Link Chores ↔ Plants
+### Feature 4: Link Chores ↔ Plants (Bidirectional)
 
 **Chore → Plant**:
-- Add `plantId?` to Chore type (already exists)
-- ChoreDetailScreen shows plant name + emoji
+- Chore type has `plantId?` field (already exists in codebase)
+- ChoreDetailScreen shows plant name + emoji in header
 - Tap plant name → navigate to PlantDetailScreen
 
-**Plant → Chores**:
-- PlantDetailScreen shows "Tâches liées" section
-- List upcoming chores for this plant
-- Tap chore → ChoreDetailScreen
+**Plant → Chores** (Designer-approved):
+- PlantDetailScreen shows "Tâches liées" section below plant metadata
+- Card-based layout listing **pending + upcoming chores only** (not past)
+- Each chore card shows: emoji + type + date + action (tap to detail)
+- **"➕ Ajouter une tâche" button** at top of section
+  - Tap → ChoreFormModal with `plantId` pre-filled
+  - User selects date/type/priority/notes
+  - Form saves with this plantId auto-assigned
+
+**Store helpers**:
+- `getChoresForPlant(plantId, statusFilter?: 'pending' | 'upcoming')` — Returns chores for plant, filtered to pending/upcoming only
+- `addChore()` — Already exists, now supports `plantId` parameter
+
+**Route param flow**:
+```tsx
+// From PlantDetailScreen "Add chore" button
+navigation.navigate('ChoreForm', { plantId: plant.id })
+
+// ChoreFormModal receives route params, pre-fills plant selector
+```
 
 **Files to modify**:
-- `src/types/index.ts` (ensure Chore.plantId)
-- `src/screens/ChoreDetailScreen.tsx` (show plant + link)
-- `src/screens/PlantDetailScreen.tsx` (show related chores)
-- `src/store/useStore.ts` (add `getChoresForPlant()` helper)
+- `src/types/index.ts` (ensure Chore.plantId, ChoreStatus types)
+- `src/screens/ChoreDetailScreen.tsx` (show plant link in header)
+- `src/screens/PlantDetailScreen.tsx` (add "Tâches liées" section + "Add chore" button)
+- `src/store/useStore.ts` (add `getChoresForPlant()` helper with status filter)
 
 ### Feature 5: Clickable Dashboard Alerts
 
 **Current**: Alerts shown in DashboardScreen (AlertBanner) but not actionable  
-**New**: Tap alert → navigate to ChoreCalendarScreen + filter to relevant type
+**New** (Designer-approved): Tap alert → navigate to ChoreCalendarScreen + filter to relevant chore type
+
+**Alert ↔ Chore Type Mapping**:
+- Extend `AlertItem` type with optional `choreTypeFilter?: ChoreType[]`
+- DashboardScreen creates alerts with mapping:
+  - "High humidity detected" → `choreTypeFilter: ['watering']`
+  - "Low nitrogen" → `choreTypeFilter: ['fertilizing']`
+  - Multiple types possible: `['watering', 'fertilizing']`
 
 **Example flow**:
-- Dashboard shows: "⚠️ High humidity detected"
-- Tap alert → ChoreCalendarScreen + highlight watering chores
-- Or create quick alert: "Add a watering chore?"
+- Dashboard shows: "⚠️ High humidity detected ›" (with chevron/affordance)
+- Tap alert → ChoreCalendarScreen + filter to watering chores
+- Auto-scroll to first matching chore (or "Overdue" if present)
+
+**Visual affordance** (Designer requirement):
+- Add trailing chevron icon (›) when alert is tappable
+- Use `activeOpacity={0.7}` for press feedback
+- Consider `ripple` effect on Android
 
 **Implementation**:
-- Update `AlertBanner` component with `onPress` handler
-- Add `filterChoreType` param to ChoreCalendarScreen navigation
-- Scroll/highlight filtered chores on open
+- Extend `AlertItem` type: `choreTypeFilter?: ChoreType[]`
+- Update `AlertBanner.tsx`: Add chevron icon + tap handler
+- Update `ChoreCalendarScreen.tsx`: Accept route param `filterChoreType?: ChoreType[]`
+- Auto-filter chores on open, scroll to first match
 
 **Files to modify**:
-- `src/components/Dashboard/AlertBanner.tsx` (add onPress)
-- `src/screens/ChoreCalendarScreen.tsx` (accept filter param)
+- `src/types/index.ts` (extend AlertItem)
+- `src/components/Dashboard/AlertBanner.tsx` (add onPress, chevron, ripple)
+- `src/screens/ChoreCalendarScreen.tsx` (accept filter param, useRoute hook)
 
 ---
 

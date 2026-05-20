@@ -42,3 +42,10 @@ export const typography = {
   caption: { fontSize: 12, fontWeight: '400' as const, color: '#38764B' },
   label: { fontSize: 13, fontWeight: '500' as const, color: '#1B4332' },
 };
+
+export const choreTypeColors = {
+  watering: '#3B82F6',      // blue
+  fertilizing: '#10B981',   // green
+  pestControl: '#EF4444',   // red
+  maintenance: '#6B7280',   // gray
+};
