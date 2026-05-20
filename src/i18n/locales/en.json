@@ -228,7 +228,9 @@
     "successRestore": "Restore successful",
     "successCloudSync": "Data merged from cloud.",
     "successCloudReplace": "Data replaced from cloud.",
-    "errorSetup": "Could not complete setup."
+    "errorSetup": "Could not complete setup.",
+    "merge": "Merge",
+    "replace": "Replace"
   },
   "sowing": {
     "title": "Sowing Calendar",

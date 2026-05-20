@@ -228,7 +228,9 @@
     "successRestore": "Restauración exitosa",
     "successCloudSync": "Datos fusionados desde la nube.",
     "successCloudReplace": "Datos reemplazados desde la nube.",
-    "errorSetup": "No se pudo completar la configuración."
+    "errorSetup": "No se pudo completar la configuración.",
+    "merge": "Fusionar",
+    "replace": "Reemplazar"
   },
   "sowing": {
     "title": "Calendario de Siembra",

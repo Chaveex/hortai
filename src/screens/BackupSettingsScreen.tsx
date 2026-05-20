@@ -169,7 +169,7 @@ export default function BackupSettingsScreen() {
 
   const handleExportJSON = useCallback(async () => {
     if (!profile) {
-      Alert.alert('Erreur', 'Aucun profil à sauvegarder.');
+      Alert.alert(t('common.error'), t('backup.errorNoProfile'));
       return;
     }
     setLoadingLocal(true);
@@ -178,20 +178,20 @@ export default function BackupSettingsScreen() {
       addBackup(meta);
       const updated = await getBackupMetadataList();
       setLocalBackups(updated);
-      Alert.alert('Export réussi', `Sauvegarde JSON partagée (${formatBytes(meta.size)}).`);
+      Alert.alert(t('backup.successExport'), `Sauvegarde JSON partagée (${formatBytes(meta.size)}).`);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur inconnue';
-      Alert.alert('Erreur export', msg);
+      Alert.alert(t('backup.errorExport'), msg);
     } finally {
       setLoadingLocal(false);
     }
-  }, [storeSnapshot, profile, addBackup]);
+  }, [storeSnapshot, profile, addBackup, t]);
 
   // ── Export ZIP ──────────────────────────────────────────────────────────────
 
   const handleExportZIP = useCallback(async () => {
     if (!profile) {
-      Alert.alert('Erreur', 'Aucun profil à sauvegarder.');
+      Alert.alert(t('common.error'), t('backup.errorNoProfile'));
       return;
     }
     setLoadingLocal(true);
@@ -200,14 +200,14 @@ export default function BackupSettingsScreen() {
       addBackup(meta);
       const updated = await getBackupMetadataList();
       setLocalBackups(updated);
-      Alert.alert('Export réussi', `Sauvegarde compressée partagée (${formatBytes(meta.size)}).`);
+      Alert.alert(t('backup.successExport'), `Sauvegarde compressée partagée (${formatBytes(meta.size)}).`);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur inconnue';
-      Alert.alert('Erreur export', msg);
+      Alert.alert(t('backup.errorExport'), msg);
     } finally {
       setLoadingLocal(false);
     }
-  }, [storeSnapshot, profile, addBackup]);
+  }, [storeSnapshot, profile, addBackup, t]);
 
   // ── Import local ────────────────────────────────────────────────────────────
 
@@ -230,12 +230,12 @@ export default function BackupSettingsScreen() {
       });
 
       Alert.alert(
-        'Restauration réussie',
+        t('backup.successRestore'),
         `Données ${strategy === 'overwrite' ? 'remplacées' : 'fusionnées'} avec succès.`
       );
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur inconnue';
-      Alert.alert('Erreur import', msg);
+      Alert.alert(t('backup.errorImport'), msg);
     } finally {
       setLoadingImport(false);
     }
@@ -246,9 +246,9 @@ export default function BackupSettingsScreen() {
       'Importer une sauvegarde',
       'Que faire des données existantes ?',
       [
-        { text: 'Annuler', style: 'cancel' },
-        { text: 'Fusionner', onPress: () => handleImport('merge') },
-        { text: 'Remplacer', style: 'destructive', onPress: () => handleImport('overwrite') },
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('backup.merge'), onPress: () => handleImport('merge') },
+        { text: t('backup.replace'), style: 'destructive', onPress: () => handleImport('overwrite') },
       ]
     );
   }, [handleImport]);
@@ -264,7 +264,7 @@ export default function BackupSettingsScreen() {
       setCloudBackups(list);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur cloud';
-      Alert.alert('Erreur cloud', msg);
+      Alert.alert(t('backup.errorCloud'), msg);
     } finally {
       setLoadingCloud(false);
     }
@@ -288,7 +288,7 @@ export default function BackupSettingsScreen() {
       await loadCloudBackups();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur cloud';
-      Alert.alert('Erreur cloud', msg);
+      Alert.alert(t('backup.errorCloud'), msg);
     } finally {
       setLoadingCloudUpload(false);
     }
@@ -296,12 +296,12 @@ export default function BackupSettingsScreen() {
 
   const handleCloudRestore = useCallback(async (meta: BackupMetadata) => {
     Alert.alert(
-      'Restaurer depuis le cloud',
+      t('backup.cloudRestore'),
       `Sauvegarde du ${formatDate(meta.timestamp)}. Que faire des données existantes ?`,
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Fusionner',
+          text: t('backup.merge'),
           onPress: async () => {
             try {
               const json = await downloadBackup(meta.id);
@@ -314,15 +314,15 @@ export default function BackupSettingsScreen() {
                 currentEntries: entries,
                 currentChores: choreStore.chores,
               });
-              Alert.alert('Restauration réussie', 'Données fusionnées depuis le cloud.');
+              Alert.alert(t('backup.successRestore'), t('backup.successCloudSync'));
             } catch (err: unknown) {
               const msg = err instanceof Error ? err.message : 'Erreur';
-              Alert.alert('Erreur', msg);
+              Alert.alert(t('common.error'), msg);
             }
           },
         },
         {
-          text: 'Remplacer',
+          text: t('backup.replace'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -336,10 +336,10 @@ export default function BackupSettingsScreen() {
                 currentEntries: entries,
                 currentChores: choreStore.chores,
               });
-              Alert.alert('Restauration réussie', 'Données remplacées depuis le cloud.');
+              Alert.alert(t('backup.successRestore'), t('backup.successCloudReplace'));
             } catch (err: unknown) {
               const msg = err instanceof Error ? err.message : 'Erreur';
-              Alert.alert('Erreur', msg);
+              Alert.alert(t('common.error'), msg);
             }
           },
         },
@@ -352,7 +352,7 @@ export default function BackupSettingsScreen() {
       'Supprimer cette sauvegarde ?',
       `Du ${formatDate(meta.timestamp)} — irréversible.`,
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
           text: 'Supprimer',
           style: 'destructive',
@@ -362,7 +362,7 @@ export default function BackupSettingsScreen() {
               await loadCloudBackups();
             } catch (err: unknown) {
               const msg = err instanceof Error ? err.message : 'Erreur';
-              Alert.alert('Erreur', msg);
+              Alert.alert(t('common.error'), msg);
             }
           },
         },
@@ -375,7 +375,7 @@ export default function BackupSettingsScreen() {
       'Supprimer cet enregistrement ?',
       'Supprime uniquement la référence locale, pas le fichier partagé.',
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
           text: 'Supprimer',
           style: 'destructive',
