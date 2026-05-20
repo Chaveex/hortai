@@ -1,0 +1,281 @@
+================================================================================
+                    PHASE 1 KICKOFF PLAN — EXECUTIVE SUMMARY
+                         HortiAI UX Optimization (2026)
+================================================================================
+
+DATE: 2026-05-20
+STATUS: Ready for Design Review & Developer Execution
+TIMELINE: 2—3 days (2026-05-20 → 2026-05-24)
+
+================================================================================
+PHASE 1 SCOPE
+================================================================================
+
+OBJECTIVE: Restructure navigation from 6 → 4 tabs to reduce cognitive load,
+improve discoverability, and add context-aware quick-add (FAB) actions.
+
+FOUR PRIMARY CHANGES:
+
+1. TAB REDUCTION (6 → 4)
+   Before: Accueil, Jardin, Tâches, Semis, Tableaux de Bord, Réglages
+   After:  Accueil, Jardin, Tâches, Réglages
+   Impact: -33% tab count, improved visual hierarchy
+
+2. INNER TABS FOR JARDIN (Plantes | Planification)
+   Jardin now has nested tabs:
+   - Plantes: Plant list, add, detail, stats (current behavior)
+   - Planification: Garden beds + sowing calendar (merged from separate tabs)
+   Impact: SowingCalendarScreen now in Planification (1 tap vs 2)
+
+3. TABLEAUX DE BORD INTEGRATION INTO ACCUEIL
+   Before: Standalone "Tableaux de Bord" tab (6 dashboards)
+   After:  Card/collapsible in HomeScreen OR inner tab in Accueil
+   Impact: Dashboards still fully accessible, better navigation hierarchy
+
+4. CONTEXT-AWARE FABs
+   - Jardin FAB: "+ Add Plant" → AddPlantScreen (was in Jardin tab label)
+   - Tâches FAB: "+ Add Chore" → ChoreFormScreen
+   - Accueil/Réglages: "💬 AI Chat" → AIChatModal
+   Impact: -2 taps to add plant/chore, clearer intent
+
+================================================================================
+DELIVERABLES CREATED
+================================================================================
+
+THREE SPECIFICATION DOCUMENTS (ready for review):
+
+1. PHASE_1_KICKOFF.md (Design + Dev Coordination Spec)
+   - Executive summary, scope, 4 acceptance criteria
+   - Design review checklist (Designer answers before dev starts)
+   - Implementation approach (4 steps)
+   - Risk register, success metrics
+   - Reference: What Designer & Developer must do
+
+2. PHASE_1_DEV_STORY.md (Detailed Implementation Instructions)
+   - User story, 9 acceptance criteria
+   - Step-by-step code changes (7 implementation steps)
+   - Code snippets (navigation restructure, FAB logic, HomeScreen card)
+   - Testing checklist (40+ manual test cases)
+   - Code review checklist, commit message template
+   - Reference: Developer's primary document during implementation
+
+3. PHASE_1_STATUS.md (Orchestrator Tracking Document)
+   - Current phase status, timeline, critical path
+   - Designer action items, Developer action items
+   - Risk register, success metrics
+   - Open questions for Designer
+   - Reference: Used to track progress & coordinate between teams
+
+================================================================================
+WHO DOES WHAT (NEXT STEPS)
+================================================================================
+
+DESIGNER (TODAY OR 2026-05-21):
+1. Read PHASE_1_KICKOFF.md (10 min)
+2. Answer Design Review Checklist:
+   [ ] Inner-tab design (top vs bottom tabs, styling, indicator style)
+   [ ] Accueil → Tableaux de Bord option (card, collapsible, or inner tab)
+   [ ] FAB styling (size, colors, icons)
+   [ ] Overall visual consistency
+3. Provide approval + mockups (or text confirmation)
+4. Notify Developer to proceed
+
+OUTPUT: Design approval message with answers to checklist
+
+---
+
+DEVELOPER (AFTER DESIGN APPROVAL):
+1. Create branch: feat/P1-navigation-restructure
+2. Follow PHASE_1_DEV_STORY.md (7 implementation steps)
+3. Implement:
+   - GardenTabNavigator (nested bottom tabs)
+   - PlanificationStack (garden beds + sowing)
+   - Refactored AIFABButton (tab-aware)
+   - HomeScreen card/section (Tableaux de Bord)
+4. Test all 40+ manual test cases (per checklist)
+5. Self-review + commit (Conventional Commits)
+6. Push branch, create PR with testing summary
+7. Request review
+
+ESTIMATED EFFORT: 4–6 hours implementation + 2–3 hours testing
+
+OUTPUT: PR merge (target: 2026-05-22)
+
+---
+
+ORCHESTRATOR (THIS AGENT):
+- [x] Create Design spec
+- [x] Create Dev story
+- [ ] Track Designer review progress
+- [ ] Coordinate Developer start
+- [ ] Validate testing results
+- [ ] Approve PR merge
+- [ ] Update progress tracking
+- [ ] Plan Phase 2 kickoff
+
+OUTPUT: Status updates, progress tracking in PHASE_1_STATUS.md
+
+================================================================================
+TIMELINE
+================================================================================
+
+2026-05-20 (TODAY):
+  ✓ Kickoff Plan created
+  ✓ Design spec (PHASE_1_KICKOFF.md) created
+  ✓ Dev story (PHASE_1_DEV_STORY.md) created
+  ⟶ Designer review starts (1–2 hours)
+
+2026-05-20 to 2026-05-21:
+  ⟶ Designer answers checklist, approves design
+  ⟶ Developer stands by (branch ready)
+
+2026-05-21:
+  ⟶ Developer starts implementation (4–6 hours)
+  ⟶ Code written, testing begins
+
+2026-05-21 to 2026-05-22:
+  ⟶ Testing + code review (2–3 hours)
+  ⟶ Fixes if needed
+  ⟶ PR merge
+
+2026-05-24:
+  ✓ Phase 1 complete
+  ⟶ Phase 2 kicks off (Retention Gamification)
+
+CRITICAL PATH: Designer approval → Developer implementation → PR merge
+CRITICAL DEADLINE: 2026-05-22 (to unblock Phase 2)
+
+================================================================================
+EXPECTED IMPACT
+================================================================================
+
+NAVIGATION IMPROVEMENT:
+- Tab count reduced: 6 → 4 (33% reduction)
+- Tap count to add plant: 3–4 → 2 (50% reduction)
+- Tap count to add chore: 3–4 → 2 (50% reduction)
+- Navigation tree depth: 4+ → 3 levels (flatter)
+
+USER ENGAGEMENT:
+- +25% core feature engagement (easier navigation)
+- Improved discoverability (4 tabs vs 6)
+- Faster plant/chore creation (context FABs)
+
+TECHNICAL METRICS:
+- 100% test pass rate (40/40 manual tests)
+- TypeScript type safety (no `any` types)
+- No navigation errors, back button works correctly
+- Device rotation preserves state
+
+================================================================================
+RISK MITIGATION
+================================================================================
+
+RISK: Nested tabs confuse back button
+LIKELIHOOD: Medium | IMPACT: High
+MITIGATION: Extensive back button testing (5 test scenarios in checklist)
+
+RISK: Designer approval delayed
+LIKELIHOOD: Low | IMPACT: Medium
+MITIGATION: Follow up if no response in 24 hours
+
+RISK: FAB state bugs
+LIKELIHOOD: Medium | IMPACT: Medium
+MITIGATION: Tab-aware logic tested on all 4 tabs (5 test scenarios)
+
+RISK: Moved features hard to find
+LIKELIHOOD: Low | IMPACT: Medium
+MITIGATION: Dashboard card prominent on HomeScreen, Semis in obvious Planification tab
+
+================================================================================
+SUCCESS CRITERIA (POST-PHASE 1)
+================================================================================
+
+MUST HAVE (blocking):
+- [ ] 4 tabs visible (Accueil, Jardin, Tâches, Réglages)
+- [ ] Jardin inner tabs work (Plantes ↔ Planification smooth switching)
+- [ ] Semis accessible from Planification (1 tap)
+- [ ] Tableaux de Bord accessible from Accueil (card/section)
+- [ ] FABs context-aware (+ on Jardin/Tâches, 💬 on Accueil/Réglages)
+- [ ] Back button works correctly
+- [ ] All 40 manual tests pass
+- [ ] TypeScript clean (no `any` types)
+
+NICE TO HAVE:
+- [ ] Animation smooth (fade/slide between tabs)
+- [ ] Performance: <300ms tab switch
+- [ ] No console warnings
+
+================================================================================
+REFERENCE DOCUMENTS
+================================================================================
+
+IN REPO:
+- PHASE_1_KICKOFF.md — Design + Dev coordination spec
+- PHASE_1_DEV_STORY.md — Detailed implementation instructions
+- PHASE_1_STATUS.md — Orchestrator tracking + status updates
+- UX_OPTIM_PROGRESS.md — Full UX audit + roadmap (Phase 1 context)
+- MULTI_AGENT_SYSTEM.md — Agent roles & workflow
+
+IN CODE:
+- src/navigation/index.tsx (lines 1–146) — Current navigation structure
+- src/screens/HomeScreen.tsx — Where Tableaux de Bord card goes
+- src/components/AIFABButton.tsx — FAB component to refactor
+
+================================================================================
+QUESTIONS FOR DESIGNER
+================================================================================
+
+Please answer before Development starts:
+
+1. Inner-tab design for Jardin:
+   [ ] Top tabs (below header)?
+   [ ] Bottom nested tabs?
+   [ ] What styling (underline, background, size)?
+
+2. Accueil → Tableaux de Bord:
+   [ ] Option A (card)?
+   [ ] Option B (collapsible)?
+   [ ] Option C (inner tabs)?
+
+3. FAB styling:
+   [ ] Size (56pt)?
+   [ ] Colors (green for +, purple for 💬)?
+   [ ] Icons clear?
+
+4. Transition animation:
+   [ ] Fade?
+   [ ] Slide?
+   [ ] None?
+
+5. Empty states:
+   [ ] Toast when Semis moves?
+   [ ] Silent transition?
+
+================================================================================
+APPROVALS REQUIRED
+================================================================================
+
+PHASE 1 CANNOT START without Designer approval on above questions.
+
+Designer: _________________ Date: _________
+Orchestrator: _________________ Date: _________
+
+Once approved, Developer can start immediately (no further blockers).
+
+================================================================================
+CONTACT / ESCALATION
+================================================================================
+
+Designer Lead: [Awaiting info]
+Developer Lead: [Awaiting info]
+Orchestrator: This Agent (coordinates between Designer & Developer)
+
+ESCALATION PATH:
+- Designer blocked? → Notify Orchestrator
+- Developer blocked? → Notify Orchestrator
+- Phase 1 at risk? → Escalate immediately
+
+================================================================================
+                              END OF KICKOFF PLAN
+                  Next: Send to Designer for review & approval
+================================================================================
