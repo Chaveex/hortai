@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import {
-  View, Text, ScrollView, StyleSheet, SafeAreaView, TouchableOpacity,
+  View, Text, ScrollView, StyleSheet, TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { parseISO, differenceInDays } from 'date-fns';
 import { useStore } from '../store/useStore';
@@ -91,7 +92,7 @@ export function WaterDashboard() {
   }, [recommendations]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView style={styles.content} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>

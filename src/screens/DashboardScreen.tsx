@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View, Text, ScrollView, StyleSheet, RefreshControl, SafeAreaView, TouchableOpacity,
+  View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { useStore } from '../store/useStore';
@@ -99,7 +100,7 @@ export function DashboardScreen() {
   }, [dashboardData.health]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <ScrollView
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
