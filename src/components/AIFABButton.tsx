@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import { borderRadius, colors, spacing } from '../constants/theme';
 
 interface Props {
@@ -23,11 +24,16 @@ export default function AIFABButton({ onPress }: Props) {
     Animated.spring(scale, { toValue: 1, useNativeDriver: true, friction: 6 }).start();
   }
 
+  function handlePress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onPress();
+  }
+
   return (
     <View pointerEvents="box-none" style={[styles.wrapper, { bottom }]}>
       <Animated.View style={{ transform: [{ scale }] }}>
         <Pressable
-          onPress={onPress}
+          onPress={handlePress}
           onPressIn={pressIn}
           onPressOut={pressOut}
           accessibilityRole="button"

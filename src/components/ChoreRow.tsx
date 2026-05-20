@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
+import * as Haptics from 'expo-haptics';
 import { Chore, CHORE_TYPE_META, URGENCY_BG } from '../types/chores';
 import { colors, spacing, borderRadius } from '../constants/theme';
 import { useStore } from '../store/useStore';
@@ -34,15 +35,28 @@ export default function ChoreRow({ chore, onPress, onComplete, onSkip, onDelete 
       outputRange: [0, 1, 1],
       extrapolate: 'clamp',
     });
+    const handleCompleteWithHaptic = () => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      setTimeout(() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }, 100);
+      onComplete();
+    };
+
+    const handleSkipWithHaptic = () => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      onSkip();
+    };
+
     return (
       <View style={styles.leftActions}>
         <Animated.View style={[styles.actionBtn, { backgroundColor: colors.success, transform: [{ scale }] }]}>
-          <TouchableOpacity onPress={onComplete} style={styles.actionTouch}>
+          <TouchableOpacity onPress={handleCompleteWithHaptic} style={styles.actionTouch}>
             <Text style={styles.actionText}>✓ Fait</Text>
           </TouchableOpacity>
         </Animated.View>
         <Animated.View style={[styles.actionBtn, { backgroundColor: colors.textMuted, transform: [{ scale }] }]}>
-          <TouchableOpacity onPress={onSkip} style={styles.actionTouch}>
+          <TouchableOpacity onPress={handleSkipWithHaptic} style={styles.actionTouch}>
             <Text style={styles.actionText}>↷ Ignorer</Text>
           </TouchableOpacity>
         </Animated.View>
