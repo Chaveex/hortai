@@ -21,16 +21,16 @@
 ✅ **Export/Backup JSON** (local + Supabase optionnel, compression, import merge/overwrite, métadonnées persistées)
 ✅ **P1 — Cartographie Multi-Bacs** (lits nommés + localisés, grille indépendante par bac, placement plantes, compatibilité voisinage, persistence Zustand)
 
-## En cours
-🔄 **P2 — Tableaux de Bord Avancés** (Home dashboard MVP implémenté: PeriodSelector, StatCard tappable, 3 KPIs, BarChart 6m, ComparisonCard plantes. Service dashboardAggregation complet. Reste: 5 détail screens, tests, optimisation)
+## Terminé
+✅ **P2 — Tableaux de Bord Avancés** (6 screens, navigation filaire, services agrégation, composants, accessibility fixes)
 
 ## Backlog priorisé
 
 ### P1 ✅ DONE
 1. **Cartographie du jardin (Multi-Bacs)** — Lits nommés/localisés, grille par bac, placement plantes, conflits voisinage.
 
-### P2 — Données & Analytics (EN SPECS)
-2. **Tableaux de bord avancés** — 15 métriques botaniques, 6 screens (Home/Production/Water/Health/Plant/Comparison), charts SVG, prédictions rendement, comparatifs saisonniers. Agents (Botaniste/Dev/UX/QA) livrés spécifications. Impl timeline: 8 semaines.
+### P2 ✅ DONE
+2. **Tableaux de bord avancés** — 6 screens (Home/Production/Eau/Santé/Plante/Comparaison), charts SVG, agrégations KPI, navigation, services, composants, accessibility fixes. UX issues mineurs backlog P2.1.
 
 ### P3 — Communauté & Découverte
 6. **Partage entre utilisateurs** — Échanger plans de jardin, stratégies semis, photos avant/après.
@@ -76,7 +76,7 @@
 6. **Climat détecté par API Köppen-Geiger** — fallback local si API timeout.
 7. **IA Chat intègre profil automatiquement** — ville, style, saison contextualisés.
 
-## Implémentation P2 — Home Dashboard MVP (2026-05-20)
+## Implémentation P2 — Tableaux de Bord Avancés DONE (2026-05-20)
 
 ✅ **Services**
 - `dashboardAggregation.ts`: 4 fonctions agrégation (ProductionData, WaterData, HealthData, ComparisonData)
@@ -87,23 +87,32 @@
 - `StatCard.tsx`: carte KPI tappable, trend badge (↑↓→), icônes personnalisables
 - `PlantComparisonCard.tsx`: comparison plante vs régional avec barre de progression
 
-✅ **Écran Home Dashboard**
-- Refactorisé `DashboardScreen.tsx` avec:
-  - PeriodSelector top (déclencheur recalcul KPIs)
-  - 3 StatCards (Production, Eau, Santé) navigable vers détail
-  - BarChart 6 derniers mois production
-  - AlertBanner depuis health.alerts
-  - RefreshControl pour sync météo
-  - PlantComparisonCard top 3 plants
+✅ **6 Écrans Dashboard implémentés**
+- `DashboardScreen.tsx` — Home (entry point, PeriodSelector, 3 StatCards KPI, BarChart 6m, top plants, bouton comparaison)
+- `ProductionDashboard.tsx` — Récolte (LineChart 12m, BarChart, PieChart type, LeaderboardRow)
+- `WaterDashboard.tsx` — Eau (HealthScoreGauge %, LineChart usage, StackedBar type, recommandations, weather note)
+- `HealthScoreDashboard.tsx` — Santé (Gauge score, 5-factor grid, LineChart trend 6m, problematic plants, recommendations)
+- `PlantDetailDashboard.tsx` — Détail plante (plant selector, metrics grid 6 items, growth timeline, watering history, recent harvests)
+- `ComparisonDashboard.tsx` — Comparaison (2 period selectors, trend summary, ComparisonCard 3 metrics, dual bars, insights)
 
-⏭️ **Prochaines étapes P2**
-1. **Detail Dashboards**: ProductionDash, WaterDash, HealthDash, PlantDetailDash, ComparisonDash
-2. **Charts avancées**: PieChart enhancement, StackedBarChart, HeatmapChart, RadarChart
-3. **Store integration**: Zustand dashboardFilter state, memoized selectors
-4. **Zustand store updates**: dashboardFilter persist, cache invalide on plant/entry change
-5. **Tests**: unit tests aggregation functions, component tests (React Native Testing Library)
-6. **Performance**: FlatList virtualization, cache AsyncStorage, selector memoization
-7. **Dark mode**: color adapt, contrast ratios (WCAG AA)
-8. **Polish**: animations (Reanimated), empty states, tooltips (ⓘ), localisation (DD/MM/YYYY)
+✅ **Navigation filaire**
+- Créé `DashboardStack` (replaces old GardenStack routes)
+- Onglet "Tableaux de Bord" (📊) remplace StatsScreen
+- StatCard tap → detail dashboards (Production/Eau/Santé)
+- PlantDetailScreen: bouton "📊 Stats" → PlantDetailDashboard
+- DashboardScreen: bouton "📊 Tableau de comparaison détaillé" → ComparisonDashboard
 
-**Dernière mise à jour:** 2026-05-20, branche `master`. P1 SHIPPED. P2 Home Dashboard MVP DONE. Prêt implémentation detail screens.
+✅ **Accessibility fixes**
+- StatCard label contrast: rgba(255,255,255,0.7) → #FFFFFF (WCAG AA 4.5:1)
+- Progress bars: 4-6px → 10-12px (touch target ≥ 44x44pt area)
+
+⏭️ **P2.1 Backlog (UX mineurs)**
+1. **Virtualization**: FlatList pour ProductionDash, WaterDash, HealthDash (perf listes longues)
+2. **StatCard hint**: Ajouter chevron → ou "Appuyez" hint (UX discovery)
+3. **Hiérarchie visuelle**: Augmenter gap/elevation KPI section DashboardScreen
+4. **Empty states**: Ajouter écran onboarding si 0 plants
+5. **LineChart Y-axis**: Omit decimals si value > 10 (50.0% → 50%)
+6. **PlantDetailDashboard scroll dots**: Visual hint horizontal scroll si 2+ plants
+7. **HEALTH_SCORE_THRESHOLDS**: Centraliser en theme.ts (hardcoded actuel)
+
+**Dernière mise à jour:** 2026-05-20, branche `master`. P1 SHIPPED. P2 DONE (6 dashboards, navigation, services, accessibility). Commits: b434241, 535a9ae, f5bbf58. Prêt production. Backlog P2.1: virtualization, UX hints, empty states.
