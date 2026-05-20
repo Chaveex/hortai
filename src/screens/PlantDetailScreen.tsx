@@ -171,7 +171,13 @@ export default function PlantDetailScreen() {
               <>
                 <Text style={styles.waterAmount}>{rec.amount.toFixed(1)} L/m²</Text>
                 <Text style={styles.waterReason}>{rec.reason}</Text>
-                <TouchableOpacity style={styles.waterBtn} onPress={() => markWatered(plantId)}>
+                <TouchableOpacity
+                  style={styles.waterBtn}
+                  onPress={() => markWatered(plantId)}
+                  accessibilityRole="button"
+                  accessibilityLabel="Marquer comme arrosé"
+                  accessibilityHint="Appuyez pour enregistrer l'arrosage"
+                >
                   <Text style={styles.waterBtnText}>Marquer comme arrosé ✓</Text>
                 </TouchableOpacity>
               </>
@@ -191,6 +197,9 @@ export default function PlantDetailScreen() {
             <TouchableOpacity
               onPress={() => navigation.navigate('Tâches', { screen: 'ChoreForm', params: { plantId: plant.id } })}
               style={styles.addChoreBtn}
+              accessibilityRole="button"
+              accessibilityLabel="Ajouter une tâche"
+              accessibilityHint="Appuyez pour créer une nouvelle tâche pour ce plant"
             >
               <Text style={styles.addChoreBtnText}>➕</Text>
             </TouchableOpacity>
@@ -204,6 +213,9 @@ export default function PlantDetailScreen() {
                     key={chore.id}
                     style={styles.choreCard}
                     onPress={() => navigation.navigate('Tâches', { screen: 'ChoreDetail', params: { choreId: chore.id } })}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Tâche: ${chore.title}`}
+                    accessibilityHint={`Appuyez pour voir les détails du ${chore.type}`}
                   >
                     <Text style={styles.choreIcon}>{meta.icon}</Text>
                     <View style={styles.choreInfo}>
@@ -284,12 +296,18 @@ export default function PlantDetailScreen() {
             <TouchableOpacity
               style={[styles.typeTab, entryType === 'note' && styles.typeTabActive]}
               onPress={() => setEntryType('note')}
+              accessibilityRole="tab"
+              accessibilityLabel="Type de note"
+              accessibilityState={{ selected: entryType === 'note' }}
             >
               <Text style={[styles.typeTabText, entryType === 'note' && styles.typeTabTextActive]}>📓 Note</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.typeTab, entryType === 'harvest' && styles.typeTabActive]}
               onPress={() => setEntryType('harvest')}
+              accessibilityRole="tab"
+              accessibilityLabel="Type de récolte"
+              accessibilityState={{ selected: entryType === 'harvest' }}
             >
               <Text style={[styles.typeTabText, entryType === 'harvest' && styles.typeTabTextActive]}>🌾 Récolte</Text>
             </TouchableOpacity>
@@ -304,6 +322,8 @@ export default function PlantDetailScreen() {
               placeholderTextColor={colors.textMuted}
               multiline
               numberOfLines={2}
+              accessibilityLabel="Saisissez votre observation"
+              accessibilityHint="Entrez les détails de votre observation sur la plante"
             />
           ) : (
             <View style={styles.harvestRow}>
@@ -314,6 +334,8 @@ export default function PlantDetailScreen() {
                 placeholder="Quantité"
                 placeholderTextColor={colors.textMuted}
                 keyboardType="decimal-pad"
+                accessibilityLabel="Quantité récolte"
+                accessibilityHint="Entrez la quantité récolte"
               />
               <View style={styles.unitTabs}>
                 {(['kg', 'g', 'pièces'] as const).map(u => (
@@ -321,6 +343,9 @@ export default function PlantDetailScreen() {
                     key={u}
                     style={[styles.unitBtn, entryUnit === u && styles.unitBtnActive]}
                     onPress={() => setEntryUnit(u)}
+                    accessibilityRole="radio"
+                    accessibilityLabel={`Unité: ${u}`}
+                    accessibilityState={{ selected: entryUnit === u }}
                   >
                     <Text style={[styles.unitBtnText, entryUnit === u && styles.unitBtnTextActive]}>{u}</Text>
                   </TouchableOpacity>
@@ -329,7 +354,13 @@ export default function PlantDetailScreen() {
             </View>
           )}
 
-          <TouchableOpacity style={styles.addEntryBtn} onPress={handleAddEntry}>
+          <TouchableOpacity
+            style={styles.addEntryBtn}
+            onPress={handleAddEntry}
+            accessibilityRole="button"
+            accessibilityLabel={`Ajouter ${entryType === 'note' ? 'note' : 'récolte'}`}
+            accessibilityHint="Appuyez pour enregistrer votre saisie"
+          >
             <Text style={styles.addEntryBtnText}>+ Ajouter</Text>
           </TouchableOpacity>
         </View>
@@ -344,6 +375,9 @@ export default function PlantDetailScreen() {
               <TouchableOpacity
                 onPress={() => deleteEntry(entry.id)}
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                accessibilityRole="button"
+                accessibilityLabel="Supprimer"
+                accessibilityHint="Appuyez pour supprimer cette entrée"
               >
                 <Text style={styles.entryCardDelete}>✕</Text>
               </TouchableOpacity>

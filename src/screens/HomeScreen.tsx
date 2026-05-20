@@ -104,6 +104,9 @@ export default function HomeScreen() {
             style={styles.warningBanner}
             onPress={() => navigation.navigate('GardenStack', { screen: 'PlantDetailScreen', params: { plantId: streakAtRiskPlant.id } })}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={`Alerte: ${streakAtRiskPlant.name} n'a pas d'eau depuis longtemps`}
+            accessibilityHint="Appuyez pour aller aux détails de la plante"
           >
             <Text style={styles.warningText}>
               🔥 Ta série est en danger ! {streakAtRiskPlant.name} n'a pas eu d'eau depuis {Math.floor(differenceInDays(new Date(), parseISO(streakAtRiskPlant.lastWatered || '')))} jours.
@@ -119,6 +122,9 @@ export default function HomeScreen() {
             style={styles.badge}
             onPress={() => setStreakModalVisible(true)}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={`Série: ${streakDays} jours`}
+            accessibilityHint="Appuyez pour voir les détails de votre série"
           >
             <Text style={styles.badgeEmoji}>🔥</Text>
             <View style={styles.badgeContent}>
@@ -132,6 +138,9 @@ export default function HomeScreen() {
             style={styles.badge}
             onPress={() => setLevelModalVisible(true)}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={`Niveau de jardinier: ${gardenerLevel}`}
+            accessibilityHint="Appuyez pour voir les détails de votre niveau"
           >
             <Text style={styles.badgeEmoji}>🏆</Text>
             <View style={styles.badgeContent}>
@@ -145,6 +154,9 @@ export default function HomeScreen() {
             style={styles.badge}
             onPress={() => navigation.navigate('DashboardStack', { screen: 'ProductionDashboard' })}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel={`Tableau de bord de production: ${harvestData.actual.toFixed(1)}kg sur ${harvestData.goal}kg`}
+            accessibilityHint="Appuyez pour voir le tableau de bord complet"
           >
             <Text style={styles.badgeEmoji}>📊</Text>
             <View style={styles.badgeContent}>
