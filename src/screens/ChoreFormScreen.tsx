@@ -90,7 +90,7 @@ export default function ChoreFormScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View style={styles.navHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.backBtn}>← Annuler</Text>

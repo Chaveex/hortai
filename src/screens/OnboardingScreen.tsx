@@ -69,7 +69,7 @@ export default function OnboardingScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
           <Text style={styles.logo}>🌱</Text>

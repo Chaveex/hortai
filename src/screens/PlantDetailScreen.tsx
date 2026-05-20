@@ -27,7 +27,7 @@ export default function PlantDetailScreen() {
 
   if (!plant) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
         <Text style={{ padding: spacing.md }}>Plant introuvable.</Text>
       </SafeAreaView>
     );
@@ -75,7 +75,7 @@ export default function PlantDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View style={styles.navHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.backBtn}>← Retour</Text>

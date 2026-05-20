@@ -390,7 +390,7 @@ export default function BackupSettingsScreen() {
   // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Sauvegarde & Export</Text>
 

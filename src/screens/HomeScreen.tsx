@@ -33,9 +33,10 @@ export default function HomeScreen() {
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={isLoadingWeather} onRefresh={onRefresh} tintColor={colors.primary} />}
       >
         <View style={styles.header}>
@@ -102,6 +103,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
+  scrollContent: { paddingBottom: spacing.xxl },
   header: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingHorizontal: spacing.md, paddingTop: spacing.md, paddingBottom: spacing.sm,

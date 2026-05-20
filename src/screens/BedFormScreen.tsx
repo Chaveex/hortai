@@ -5,10 +5,10 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
-  SafeAreaView,
   Alert,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useStore } from '@/store/useStore';
 import { colors, spacing, typography } from '@/constants/theme';
@@ -61,7 +61,7 @@ export function BedFormScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View style={styles.header}>
         <Pressable onPress={() => navigation.goBack()}>
           <Text style={styles.backButton}>← Retour</Text>
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: spacing.md,
+    paddingBottom: spacing.xxl,
     gap: spacing.md,
   },
   field: {

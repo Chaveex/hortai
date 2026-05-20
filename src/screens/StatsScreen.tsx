@@ -203,7 +203,7 @@ export default function StatsScreen() {
   const trend       = stats ? TREND_CONFIG[stats.productivityTrend] : null;
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>

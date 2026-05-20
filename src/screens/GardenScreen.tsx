@@ -15,7 +15,7 @@ export default function GardenScreen() {
   const toWaterCount = recommendations.filter(r => r.shouldWater).length;
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>Mon Jardin</Text>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs, borderRadius: borderRadius.full,
   },
   addBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: '600' },
-  list: { padding: spacing.md, paddingTop: spacing.xs },
+  list: { padding: spacing.md, paddingTop: spacing.xs, paddingBottom: spacing.xxl },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl, gap: spacing.sm },
   emptyEmoji: { fontSize: 56 },
   emptyTitle: { ...typography.h3, textAlign: 'center' },

@@ -45,7 +45,7 @@ export default function SowingCalendarScreen() {
   const isCurrentMonth = month === now.getMonth() + 1 && year === now.getFullYear();
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View style={styles.header}>
         <Text style={styles.title}>Calendrier des semis</Text>
         <View style={styles.zoneBadge}>

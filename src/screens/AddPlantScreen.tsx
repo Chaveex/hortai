@@ -44,7 +44,7 @@ export default function AddPlantScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <View style={styles.navHeader}>
           <TouchableOpacity onPress={() => navigation.goBack()}>

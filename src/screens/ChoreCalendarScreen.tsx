@@ -74,7 +74,7 @@ export default function ChoreCalendarScreen() {
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View style={styles.header}>
         <View style={styles.titleRow}>
           <Text style={styles.title}>Calendrier d'entretien</Text>
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   dateCenter: { flex: 1, alignItems: 'center' },
   dateLabel: { fontSize: 15, fontWeight: '700', color: colors.text },
   todayLink: { fontSize: 11, color: colors.primary, marginTop: 2, fontWeight: '600' },
-  body: { flex: 1 },
+  body: { flex: 1, paddingBottom: spacing.xl },
   fab: {
     position: 'absolute',
     right: spacing.md,
