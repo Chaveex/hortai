@@ -13,6 +13,8 @@ import { calculateGardenMetrics, calculatePlantMetrics } from '../services/garde
 import { generatePredictions } from '../services/predictions';
 import { generateGardenInsights, prioritizeInsights } from '../services/insights';
 import { calculateTimeSeriesData } from '../services/statistics';
+import { format, differenceInDays, parseISO } from 'date-fns';
+import { PLANT_DATABASE } from '../constants/plants';
 
 interface StoreState {
   profile: UserProfile | null;
@@ -43,6 +45,14 @@ interface StoreState {
   chartData: GardenChartData | null;
   selectedMetricsPeriod: 'week' | 'month' | 'quarter' | 'year' | 'all';
   selectedDateRange: { start: string; end: string } | null;
+
+  // Retention gamification (P2)
+  streakDays: number;
+  longestStreakDays: number;
+  lastWatered: string | null;
+  streakResetAt: string | null;
+  gardenerLevel: number;
+  lastDailyTipDate: string | null;
 
   refreshStats: () => void;
   setProfile: (profile: UserProfile) => void;
@@ -83,6 +93,15 @@ interface StoreState {
   refreshInsights: () => void;
   setMetricsPeriod: (period: 'week' | 'month' | 'quarter' | 'year' | 'all') => void;
   setDateRange: (range: { start: string; end: string } | null) => void;
+
+  // Retention gamification actions
+  updateStreakDays: (days: number) => void;
+  setLongestStreakDays: (days: number) => void;
+  setLastWatered: (date: string | null) => void;
+  setHarvestGoal: (kg: number) => void;
+  setDailyTipEnabled: (enabled: boolean) => void;
+  setDailyTipTime: (time: string) => void;
+  recordDailyTip: (date: string) => void;
 }
 
 function generateId(): string {
@@ -97,6 +116,29 @@ function createEmptyCells(rows: number, cols: number): GardenCell[] {
     }
   }
   return cells;
+}
+
+function checkStreakReset(plants: Plant[]): boolean {
+  const now = new Date();
+  let shouldReset = false;
+
+  plants.forEach(plant => {
+    if (!plant.lastWatered) return;
+
+    const daysSince = differenceInDays(now, parseISO(plant.lastWatered));
+    const wateringFreq = PLANT_DATABASE[plant.type].wateringFrequencyDays;
+
+    // Streak resets if any plant is overdue by 2x watering frequency
+    if (daysSince > wateringFreq * 2) {
+      shouldReset = true;
+    }
+  });
+
+  return shouldReset;
+}
+
+function calculateGardenerLevel(plantCount: number, harvestCount: number, daysSinceOnboarding: number): number {
+  return 1 + Math.floor((plantCount + harvestCount + daysSinceOnboarding) / 20);
 }
 
 export const useStore = create<StoreState>()(
@@ -129,6 +171,14 @@ export const useStore = create<StoreState>()(
       selectedMetricsPeriod: 'month',
       selectedDateRange: null,
 
+      // Retention gamification
+      streakDays: 0,
+      longestStreakDays: 0,
+      lastWatered: null,
+      streakResetAt: null,
+      gardenerLevel: 1,
+      lastDailyTipDate: null,
+
       refreshStats: () => {
         const { entries, plants, weather } = get();
         const stats = calculateStats(entries, plants, weather);
@@ -138,10 +188,15 @@ export const useStore = create<StoreState>()(
       },
 
       setProfile: (profile) => {
-        set({ profile });
+        // Initialize onboardingDate if not set
+        const enrichedProfile = {
+          ...profile,
+          onboardingDate: profile.onboardingDate || format(new Date(), 'yyyy-MM-dd'),
+        };
+        set({ profile: enrichedProfile });
         get().refreshWeather();
-        if (profile.sowingNotificationsEnabled !== false) {
-          scheduleMonthlysSowingNotification(profile);
+        if (enrichedProfile.sowingNotificationsEnabled !== false) {
+          scheduleMonthlysSowingNotification(enrichedProfile);
         }
       },
 
@@ -194,6 +249,10 @@ export const useStore = create<StoreState>()(
 
       markWatered: (plantId) => {
         const now = new Date().toISOString();
+        const nowStr = format(new Date(), 'yyyy-MM-dd');
+        const { lastWatered } = get();
+
+        // Update plant's last watered time
         set(s => ({
           plants: s.plants.map(p =>
             p.id === plantId
@@ -201,6 +260,19 @@ export const useStore = create<StoreState>()(
               : p
           ),
         }));
+
+        // Update streak: if not already watered today, increment streak
+        if (!lastWatered || lastWatered !== nowStr) {
+          const { streakDays, longestStreakDays } = get();
+          const newStreak = streakDays + 1;
+          const newLongest = Math.max(newStreak, longestStreakDays);
+          set({
+            lastWatered: nowStr,
+            streakDays: newStreak,
+            longestStreakDays: newLongest,
+          });
+        }
+
         get().refreshRecommendations();
       },
 
@@ -232,8 +304,20 @@ export const useStore = create<StoreState>()(
       },
 
       refreshRecommendations: () => {
-        const { plants, weather, profile } = get();
+        const { plants, weather, profile, entries } = get();
         if (!weather || !profile) return;
+
+        // Check streak auto-reset
+        if (checkStreakReset(plants)) {
+          set({ streakDays: 0 });
+        }
+
+        // Calculate gardener level
+        const harvestCount = entries.filter(e => e.type === 'harvest').length;
+        const onboardingDate = profile.onboardingDate ? parseISO(profile.onboardingDate) : new Date();
+        const daysSinceOnboarding = differenceInDays(new Date(), onboardingDate);
+        const newLevel = calculateGardenerLevel(plants.length, harvestCount, daysSinceOnboarding);
+        set({ gardenerLevel: newLevel });
 
         const recommendations = plants.map(plant =>
           getWateringRecommendation(plant, weather, profile)
@@ -357,6 +441,46 @@ export const useStore = create<StoreState>()(
       setDateRange: (range) => {
         set({ selectedDateRange: range });
       },
+
+      // Retention gamification actions
+      updateStreakDays: (days) => {
+        set({ streakDays: days });
+      },
+
+      setLongestStreakDays: (days) => {
+        set({ longestStreakDays: days });
+      },
+
+      setLastWatered: (date) => {
+        set({ lastWatered: date });
+      },
+
+      setHarvestGoal: (kg) => {
+        const current = get().profile;
+        if (!current) return;
+        const now = new Date();
+        const currentMonth = new Intl.DateTimeFormat('sv-SE', {
+          year: 'numeric',
+          month: '2-digit',
+        }).format(now);
+        set({ profile: { ...current, harvestGoal: kg, harvestGoalMonth: currentMonth } });
+      },
+
+      setDailyTipEnabled: (enabled) => {
+        const current = get().profile;
+        if (!current) return;
+        set({ profile: { ...current, dailyTipEnabled: enabled } });
+      },
+
+      setDailyTipTime: (time) => {
+        const current = get().profile;
+        if (!current) return;
+        set({ profile: { ...current, dailyTipTime: time } });
+      },
+
+      recordDailyTip: (date) => {
+        set({ lastDailyTipDate: date });
+      },
     }),
     {
       name: 'garden-app-storage',
@@ -369,6 +493,11 @@ export const useStore = create<StoreState>()(
         backups: state.backups,
         lastBackupTime: state.lastBackupTime,
         gardenBeds: state.gardenBeds,
+        streakDays: state.streakDays,
+        longestStreakDays: state.longestStreakDays,
+        lastWatered: state.lastWatered,
+        gardenerLevel: state.gardenerLevel,
+        lastDailyTipDate: state.lastDailyTipDate,
       }),
     }
   )

@@ -12,6 +12,10 @@ export interface UserProfile {
   notificationHour: number;
   sowingNotificationsEnabled?: boolean;
   harvestGoal?: number; // kg per month
+  harvestGoalMonth?: string; // yyyy-MM
+  dailyTipEnabled?: boolean;
+  dailyTipTime?: string; // HH:mm
+  onboardingDate?: string; // YYYY-MM-DD
 }
 
 export type PlantType =
