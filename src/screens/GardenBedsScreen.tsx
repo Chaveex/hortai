@@ -13,10 +13,10 @@ import { useNavigation } from '@react-navigation/native';
 import { useStore } from '@/store/useStore';
 import { colors, spacing, typography } from '@/constants/theme';
 import { differenceInDays, parseISO, format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { getDateLocale } from '../utils/dateLocale';
 
 export function GardenBedsScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigation = useNavigation<any>();
   const gardenBeds = useStore(s => s.gardenBeds);
   const deleteGardenBed = useStore(s => s.deleteGardenBed);
@@ -30,21 +30,21 @@ export function GardenBedsScreen() {
   };
 
   const handleBedLongPress = (bedId: string, bedName: string) => {
-    Alert.alert(bedName, 'Que voulez-vous faire ?', [
+    Alert.alert(bedName, t('garden.bedActions'), [
       {
-        text: 'Modifier',
+        text: t('garden.editBedAction'),
         onPress: () => navigation.navigate('BedForm', { bedId }),
       },
       {
-        text: 'Supprimer',
+        text: t('garden.deleteBedAction'),
         onPress: () => {
           Alert.alert(
-            'Confirmer la suppression',
-            `Êtes-vous sûr de vouloir supprimer le bac "${bedName}" ?`,
+            t('garden.confirmDelete'),
+            t('garden.confirmDeleteBed', { name: bedName }),
             [
-              { text: 'Annuler', onPress: () => {} },
+              { text: t('garden.cancelAction'), onPress: () => {} },
               {
-                text: 'Supprimer',
+                text: t('garden.deleteBedAction'),
                 onPress: () => deleteGardenBed(bedId),
                 style: 'destructive',
               },
@@ -53,7 +53,7 @@ export function GardenBedsScreen() {
         },
         style: 'destructive',
       },
-      { text: 'Annuler', onPress: () => {} },
+      { text: t('garden.cancelAction'), onPress: () => {} },
     ]);
   };
 
@@ -69,46 +69,46 @@ export function GardenBedsScreen() {
     const d = parseISO(date);
     const daysDiff = differenceInDays(new Date(), d);
 
-    if (daysDiff === 0) return 'Aujourd\'hui';
-    if (daysDiff === 1) return 'Hier';
-    if (daysDiff < 7) return `${daysDiff} jours`;
-    if (daysDiff < 30) return `${Math.floor(daysDiff / 7)} semaines`;
-    if (daysDiff < 365) return `${Math.floor(daysDiff / 30)} mois`;
-    return `${Math.floor(daysDiff / 365)} ans`;
+    if (daysDiff === 0) return t('garden.today');
+    if (daysDiff === 1) return t('garden.yesterday');
+    if (daysDiff < 7) return t('garden.daysAgo', { days: daysDiff });
+    if (daysDiff < 30) return t('garden.weeksAgo', { weeks: Math.floor(daysDiff / 7) });
+    if (daysDiff < 365) return t('garden.monthsAgo', { months: Math.floor(daysDiff / 30) });
+    return t('garden.yearsAgo', { years: Math.floor(daysDiff / 365) });
   };
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Mes Bacs</Text>
+          <Text style={styles.title}>{t('garden.myBeds')}</Text>
           <Text style={styles.subtitle}>
-            {gardenBeds.length} bac{gardenBeds.length !== 1 ? 's' : ''}
+            {gardenBeds.length} {gardenBeds.length === 1 ? t('garden.bedCount', { count: 1 }) : t('garden.bedCount', { count: gardenBeds.length })}
           </Text>
         </View>
         <Pressable
           style={styles.calendarButton}
           onPress={handleSowingCalendarPress}
           accessibilityRole="button"
-          accessibilityLabel="Calendrier des semis"
-          accessibilityHint="Appuyez pour voir le calendrier de semis"
+          accessibilityLabel={t('garden.sowingCalendar')}
+          accessibilityHint={t('garden.sowingCalendarHint')}
         >
-          <Text style={styles.calendarButtonText}>📅 Semis</Text>
+          <Text style={styles.calendarButtonText}>📅 {t('sowing.title')}</Text>
         </Pressable>
       </View>
 
       {gardenBeds.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyEmoji}>🌿</Text>
-          <Text style={styles.emptyTitle}>Aucun bac créé</Text>
+          <Text style={styles.emptyTitle}>{t('garden.noBedCreated')}</Text>
           <Text style={styles.emptyDesc}>
-            Créez votre premier bac pour organiser votre jardin
+            {t('garden.noBedDesc')}
           </Text>
           <Pressable
             style={styles.createButton}
             onPress={handleCreateBed}
           >
-            <Text style={styles.createButtonText}>+ Créer un bac</Text>
+            <Text style={styles.createButtonText}>{t('garden.createBed')}</Text>
           </Pressable>
         </View>
       ) : (
@@ -139,7 +139,7 @@ export function GardenBedsScreen() {
                     style={styles.settingsButton}
                     onPress={() => handleBedSettings(bed.id)}
                     accessibilityRole="button"
-                    accessibilityLabel="Gérer le lit"
+                    accessibilityLabel={t('garden.manageGardenBed')}
                   >
                     <Text style={styles.settingsButtonText}>⚙️</Text>
                   </Pressable>
