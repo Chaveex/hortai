@@ -20,6 +20,7 @@ import {
   DateRange,
 } from '../services/dashboardAggregation';
 import { REGIONAL_AVERAGES } from '../constants/plants';
+import type { ChoreType } from '../types/chores';
 
 export function DashboardScreen() {
   const navigation = useNavigation<any>();
@@ -88,16 +89,38 @@ export function DashboardScreen() {
       .slice(0, 3);
   }, [dashboardData.comparison, plants]);
 
+  // Helper to map alert message to relevant chore types
+  const getChoreTypeFilter = (message: string): ChoreType[] | undefined => {
+    const lowerMsg = message.toLowerCase();
+    if (lowerMsg.includes('humidité') || lowerMsg.includes('humidity') || lowerMsg.includes('arrosage') || lowerMsg.includes('watering')) {
+      return ['watering'] as ChoreType[];
+    }
+    if (lowerMsg.includes('azote') || lowerMsg.includes('nitrogen') || lowerMsg.includes('nutriment') || lowerMsg.includes('engrais') || lowerMsg.includes('fertilizing')) {
+      return ['fertilizing'] as ChoreType[];
+    }
+    if (lowerMsg.includes('ravageur') || lowerMsg.includes('pest') || lowerMsg.includes('maladie') || lowerMsg.includes('disease')) {
+      return ['pest'] as ChoreType[];
+    }
+    return undefined;
+  };
+
   // Alerts from health data
   const alerts: AlertItem[] = useMemo(() => {
-    return dashboardData.health.alerts.map((alert, i) => ({
-      id: `health-${i}`,
-      type: alert.severity === 'warning' ? 'warning' : 'info',
-      message: alert.message,
-      icon: alert.severity === 'warning' ? '⚠️' : 'ℹ️',
-      dismissible: true,
-    }));
-  }, [dashboardData.health]);
+    return dashboardData.health.alerts.map((alert, i) => {
+      const choreTypeFilter = getChoreTypeFilter(alert.message);
+      return {
+        id: `health-${i}`,
+        type: alert.severity === 'warning' ? 'warning' : 'info',
+        message: alert.message,
+        icon: alert.severity === 'warning' ? '⚠️' : 'ℹ️',
+        dismissible: true,
+        choreTypeFilter,
+        onNavigate: choreTypeFilter ? (filter) => {
+          navigation.navigate('Tâches', { filterChoreType: filter });
+        } : undefined,
+      };
+    });
+  }, [dashboardData.health, navigation]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>

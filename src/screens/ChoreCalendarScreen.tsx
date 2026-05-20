@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   format,
 } from 'date-fns';
@@ -11,19 +11,31 @@ import {
   useChoreStore, filterChores, activeFilterCount,
 } from '../store/useChoreStore';
 import { useStore } from '../store/useStore';
-import { Chore } from '../types/chores';
+import { Chore, ChoreType } from '../types/chores';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import ChoreAgendaView from '../components/ChoreAgendaView';
 import FilterBottomSheet from '../components/FilterBottomSheet';
 
 export default function ChoreCalendarScreen() {
   const navigation = useNavigation<any>();
+  const route = useRoute<any>();
   const {
     chores, filters, setFilters,
     completeChore, skipChore, deleteChore,
   } = useChoreStore();
   const plants = useStore((s) => s.plants);
   const [filterOpen, setFilterOpen] = useState(false);
+  const filterChoreType = route.params?.filterChoreType as ChoreType[] | undefined;
+
+  // When filterChoreType is provided via route params, auto-apply the filter
+  useEffect(() => {
+    if (filterChoreType && filterChoreType.length > 0) {
+      setFilters({
+        ...filters,
+        types: filterChoreType,
+      });
+    }
+  }, [filterChoreType]);
 
   const filteredChores = useMemo(() => filterChores(chores, filters), [chores, filters]);
   const filterCount = activeFilterCount(filters);
@@ -40,7 +52,14 @@ export default function ChoreCalendarScreen() {
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View style={styles.header}>
         <View style={styles.titleRow}>
-          <Text style={styles.title}>Tâches</Text>
+          <View style={styles.titleArea}>
+            <Text style={styles.title}>Tâches</Text>
+            {filterChoreType && filterChoreType.length > 0 && (
+              <View style={styles.filterBadgeTitle}>
+                <Text style={styles.filterBadgeTitleText}>Filtrée</Text>
+              </View>
+            )}
+          </View>
           <TouchableOpacity onPress={() => setFilterOpen(true)} style={styles.filterBtn}>
             <Text style={styles.filterIcon}>⚙️</Text>
             {filterCount > 0 && (
@@ -91,7 +110,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  titleArea: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    flex: 1,
+  },
   title: { ...typography.h2 },
+  filterBadgeTitle: {
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  filterBadgeTitleText: {
+    color: colors.surface,
+    fontSize: 10,
+    fontWeight: '700',
+  },
   filterBtn: {
     width: 40, height: 40,
     borderRadius: 20,
