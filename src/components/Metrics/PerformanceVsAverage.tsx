@@ -133,7 +133,7 @@ export function PerformanceVsAverage({
       <View style={styles.legend}>
         <View style={styles.legendItem}>
           <View style={[styles.legendColor, { backgroundColor: colors.primary }]} />
-          <Text style={styles.legendLabel}>Plante</Text>
+          <Text style={styles.legendLabel}>Votre récolte</Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendColor, { backgroundColor: colors.secondary }]} />
