@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Modal,
+  View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import BotanistModal from './BotanistModal';
 import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { useStore } from '../store/useStore';
 import { PeriodSelector, Period } from '../components/Dashboard/PeriodSelector';
@@ -28,7 +27,6 @@ export function DashboardScreen() {
   const { plants, entries, weather, refreshWeather } = useStore();
   const [refreshing, setRefreshing] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState<Period>('month');
-  const [botanistModalOpen, setBotanistModalOpen] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -207,22 +205,6 @@ export function DashboardScreen() {
           </View>
         )}
 
-        {/* Botanist Advice Card */}
-        <View style={styles.comparisonSection}>
-          <TouchableOpacity
-            style={styles.botanistCard}
-            onPress={() => setBotanistModalOpen(true)}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.botanistCardIcon}>🌱</Text>
-            <View style={styles.botanistCardContent}>
-              <Text style={styles.botanistCardTitle}>Conseil du jardin</Text>
-              <Text style={styles.botanistCardSubtitle}>Posez une question au botaniste</Text>
-            </View>
-            <Text style={styles.botanistCardArrow}>›</Text>
-          </TouchableOpacity>
-        </View>
-
         {/* Navigation button */}
         <View style={styles.comparisonSection}>
           <TouchableOpacity
@@ -235,11 +217,6 @@ export function DashboardScreen() {
 
         <View style={styles.spacer} />
       </ScrollView>
-      {/* Botanist Modal */}
-      <BotanistModal
-        visible={botanistModalOpen}
-        onClose={() => setBotanistModalOpen(false)}
-      />
     </SafeAreaView>
   );
 }
@@ -307,39 +284,5 @@ const styles = StyleSheet.create({
     color: colors.surface,
     fontSize: 14,
     fontWeight: '600',
-  },
-  botanistCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.secondary + '15',
-    borderRadius: 12,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    borderWidth: 1,
-    borderColor: colors.secondary,
-    marginTop: spacing.md,
-  },
-  botanistCardIcon: {
-    fontSize: 24,
-    marginRight: spacing.md,
-  },
-  botanistCardContent: {
-    flex: 1,
-  },
-  botanistCardTitle: {
-    ...typography.h3,
-    fontSize: 14,
-    color: colors.text,
-    marginBottom: spacing.xs,
-  },
-  botanistCardSubtitle: {
-    ...typography.body,
-    fontSize: 12,
-    color: colors.textMuted,
-  },
-  botanistCardArrow: {
-    fontSize: 18,
-    color: colors.textMuted,
-    marginLeft: spacing.sm,
   },
 });

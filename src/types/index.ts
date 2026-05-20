@@ -16,7 +16,6 @@ export interface UserProfile {
   dailyTipEnabled?: boolean;
   dailyTipTime?: string; // HH:mm
   onboardingDate?: string; // YYYY-MM-DD
-  language?: 'fr' | 'en' | 'es'; // NEW
 }
 
 export type PlantType =
@@ -109,14 +108,6 @@ export interface AIChatMessage {
   content: string;
   timestamp: string;
   photo?: string;
-}
-
-export interface BotanistMessage {
-  id: string;
-  role: 'user' | 'assistant';
-  text: string;
-  timestamp: string;
-  photo?: string; // base64 (optional, for plant photos)
 }
 
 export interface RateLimitStatus {

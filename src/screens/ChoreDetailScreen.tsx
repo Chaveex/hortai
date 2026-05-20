@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert,
 } from 'react-native';
@@ -14,13 +14,11 @@ import {
 } from '../types/chores';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import ChoreTypeIcon from '../components/ChoreTypeIcon';
-import BotanistModal from './BotanistModal';
 
 export default function ChoreDetailScreen() {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const { choreId } = route.params as { choreId: string };
-  const [botanistModalOpen, setBotanistModalOpen] = useState(false);
 
   const chores = useChoreStore((s) => s.chores);
   const completeChore = useChoreStore((s) => s.completeChore);
@@ -155,22 +153,6 @@ export default function ChoreDetailScreen() {
           </View>
         )}
 
-        {/* Botanist button */}
-        <TouchableOpacity
-          onPress={() => setBotanistModalOpen(true)}
-          style={styles.botanistButton}
-          accessibilityRole="button"
-          accessibilityLabel="Besoin d'aide"
-          accessibilityHint="Appuyez pour poser une question au botaniste"
-        >
-          <Text style={styles.botanistButtonEmoji}>❓</Text>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.botanistButtonLabel}>Besoin d'aide?</Text>
-            <Text style={styles.botanistButtonSubtitle}>Demandez au botaniste</Text>
-          </View>
-          <Text style={styles.botanistButtonArrow}>›</Text>
-        </TouchableOpacity>
-
         {chore.description && (
           <>
             <Text style={styles.sectionLabel}>Description</Text>
@@ -219,12 +201,6 @@ export default function ChoreDetailScreen() {
           <Text style={styles.deleteText}>Supprimer cette tâche</Text>
         </TouchableOpacity>
       </ScrollView>
-      {/* Botanist Modal */}
-      <BotanistModal
-        visible={botanistModalOpen}
-        onClose={() => setBotanistModalOpen(false)}
-        context={`chore:${chore?.id}`}
-      />
     </SafeAreaView>
   );
 }
@@ -326,19 +302,4 @@ const styles = StyleSheet.create({
   bigBtnText: { color: '#FFF', fontSize: 15, fontWeight: '700' },
   deleteRow: { marginTop: spacing.lg, padding: spacing.sm, alignItems: 'center' },
   deleteText: { color: colors.warning, fontSize: 14, fontWeight: '600' },
-  botanistButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.secondary + '20',
-    borderRadius: borderRadius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    marginVertical: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.secondary,
-  },
-  botanistButtonEmoji: { fontSize: 20, marginRight: spacing.sm },
-  botanistButtonLabel: { fontSize: 14, fontWeight: '600', color: colors.text },
-  botanistButtonSubtitle: { fontSize: 12, color: colors.textMuted, marginTop: spacing.xs },
-  botanistButtonArrow: { fontSize: 18, color: colors.textMuted, marginLeft: spacing.sm },
 });

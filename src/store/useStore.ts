@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData, GardenBed, GardenCell, GardenMetrics, PlantMetrics, Predictions, GardenInsight, GardenChartData, BotanistMessage } from '../types';
+import { Plant, UserProfile, WeatherData, WateringRecommendation, GardeningTip, PlantType, PlantEntry, AIChatMessage, RateLimitStatus, StatsData, GardenBed, GardenCell, GardenMetrics, PlantMetrics, Predictions, GardenInsight, GardenChartData } from '../types';
 import { fetchWeather } from '../services/weather';
 import { calculateStats } from '../services/statistics';
 import { isFrostRisk as checkFrost, isHeatWave as checkHeat } from '../services/weather';
@@ -29,10 +29,6 @@ interface StoreState {
 
   aiChatMessages: AIChatMessage[];
   aiChatRateLimit: RateLimitStatus | null;
-
-  // Botanist chat (separate from AI Chat)
-  botanistMessages: BotanistMessage[];
-  botanistRateLimit: RateLimitStatus | null;
 
   // Backup metadata
   backups: BackupMetadata[];
@@ -75,12 +71,6 @@ interface StoreState {
   addAIChatMessage: (message: AIChatMessage) => void;
   clearAIChatHistory: () => void;
   setAIChatRateLimit: (status: RateLimitStatus | null) => void;
-
-  // Botanist actions
-  setBotanistMessages: (messages: BotanistMessage[]) => void;
-  addBotanistMessage: (message: BotanistMessage) => void;
-  clearBotanistHistory: () => void;
-  setBotanistRateLimit: (status: RateLimitStatus | null) => void;
 
   // Backup actions
   setBackups: (backups: BackupMetadata[]) => void;
@@ -172,9 +162,6 @@ export const useStore = create<StoreState>()(
 
       aiChatMessages: [],
       aiChatRateLimit: null,
-
-      botanistMessages: [],
-      botanistRateLimit: null,
 
       backups: [],
       lastBackupTime: undefined,
@@ -374,19 +361,6 @@ export const useStore = create<StoreState>()(
       clearAIChatHistory: () => set({ aiChatMessages: [] }),
 
       setAIChatRateLimit: (status) => set({ aiChatRateLimit: status }),
-
-      // Botanist
-      setBotanistMessages: (messages) => set({ botanistMessages: messages }),
-
-      addBotanistMessage: (message) => {
-        set(s => ({
-          botanistMessages: [...s.botanistMessages, message].slice(-50),
-        }));
-      },
-
-      clearBotanistHistory: () => set({ botanistMessages: [] }),
-
-      setBotanistRateLimit: (status) => set({ botanistRateLimit: status }),
 
       // Backup
       setBackups: (backups) => set({ backups }),

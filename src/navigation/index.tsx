@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Text, View, StyleSheet, Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
 import HomeScreen from '../screens/HomeScreen';
 import GardenScreen from '../screens/GardenScreen';
 import AddPlantScreen from '../screens/AddPlantScreen';
@@ -21,7 +20,6 @@ import { BedGridScreen } from '../screens/BedGridScreen';
 import { BedFormScreen } from '../screens/BedFormScreen';
 import { BedSettingsModal } from '../screens/BedSettingsModal';
 import AIChatModal from '../screens/AIChatModal';
-import BotanistModal from '../screens/BotanistModal';
 import AIFABButton from '../components/AIFABButton';
 import ContextFAB from '../components/ContextFAB';
 import { colors } from '../constants/theme';
@@ -37,7 +35,6 @@ const Stack = createStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
 
 function GardenTabs() {
-  const { t } = useTranslation();
   return (
     <TopTab.Navigator
       screenOptions={{
@@ -59,14 +56,14 @@ function GardenTabs() {
         name="Plantes"
         component={GardenScreen}
         options={{
-          tabBarLabel: t('screens.plants'),
+          tabBarLabel: 'Plantes',
         }}
       />
       <TopTab.Screen
         name="Planification"
         component={GardenBedsScreen}
         options={{
-          tabBarLabel: t('screens.planning'),
+          tabBarLabel: 'Planification',
         }}
       />
     </TopTab.Navigator>
@@ -130,9 +127,7 @@ function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
 
 export default function Navigation() {
   const [chatOpen, setChatOpen] = useState(false);
-  const [botanistOpen, setBotanistOpen] = useState(false);
   const insets = useSafeAreaInsets();
-  const { t } = useTranslation();
 
   return (
     <NavigationContainer>
@@ -160,7 +155,6 @@ export default function Navigation() {
                     name="Accueil"
                     component={HomeScreen}
                     options={{
-                      tabBarLabel: t('navigation.home'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🏠" focused={focused} />,
                     }}
                   />
@@ -168,7 +162,6 @@ export default function Navigation() {
                     name="Jardin"
                     component={GardenStack}
                     options={{
-                      tabBarLabel: t('navigation.garden'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🌱" focused={focused} />,
                     }}
                   />
@@ -176,7 +169,6 @@ export default function Navigation() {
                     name="Tâches"
                     component={ChoreStack}
                     options={{
-                      tabBarLabel: t('navigation.chores'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="🗓️" focused={focused} />,
                     }}
                   />
@@ -184,7 +176,6 @@ export default function Navigation() {
                     name="Réglages"
                     component={SettingsStack}
                     options={{
-                      tabBarLabel: t('navigation.settings'),
                       tabBarIcon: ({ focused }) => <TabIcon emoji="⚙️" focused={focused} />,
                     }}
                   />
@@ -202,7 +193,6 @@ export default function Navigation() {
         </Stack.Navigator>
       </View>
       <AIChatModal visible={chatOpen} onClose={() => setChatOpen(false)} />
-      <BotanistModal visible={botanistOpen} onClose={() => setBotanistOpen(false)} />
     </NavigationContainer>
   );
 }

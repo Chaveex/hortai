@@ -11,7 +11,6 @@ import { useStore } from '../store/useStore';
 import { useChoreStore } from '../store/useChoreStore';
 import { getPlantInfo, getGrowthStage } from '../constants/plants';
 import TipCard from '../components/TipCard';
-import BotanistModal from './BotanistModal';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 import { getSeason } from '../services/recommendations';
 import { CHORE_TYPE_META } from '../types/chores';
@@ -27,7 +26,6 @@ export default function PlantDetailScreen() {
   const [entryText, setEntryText] = useState('');
   const [entryQty, setEntryQty] = useState('');
   const [entryUnit, setEntryUnit] = useState<'kg' | 'g' | 'pièces'>('kg');
-  const [botanistModalOpen, setBotanistModalOpen] = useState(false);
   const plant = plants.find(p => p.id === plantId);
   const linkedChores = plant ? getChoresForPlant(plant.id, 'upcoming') : [];
 
@@ -192,22 +190,6 @@ export default function PlantDetailScreen() {
             )}
           </View>
         )}
-
-        {/* Botanist button */}
-        <TouchableOpacity
-          onPress={() => setBotanistModalOpen(true)}
-          style={styles.botanistButton}
-          accessibilityRole="button"
-          accessibilityLabel="Conseil du botaniste"
-          accessibilityHint="Appuyez pour poser une question au botaniste"
-        >
-          <Text style={styles.botanistButtonEmoji}>💡</Text>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.botanistButtonLabel}>Conseil pour cette plante</Text>
-            <Text style={styles.botanistButtonSubtitle}>Posez une question au botaniste</Text>
-          </View>
-          <Text style={styles.botanistButtonArrow}>›</Text>
-        </TouchableOpacity>
 
         <View style={styles.choreSection}>
           <View style={styles.choreHeader}>
@@ -407,12 +389,6 @@ export default function PlantDetailScreen() {
           </View>
         ))}
       </ScrollView>
-      {/* Botanist Modal */}
-      <BotanistModal
-        visible={botanistModalOpen}
-        onClose={() => setBotanistModalOpen(false)}
-        context={`plant:${plant?.id}`}
-      />
     </SafeAreaView>
   );
 }
@@ -523,21 +499,6 @@ const styles = StyleSheet.create({
   entryCardDelete: { color: colors.textMuted, fontSize: 14 },
   entryCardText: { fontSize: 14, color: colors.text, lineHeight: 20 },
   entryCardHarvest: { fontSize: 16, fontWeight: '700', color: colors.success },
-  botanistButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.secondary + '20',
-    borderRadius: borderRadius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.secondary,
-  },
-  botanistButtonEmoji: { fontSize: 24, marginRight: spacing.sm },
-  botanistButtonLabel: { fontSize: 14, fontWeight: '600', color: colors.text },
-  botanistButtonSubtitle: { fontSize: 12, color: colors.textMuted, marginTop: spacing.xs },
-  botanistButtonArrow: { fontSize: 18, color: colors.textMuted, marginLeft: spacing.sm },
   choreSection: { marginTop: spacing.md, marginBottom: spacing.md },
   choreHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
   addChoreBtn: { width: 32, height: 32, justifyContent: 'center', alignItems: 'center' },
