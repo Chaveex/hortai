@@ -112,16 +112,28 @@ export default function PlantDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right", "bottom"]}>
       <View style={styles.navHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          accessibilityLabel="Retour vers le jardin"
+          accessibilityRole="button"
+        >
           <Text style={styles.backBtn}>← Retour</Text>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-          <TouchableOpacity onPress={() => navigation.navigate('PlantDetailDashboard')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PlantDetailDashboard', { plantId })}
+            accessibilityLabel="Statistiques du plant"
+            accessibilityRole="button"
+          >
             <Text style={styles.statsBtn}>📊 Stats</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete}>
+          <TouchableOpacity
+            onPress={handleDelete}
+            accessibilityLabel="Supprimer ce plant"
+            accessibilityRole="button"
+          >
             <Text style={styles.deleteBtn}>Supprimer</Text>
           </TouchableOpacity>
         </View>
@@ -332,13 +344,13 @@ const styles = StyleSheet.create({
   heroVariety: { color: colors.textSecondary, fontStyle: 'italic', fontSize: 14 },
   stageBadge: {
     backgroundColor: colors.secondary, borderRadius: borderRadius.full,
-    paddingHorizontal: spacing.sm, paddingVertical: 2, alignSelf: 'flex-start', marginTop: 4,
+    paddingHorizontal: spacing.sm, paddingVertical: 2, alignSelf: 'flex-start', marginTop: spacing.xs,
   },
   stageBadgeText: { color: colors.primaryDark, fontSize: 11, fontWeight: '600' },
   statsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
   statBox: {
     backgroundColor: colors.surface, borderRadius: borderRadius.md,
-    padding: spacing.sm, alignItems: 'center', minWidth: 72, flex: 1,
+    padding: spacing.sm, alignItems: 'center', minWidth: 60, flex: 1,
     borderWidth: 1, borderColor: colors.border,
   },
   statBoxHighlight: { borderColor: colors.success, backgroundColor: '#EDF7F1' },
@@ -368,7 +380,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm, paddingVertical: spacing.xs,
   },
   issueText: { fontSize: 12, color: colors.warning },
-  historyList: { gap: 4 },
+  historyList: { gap: spacing.xs },
   historyItem: { fontSize: 13, color: colors.textSecondary },
   journalForm: {
     backgroundColor: colors.surface, borderRadius: borderRadius.md,
@@ -388,7 +400,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   harvestRow: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center' },
-  unitTabs: { flexDirection: 'row', gap: 4 },
+  unitTabs: { flexDirection: 'row', gap: spacing.xs },
   unitBtn: {
     paddingHorizontal: spacing.sm, paddingVertical: spacing.xs,
     borderRadius: borderRadius.full, borderWidth: 1.5, borderColor: colors.border,
@@ -406,7 +418,7 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: colors.border, padding: spacing.md,
     marginTop: spacing.xs,
   },
-  entryCardHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: 4 },
+  entryCardHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.xs },
   entryCardIcon: { fontSize: 14 },
   entryCardDate: { flex: 1, fontSize: 12, color: colors.textMuted },
   entryCardDelete: { color: colors.textMuted, fontSize: 14 },

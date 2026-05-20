@@ -11,8 +11,8 @@ export const colors = {
   surface: '#FFFFFF',
   border: '#B7E4C7',
   text: '#1B4332',
-  textSecondary: '#52B788',
-  textMuted: '#74C69D',
+  textSecondary: '#38764B',
+  textMuted: '#5a9d70',
   shadow: 'rgba(0,0,0,0.08)',
   overlay: 'rgba(27,67,50,0.5)',
 };
@@ -39,6 +39,6 @@ export const typography = {
   h2: { fontSize: 22, fontWeight: '600' as const, color: '#1B4332' },
   h3: { fontSize: 18, fontWeight: '600' as const, color: '#1B4332' },
   body: { fontSize: 15, fontWeight: '400' as const, color: '#1B4332' },
-  caption: { fontSize: 12, fontWeight: '400' as const, color: '#52B788' },
+  caption: { fontSize: 12, fontWeight: '400' as const, color: '#38764B' },
   label: { fontSize: 13, fontWeight: '500' as const, color: '#1B4332' },
 };
