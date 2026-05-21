@@ -110,6 +110,7 @@ interface BackupRowProps {
 }
 
 function BackupRow({ meta, onRestore, onDelete, last }: BackupRowProps) {
+  const { t } = useTranslation();
   return (
     <View style={[styles.backupRow, last && styles.backupRowLast]}>
       <Text style={styles.backupIcon}>{meta.source === 'cloud' ? '☁️' : '📁'}</Text>
@@ -119,7 +120,7 @@ function BackupRow({ meta, onRestore, onDelete, last }: BackupRowProps) {
       </View>
       <View style={styles.backupActions}>
         <TouchableOpacity style={styles.backupBtn} onPress={() => onRestore(meta)}>
-          <Text style={styles.backupBtnText}>Restaurer</Text>
+          <Text style={styles.backupBtnText}>{t('backup.restore')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.backupBtn, styles.backupBtnDanger]} onPress={() => onDelete(meta)}>
           <Text style={[styles.backupBtnText, { color: colors.error }]}>X</Text>
@@ -178,7 +179,7 @@ export default function BackupSettingsScreen() {
       addBackup(meta);
       const updated = await getBackupMetadataList();
       setLocalBackups(updated);
-      Alert.alert(t('backup.successExport'), `Sauvegarde JSON partagée (${formatBytes(meta.size)}).`);
+      Alert.alert(t('backup.successExport'), t('backup.jsonExportSuccess', { size: formatBytes(meta.size) }));
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur inconnue';
       Alert.alert(t('backup.errorExport'), msg);
@@ -200,7 +201,7 @@ export default function BackupSettingsScreen() {
       addBackup(meta);
       const updated = await getBackupMetadataList();
       setLocalBackups(updated);
-      Alert.alert(t('backup.successExport'), `Sauvegarde compressée partagée (${formatBytes(meta.size)}).`);
+      Alert.alert(t('backup.successExport'), t('backup.zipExportSuccess', { size: formatBytes(meta.size) }));
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur inconnue';
       Alert.alert(t('backup.errorExport'), msg);
@@ -243,15 +244,15 @@ export default function BackupSettingsScreen() {
 
   const promptImport = useCallback(() => {
     Alert.alert(
-      'Importer une sauvegarde',
-      'Que faire des données existantes ?',
+      t('backup.importTitle'),
+      t('backup.importMessage'),
       [
         { text: t('common.cancel'), style: 'cancel' },
         { text: t('backup.merge'), onPress: () => handleImport('merge') },
         { text: t('backup.replace'), style: 'destructive', onPress: () => handleImport('overwrite') },
       ]
     );
-  }, [handleImport]);
+  }, [handleImport, t]);
 
   // ── Cloud backup ─────────────────────────────────────────────────────────────
 
@@ -284,7 +285,7 @@ export default function BackupSettingsScreen() {
       const json = await exportAsJSON(storeSnapshot);
       const userId = profile.city + '_' + profile.latitude.toFixed(4);
       const backupId = await uploadBackup(json, userId);
-      Alert.alert('Cloud', `Sauvegarde envoyée (id: ${backupId.slice(0, 8)}…)`);
+      Alert.alert(t('backup.cloud'), t('backup.cloudUploadSuccess', { id: backupId.slice(0, 8) }));
       await loadCloudBackups();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erreur cloud';
@@ -292,12 +293,12 @@ export default function BackupSettingsScreen() {
     } finally {
       setLoadingCloudUpload(false);
     }
-  }, [storeSnapshot, profile, loadCloudBackups]);
+  }, [storeSnapshot, profile, loadCloudBackups, t]);
 
   const handleCloudRestore = useCallback(async (meta: BackupMetadata) => {
     Alert.alert(
       t('backup.cloudRestore'),
-      `Sauvegarde du ${formatDate(meta.timestamp)}. Que faire des données existantes ?`,
+      t('backup.cloudRestoreMessage', { date: formatDate(meta.timestamp) }),
       [
         { text: t('common.cancel'), style: 'cancel' },
         {
@@ -345,16 +346,16 @@ export default function BackupSettingsScreen() {
         },
       ]
     );
-  }, [setProfile, setPlants, setEntries, plants, entries, choreStore.chores]);
+  }, [setProfile, setPlants, setEntries, plants, entries, choreStore.chores, t]);
 
   const handleCloudDelete = useCallback(async (meta: BackupMetadata) => {
     Alert.alert(
-      'Supprimer cette sauvegarde ?',
-      `Du ${formatDate(meta.timestamp)} — irréversible.`,
+      t('backup.deleteCloudTitle'),
+      t('backup.deleteCloudMessage', { date: formatDate(meta.timestamp) }),
       [
         { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Supprimer',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -368,16 +369,16 @@ export default function BackupSettingsScreen() {
         },
       ]
     );
-  }, [loadCloudBackups]);
+  }, [loadCloudBackups, t]);
 
   const handleLocalDelete = useCallback(async (meta: BackupMetadata) => {
     Alert.alert(
-      'Supprimer cet enregistrement ?',
-      'Supprime uniquement la référence locale, pas le fichier partagé.',
+      t('backup.deleteLocalTitle'),
+      t('backup.deleteLocalMessage'),
       [
         { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Supprimer',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             const updated = await deleteBackupMetadata(meta.id);
@@ -387,20 +388,20 @@ export default function BackupSettingsScreen() {
         },
       ]
     );
-  }, [setBackups]);
+  }, [setBackups, t]);
 
   // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Sauvegarde & Export</Text>
+        <Text style={styles.title}>{t('backup.pageTitle')}</Text>
 
         {/* Last backup info */}
         {lastBackupTime ? (
           <View style={styles.lastBackupBanner}>
             <Text style={styles.lastBackupText}>
-              Derniere sauvegarde : {formatDate(lastBackupTime)}
+              {t('backup.lastBackup', { date: formatDate(lastBackupTime) })}
             </Text>
           </View>
         ) : null}
@@ -436,8 +437,8 @@ export default function BackupSettingsScreen() {
                   meta={meta}
                   onRestore={() => {
                     Alert.alert(
-                      'Restaurer',
-                      'Cette action nécessite un fichier. Utilisez "Importer" pour restaurer depuis un fichier.',
+                      t('backup.restore'),
+                      t('backup.restoreLocalMessage'),
                       [{ text: 'OK' }]
                     );
                   }}
@@ -513,14 +514,14 @@ export default function BackupSettingsScreen() {
           </>
         ) : (
           <>
-            <SectionHeader title="Cloud (Supabase)" />
+            <SectionHeader title={t('backup.cloud')} />
             <View style={[styles.card, styles.disabledCard]}>
               <View style={styles.disabledContent}>
                 <Text style={styles.disabledIcon}>☁️</Text>
                 <View>
-                  <Text style={styles.disabledTitle}>Synchronisation cloud désactivée</Text>
+                  <Text style={styles.disabledTitle}>{t('backup.cloudDisabledTitle')}</Text>
                   <Text style={styles.disabledSub}>
-                    Ajoutez EXPO_PUBLIC_SUPABASE_URL et EXPO_PUBLIC_SUPABASE_KEY dans .env pour activer.
+                    {t('backup.cloudDisabledMessage')}
                   </Text>
                 </View>
               </View>

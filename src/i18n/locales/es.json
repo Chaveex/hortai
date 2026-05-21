@@ -481,7 +481,22 @@
     "successCloudReplace": "Datos reemplazados desde la nube.",
     "errorSetup": "No se pudo completar la configuración.",
     "merge": "Fusionar",
-    "replace": "Reemplazar"
+    "replace": "Reemplazar",
+    "pageTitle": "Copia de Seguridad y Exportación",
+    "lastBackup": "Última copia de seguridad: {{date}}",
+    "jsonExportSuccess": "Copia de seguridad JSON compartida ({{size}}).",
+    "zipExportSuccess": "Copia de seguridad comprimida compartida ({{size}}).",
+    "cloudUploadSuccess": "Copia de seguridad enviada (id: {{id}}…)",
+    "cloudRestoreMessage": "Copia de seguridad del {{date}}. ¿Qué hacer con los datos existentes?",
+    "deleteCloudTitle": "¿Eliminar esta copia de seguridad?",
+    "deleteCloudMessage": "Del {{date}} — irreversible.",
+    "deleteLocalTitle": "¿Eliminar este registro?",
+    "deleteLocalMessage": "Elimina solo la referencia local, no el archivo compartido.",
+    "restoreLocalMessage": "Esta acción requiere un archivo. Usa \"Importar\" para restaurar desde un archivo.",
+    "importTitle": "Importar una copia de seguridad",
+    "importMessage": "¿Qué hacer con los datos existentes?",
+    "cloudDisabledTitle": "Sincronización en la nube desactivada",
+    "cloudDisabledMessage": "Añade EXPO_PUBLIC_SUPABASE_URL y EXPO_PUBLIC_SUPABASE_KEY a .env para activar."
   },
   "sowing": {
     "title": "Calendario de Siembra",

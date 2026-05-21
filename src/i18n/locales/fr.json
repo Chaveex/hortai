@@ -481,7 +481,22 @@
     "successCloudReplace": "Données remplacées depuis le cloud.",
     "errorSetup": "Impossible de finaliser la configuration.",
     "merge": "Fusionner",
-    "replace": "Remplacer"
+    "replace": "Remplacer",
+    "pageTitle": "Sauvegarde & Export",
+    "lastBackup": "Derniere sauvegarde : {{date}}",
+    "jsonExportSuccess": "Sauvegarde JSON partagée ({{size}}).",
+    "zipExportSuccess": "Sauvegarde compressée partagée ({{size}}).",
+    "cloudUploadSuccess": "Sauvegarde envoyée (id: {{id}}…)",
+    "cloudRestoreMessage": "Sauvegarde du {{date}}. Que faire des données existantes ?",
+    "deleteCloudTitle": "Supprimer cette sauvegarde ?",
+    "deleteCloudMessage": "Du {{date}} — irréversible.",
+    "deleteLocalTitle": "Supprimer cet enregistrement ?",
+    "deleteLocalMessage": "Supprime uniquement la référence locale, pas le fichier partagé.",
+    "restoreLocalMessage": "Cette action nécessite un fichier. Utilisez \"Importer\" pour restaurer depuis un fichier.",
+    "importTitle": "Importer une sauvegarde",
+    "importMessage": "Que faire des données existantes ?",
+    "cloudDisabledTitle": "Synchronisation cloud désactivée",
+    "cloudDisabledMessage": "Ajoutez EXPO_PUBLIC_SUPABASE_URL et EXPO_PUBLIC_SUPABASE_KEY dans .env pour activer."
   },
   "sowing": {
     "title": "Calendrier des semis",

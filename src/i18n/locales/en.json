@@ -481,7 +481,22 @@
     "successCloudReplace": "Data replaced from cloud.",
     "errorSetup": "Could not complete setup.",
     "merge": "Merge",
-    "replace": "Replace"
+    "replace": "Replace",
+    "pageTitle": "Backup & Export",
+    "lastBackup": "Last backup: {{date}}",
+    "jsonExportSuccess": "JSON backup shared ({{size}}).",
+    "zipExportSuccess": "Compressed backup shared ({{size}}).",
+    "cloudUploadSuccess": "Backup sent (id: {{id}}…)",
+    "cloudRestoreMessage": "Backup from {{date}}. What to do with existing data?",
+    "deleteCloudTitle": "Delete this backup?",
+    "deleteCloudMessage": "From {{date}} — irreversible.",
+    "deleteLocalTitle": "Delete this record?",
+    "deleteLocalMessage": "Deletes only the local reference, not the shared file.",
+    "restoreLocalMessage": "This action requires a file. Use \"Import\" to restore from a file.",
+    "importTitle": "Import a backup",
+    "importMessage": "What to do with existing data?",
+    "cloudDisabledTitle": "Cloud sync disabled",
+    "cloudDisabledMessage": "Add EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_KEY to .env to enable."
   },
   "sowing": {
     "title": "Sowing Calendar",
