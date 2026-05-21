@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors, spacing, typography, borderRadius } from '../constants/theme';
 
 interface HarvestGoalCardProps {
@@ -15,6 +16,7 @@ export default function HarvestGoalCard({
   harvestActual,
   onPress,
 }: HarvestGoalCardProps) {
+  const { t } = useTranslation();
   const progressPercent = harvestGoal > 0 ? (harvestActual / harvestGoal) * 100 : 0;
   const clampedProgress = Math.min(progressPercent, 100);
 
@@ -24,13 +26,13 @@ export default function HarvestGoalCard({
       onPress={onPress}
       activeOpacity={0.7}
       accessibilityRole="button"
-      accessibilityLabel="Votre récolte du mois"
-      accessibilityHint="Appuyez pour voir le tableau de bord de production"
+      accessibilityLabel={t('home.harvestGoalA11yLabel')}
+      accessibilityHint={t('home.harvestGoalA11yHint')}
     >
       <View style={styles.header}>
         <Text style={styles.emoji}>📦</Text>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Votre récolte</Text>
+          <Text style={styles.title}>{t('home.harvestGoalTitle')}</Text>
           <Text style={styles.subtitle}>{harvestMonth}</Text>
         </View>
       </View>
@@ -52,7 +54,7 @@ export default function HarvestGoalCard({
         </Text>
       </View>
 
-      <Text style={styles.linkText}>Voir le détail →</Text>
+      <Text style={styles.linkText}>{t('home.harvestGoalDetail')}</Text>
     </TouchableOpacity>
   );
 }

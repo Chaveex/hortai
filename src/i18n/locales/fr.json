@@ -107,7 +107,11 @@
     "noWateringNeeded": "Rien à arroser aujourd'hui !",
     "plantsWellHydrated": "Vos plants sont bien hydratés.",
     "toWaterToday": "💧 À arroser aujourd'hui",
-    "wateringDone": "Fait ✓"
+    "wateringDone": "Fait ✓",
+    "harvestGoalTitle": "Votre récolte",
+    "harvestGoalA11yLabel": "Votre récolte du mois",
+    "harvestGoalA11yHint": "Appuyez pour voir le tableau de bord de production",
+    "harvestGoalDetail": "Voir le détail →"
   },
   "dashboard": {
     "production": "Production",
