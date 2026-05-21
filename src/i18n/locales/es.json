@@ -470,6 +470,14 @@
     "healthTrendStable": "✅ Salud estable y buena",
     "healthTrendDeclining": "⚠️ Salud en declive"
   },
+  "notifications": {
+    "wateringTitle": "🌱 Recordatorio de riego",
+    "wateringSingle": "{{plant}} necesita agua hoy.",
+    "wateringMultiple": "{{plants}} y {{count}} otro(s) necesitan agua.",
+    "harvestTitle": "{{icon}} Próxima cosecha",
+    "harvestBody": "{{plant}} estará listo para cosechar en {{days}} día{{plural}}.",
+    "sowingTitle": "📅 Calendario de siembra"
+  },
   "predictions": {
     "riskExcessiveHeat": "Riesgo de calor excesivo",
     "riskDryAir": "Aire muy seco",

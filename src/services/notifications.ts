@@ -1,9 +1,14 @@
 import Constants from 'expo-constants';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
+import i18next from 'i18next';
 import { Plant, WeatherData, UserProfile, WateringRecommendation } from '../types';
 import { getPlantInfo } from '../constants/plants';
 import { detectZone, getPlantsForMonth, ClimateZone } from '../constants/sowingCalendar';
+
+function t(key: string, options?: Record<string, any>): string {
+  return i18next.t(key, options) as string;
+}
 
 const BACKGROUND_TASK = 'GARDEN_WEATHER_UPDATE';
 const isExpoGo = Constants.executionEnvironment === 'storeClient';
@@ -54,12 +59,15 @@ export async function scheduleDailyWateringNotification(
     }).filter(Boolean);
 
     const body = plantNames.length === 1
-      ? `${plantNames[0]} a besoin d'eau aujourd'hui.`
-      : `${plantNames.slice(0, 3).join(', ')}${plantNames.length > 3 ? ` et ${plantNames.length - 3} autres` : ''} ont besoin d'eau.`;
+      ? t('notifications.wateringSingle', { plant: plantNames[0] })
+      : t('notifications.wateringMultiple', {
+          plants: plantNames.slice(0, 3).join(', '),
+          count: plantNames.length > 3 ? plantNames.length - 3 : 0,
+        });
 
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: '🌱 Rappel d\'arrosage',
+        title: t('notifications.wateringTitle'),
         body,
         data: { type: 'watering' },
       },
@@ -89,8 +97,12 @@ export async function scheduleHarvestReminder(plantName: string, icon: string, d
     const Notifications = require('expo-notifications');
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: `${icon} Récolte prochaine`,
-        body: `${plantName} sera prêt à récolter dans ${daysUntilHarvest} jour${daysUntilHarvest > 1 ? 's' : ''}.`,
+        title: t('notifications.harvestTitle', { icon }),
+        body: t('notifications.harvestBody', {
+          plant: plantName,
+          days: daysUntilHarvest,
+          plural: daysUntilHarvest > 1 ? 's' : '',
+        }),
         data: { type: 'harvest' },
       },
       trigger: { seconds: daysUntilHarvest * 24 * 3600 },
@@ -123,7 +135,7 @@ export async function scheduleMonthlysSowingNotification(profile: UserProfile): 
 
       await Notifications.scheduleNotificationAsync({
         content: {
-          title: '📅 Calendrier des semis',
+          title: t('notifications.sowingTitle'),
           body: allPlants.join(' · '),
           data: { type: 'sowing_calendar' },
         },
