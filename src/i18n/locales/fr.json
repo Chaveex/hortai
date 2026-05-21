@@ -7,6 +7,34 @@
     "plants": "Plantes",
     "planning": "Planification"
   },
+  "levels": {
+    "title": "🏆 Niveau de Jardinier",
+    "apprentice": "Apprenti Jardinier",
+    "confirmed": "Jardinier Confirmé",
+    "expert": "Jardinier Expert",
+    "master": "Maître Jardinier",
+    "breakdownLabel": "🍅 Récoltes"
+  },
+  "sunlight": {
+    "full": "Plein soleil",
+    "partial": "Mi-ombre",
+    "shade": "Ombre",
+    "harvestIn": "Récolte en ~{{days}} jours"
+  },
+  "chores": {
+    "todayTitle": "🗓️ Tâches du jour",
+    "notFound": "Tâche introuvable.",
+    "created": "✅ Tâche créée!"
+  },
+  "onboarding": {
+    "location": "Localisation",
+    "gardeningStyle": "Style de jardinage",
+    "fertilizerType": "Engrais",
+    "conventional": "Conventionnel",
+    "conventionalDesc": "Jardinage classique",
+    "industrial": "Industriel",
+    "industrialDesc": "Engrais NPK et spécialisés"
+  },
   "common": {
     "save": "Enregistrer",
     "cancel": "Annuler",

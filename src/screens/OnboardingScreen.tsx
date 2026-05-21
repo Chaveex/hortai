@@ -11,8 +11,6 @@ import { useStore } from '../store/useStore';
 import { GardeningStyle, FertilizerType } from '../types';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
 
-const STEPS = ['Localisation', 'Style de jardinage', 'Engrais'];
-
 const GARDENING_STYLES: { value: GardeningStyle; label: string; desc: string; icon: string }[] = [
   { value: 'permaculture', label: 'Permaculture', desc: 'Écosystème naturel, zéro intrant', icon: '🌿' },
   { value: 'conventionnel', label: 'Conventionnel', desc: 'Jardinage classique', icon: '🥕' },
@@ -25,6 +23,10 @@ const FERTILIZER_TYPES: { value: FertilizerType; label: string; desc: string; ic
   { value: 'industriel', label: 'Industriel', desc: 'Engrais NPK et spécialisés', icon: '🏭' },
   { value: 'aucun', label: 'Aucun', desc: 'Pas d\'engrais', icon: '🚫' },
 ];
+
+function getSteps(t: any) {
+  return [t('onboarding.location'), t('onboarding.gardeningStyle'), t('onboarding.fertilizerType')];
+}
 
 export default function OnboardingScreen() {
   const { t } = useTranslation();
@@ -65,10 +67,12 @@ export default function OnboardingScreen() {
         notificationHour: 8,
       });
     } catch {
-      Alert.alert('Erreur', 'Impossible de finaliser la configuration.');
+      Alert.alert(t('errors.error'), t('backup.errorSetup'));
       setIsLoading(false);
     }
   }
+
+  const steps = getSteps(t);
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
@@ -79,7 +83,7 @@ export default function OnboardingScreen() {
           <Text style={styles.subtitle}>Votre assistant jardinage intelligent</Text>
 
           <View style={styles.stepsRow}>
-            {STEPS.map((s, i) => (
+            {steps.map((s, i) => (
               <View key={s} style={styles.stepItem}>
                 <View style={[styles.stepDot, i <= step && styles.stepDotActive]}>
                   <Text style={styles.stepDotText}>{i + 1}</Text>

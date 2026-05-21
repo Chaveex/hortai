@@ -7,6 +7,34 @@
     "plants": "Plantas",
     "planning": "Planificación"
   },
+  "levels": {
+    "title": "🏆 Nivel de Jardinero",
+    "apprentice": "Jardinero Aprendiz",
+    "confirmed": "Jardinero Confirmado",
+    "expert": "Jardinero Experto",
+    "master": "Maestro Jardinero",
+    "breakdownLabel": "🍅 Cosechas"
+  },
+  "sunlight": {
+    "full": "Sol pleno",
+    "partial": "Sombra parcial",
+    "shade": "Sombra",
+    "harvestIn": "Cosecha en ~{{days}} días"
+  },
+  "chores": {
+    "todayTitle": "🗓️ Tareas de Hoy",
+    "notFound": "Tarea no encontrada.",
+    "created": "✅ ¡Tarea creada!"
+  },
+  "onboarding": {
+    "location": "Ubicación",
+    "gardeningStyle": "Estilo de Jardinería",
+    "fertilizerType": "Tipo de Fertilizante",
+    "conventional": "Convencional",
+    "conventionalDesc": "Jardinería clásica",
+    "industrial": "Industrial",
+    "industrialDesc": "Fertilizantes NPK y especializados"
+  },
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar",

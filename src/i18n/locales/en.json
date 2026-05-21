@@ -7,6 +7,34 @@
     "plants": "Plants",
     "planning": "Planning"
   },
+  "levels": {
+    "title": "🏆 Gardener Level",
+    "apprentice": "Apprentice Gardener",
+    "confirmed": "Confirmed Gardener",
+    "expert": "Expert Gardener",
+    "master": "Master Gardener",
+    "breakdownLabel": "🍅 Harvests"
+  },
+  "sunlight": {
+    "full": "Full sun",
+    "partial": "Partial shade",
+    "shade": "Shade",
+    "harvestIn": "Harvest in ~{{days}} days"
+  },
+  "chores": {
+    "todayTitle": "🗓️ Today's Chores",
+    "notFound": "Chore not found.",
+    "created": "✅ Chore created!"
+  },
+  "onboarding": {
+    "location": "Location",
+    "gardeningStyle": "Gardening Style",
+    "fertilizerType": "Fertilizer Type",
+    "conventional": "Conventional",
+    "conventionalDesc": "Classic gardening",
+    "industrial": "Industrial",
+    "industrialDesc": "NPK and specialized fertilizers"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",

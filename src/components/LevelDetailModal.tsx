@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { colors, spacing, typography, borderRadius } from '../constants/theme';
 import { Plant, PlantEntry, UserProfile } from '../types';
 import { differenceInDays, parseISO, format } from 'date-fns';
@@ -16,11 +17,11 @@ interface LevelDetailModalProps {
   profile: UserProfile | null;
 }
 
-function getLevelTier(level: number): { icon: string; tier: string } {
-  if (level <= 3) return { icon: '🌱', tier: 'Apprenti Jardinier' };
-  if (level <= 6) return { icon: '🌿', tier: 'Jardinier Confirmé' };
-  if (level <= 9) return { icon: '🌻', tier: 'Jardinier Expert' };
-  return { icon: '🏆', tier: 'Maître Jardinier' };
+function getLevelTier(level: number, t: any): { icon: string; tier: string } {
+  if (level <= 3) return { icon: '🌱', tier: t('levels.apprentice') };
+  if (level <= 6) return { icon: '🌿', tier: t('levels.confirmed') };
+  if (level <= 9) return { icon: '🌻', tier: t('levels.expert') };
+  return { icon: '🏆', tier: t('levels.master') };
 }
 
 function calculateXPForLevel(level: number): number {
@@ -30,6 +31,7 @@ function calculateXPForLevel(level: number): number {
 export default function LevelDetailModal({
   visible, onClose, gardenerLevel, plants, entries, profile,
 }: LevelDetailModalProps) {
+  const { t } = useTranslation();
   const harvestCount = entries.filter(e => e.type === 'harvest').length;
   const onboardingDate = profile?.onboardingDate ? parseISO(profile.onboardingDate) : new Date();
   const daysSinceOnboarding = differenceInDays(new Date(), onboardingDate);
@@ -52,7 +54,7 @@ export default function LevelDetailModal({
     };
   }, [plants.length, harvestCount, daysSinceOnboarding, gardenerLevel]);
 
-  const { icon, tier } = getLevelTier(gardenerLevel);
+  const { icon, tier } = getLevelTier(gardenerLevel, t);
 
   const milestones = [
     { level: 1, xp: 0, desc: 'Premier jour au jardin' },
@@ -68,9 +70,9 @@ export default function LevelDetailModal({
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose}>
-            <Text style={styles.closeBtn}>Fermer</Text>
+            <Text style={styles.closeBtn}>{t('common.close')}</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>🏆 Niveau de Jardinier</Text>
+          <Text style={styles.title}>{t('levels.title')}</Text>
           <View style={{ width: 50 }} />
         </View>
 
@@ -120,7 +122,7 @@ export default function LevelDetailModal({
               </View>
               <View style={styles.breakdownDivider} />
               <View style={styles.breakdownItem}>
-                <Text style={styles.breakdownLabel}>🍅 Récoltes</Text>
+                <Text style={styles.breakdownLabel}>{t('levels.breakdownLabel')}</Text>
                 <Text style={styles.breakdownValue}>{harvestCount}</Text>
               </View>
               <View style={styles.breakdownDivider} />
