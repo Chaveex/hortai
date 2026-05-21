@@ -62,16 +62,16 @@
     "loading": "Cargando clima…",
     "weatherError": "Error de clima",
     "retry": "Reintentar",
-    "streakAtRisk": "¡Tu racha está en peligro! {plant} no ha sido regada en {days} días.",
+    "streakAtRisk": "¡Tu racha está en peligro! {{{plant}}} no ha sido regada en {{{days}}} días.",
     "waterNow": "Regar ahora →",
-    "goalProgress": "{actual}/{goal}",
+    "goalProgress": "{{actual}}/{{goal}}",
     "todayChores": "Tareas de Hoy",
-    "streakAtRiskA11y": "Alerta: {plant} no ha sido regada en {days} días",
+    "streakAtRiskA11y": "Alerta: {{{plant}}} no ha sido regada en {{{days}}} días",
     "streakAtRiskHint": "Toca para ir a detalles de la planta",
-    "streakBadgeA11y": "{streak} días",
+    "streakBadgeA11y": "{{streak}} días",
     "streakBadgeHint": "Toca para ver detalles de tu racha",
     "levelBadgeHint": "Toca para ver detalles de tu nivel",
-    "harvestBadgeA11y": "{actual} de {goal} kg",
+    "harvestBadgeA11y": "{{actual}} de {{{goal}}} kg",
     "harvestBadgeHint": "Toca para ver el panel completo"
   },
   "dashboard": {
@@ -169,13 +169,13 @@
     "deleteBedAction": "Eliminar",
     "cancelAction": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
-    "confirmDeleteBed": "¿Estás seguro de que quieres eliminar el lecho \"{name}\"?",
+    "confirmDeleteBed": "¿Estás seguro de que quieres eliminar el lecho \"{{name}}\"?",
     "today": "Hoy",
     "yesterday": "Ayer",
-    "daysAgo": "hace {days} días",
-    "weeksAgo": "hace {weeks} semanas",
-    "monthsAgo": "hace {months} meses",
-    "yearsAgo": "hace {years} años"
+    "daysAgo": "hace {{{days}}} días",
+    "weeksAgo": "hace {{{weeks}}} semanas",
+    "monthsAgo": "hace {{{months}}} meses",
+    "yearsAgo": "hace {{{years}}} años"
   },
   "settings": {
     "title": "Configuración",
@@ -191,7 +191,7 @@
     "cityNotFound": "Ciudad no encontrada",
     "cityCheckSpelling": "Verifica la ortografía.",
     "cityUpdated": "Ciudad actualizada",
-    "weatherLoaded": "Clima de {city} cargado.",
+    "weatherLoaded": "Clima de {{{city}}} cargado.",
     "wateringReminders": "Recordatorios de riego",
     "sowingReminders": "Recordatorios de siembra",
     "dailyTip": "Consejo diario",
@@ -203,7 +203,7 @@
     "kg": "kg por mes",
     "backup": "Copia de Seguridad & Exportación",
     "backups": "Copias de Seguridad",
-    "lastBackup": "Última: {date}",
+    "lastBackup": "Última: {{{date}}}",
     "backupFormats": "Exportar JSON · ZIP · Nube Opcional",
     "version": "MiJardín v1.0.0"
   },
@@ -213,7 +213,7 @@
     "empty": "Haz tu pregunta",
     "emptyDesc": "Consulta a nuestro botánico experto para obtener asesoramiento personalizado sobre tus plantas.",
     "limit": "3 preguntas por día (se reinicia a medianoche UTC).",
-    "limitReached": "3/3 ❌ Límite alcanzado — vuelve después de {time}",
+    "limitReached": "3/3 ❌ Límite alcanzado — vuelve después de {{{time}}}",
     "botanistThinking": "El botánico está pensando…",
     "photoReady": "Foto lista para enviar",
     "cameraBtn": "📷",
@@ -285,8 +285,8 @@
     "noData": "Sin datos para este mes"
   },
   "errors": {
-    "required": "{field} es requerido",
-    "invalid": "{field} es inválido",
+    "required": "{{field}} es requerido",
+    "invalid": "{{field}} es inválido",
     "networkError": "Error de red",
     "serverError": "Error del servidor",
     "permissionDenied": "Permiso denegado",
@@ -294,13 +294,13 @@
   },
   "recommendations": {
     "gardenEmpty": "¡Comienza a plantar tus primeras verduras!",
-    "gardenAhead": "🌱 Tu jardín está {days} días adelante — ¡mantén este excelente cuidado!",
-    "gardenBehind": "⏰ Tu jardín está {days} días atrás — aumenta riego y fertilizante.",
+    "gardenAhead": "🌱 Tu jardín está {{{days}}} días adelante — ¡mantén este excelente cuidado!",
+    "gardenBehind": "⏰ Tu jardín está {{{days}}} días atrás — aumenta riego y fertilizante.",
     "gardenOnTime": "🌱 Tu jardín está progresando según lo planeado — ¡buen ritmo!",
     "noHarvestGoal": "Establece un objetivo de cosecha mensual para rastrear tu progreso.",
-    "harvestGoalExceeded": "🏆 ¡Objetivo alcanzado! Has superado tu meta por {excess} kg — ¡excelente!",
-    "harvestAlmostThere": "🎯 ¡Casi ahí! Necesitas {remaining} kg más para alcanzar tu objetivo de {goal} kg.",
-    "harvestGoodProgress": "📈 Buen progreso: {actual} kg / {goal} kg. ¡Sigue cosechando!",
-    "harvestStarting": "🌾 ¡Comienza a cosechar! Actualmente tienes {actual} kg / {goal} kg."
+    "harvestGoalExceeded": "🏆 ¡Objetivo alcanzado! Has superado tu meta por {{{excess}}} kg — ¡excelente!",
+    "harvestAlmostThere": "🎯 ¡Casi ahí! Necesitas {{{remaining}}} kg más para alcanzar tu objetivo de {{{goal}}} kg.",
+    "harvestGoodProgress": "📈 Buen progreso: {{{actual}}} kg / {{{goal}}} kg. ¡Sigue cosechando!",
+    "harvestStarting": "🌾 ¡Comienza a cosechar! Actualmente tienes {{{actual}}} kg / {{{goal}}} kg."
   }
 }
