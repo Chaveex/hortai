@@ -454,7 +454,21 @@
     "wateringTimingTitle": "Horaires d'arrosage",
     "wateringTimingMsg": "Par temps chaud, arrosez tôt le matin ou après 18h pour limiter l'évaporation.",
     "plantOutperformanceHigh": "Vos rendements dépassent la moyenne régionale de {{percent}}% — excellent travail !",
-    "plantOutperformanceMedium": "Vos rendements surpassent la moyenne régionale de {{percent}}% — bonne maîtrise !"
+    "plantOutperformanceMedium": "Vos rendiments surpassent la moyenne régionale de {{percent}}% — bonne maîtrise !",
+    "wateringNoWatering": "Aucun arrosage cette semaine. Vérifiez si vos plants ne manquent pas d'eau.",
+    "wateringOptimal": "💧 Arrosage optimal cette semaine : {{liters}}L (adapté à la météo actuelle)",
+    "wateringExcessJustified": "💧 Vous avez arrosé {{excess}}L de plus que prévu, mais c'était justifié par la faible humidité ({{humidity}}%).",
+    "wateringExcessWarning": "⚠️ Vous avez arrosé {{excess}}L de plus que recommandé — ajustez pour la semaine prochaine.",
+    "wateringSavingSuccess": "✅ Économie d'eau réussie ! Vous avez utilisé {{deficit}}L de moins grâce à la bonne humidité ({{humidity}}%).",
+    "wateringDeficitWarning": "⚠️ Vous avez arrosé {{deficit}}L de moins que prévu — augmentez légèrement.",
+    "healthNoData": "Pas assez de données pour générer une narrative de santé.",
+    "healthFactor_optimal": "arrosage optimal",
+    "healthFactor_underwatered": "⚠️ sous-arrosage",
+    "healthFactor_overwatered": "⚠️ sur-arrosage",
+    "healthFactor_balanced": "arrosage équilibré",
+    "healthTrendImproving": "📈 Santé du jardin en amélioration",
+    "healthTrendStable": "✅ Santé stable et bonne",
+    "healthTrendDeclining": "⚠️ Santé déclinante"
   },
   "predictions": {
     "riskExcessiveHeat": "Risque de chaleur excessive",

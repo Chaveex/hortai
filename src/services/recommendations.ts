@@ -326,30 +326,30 @@ export function getWateringNarrative(
   weather: WeatherData,
 ): string {
   if (weekTotalLiters === 0) {
-    return 'Aucun arrosage cette semaine. Vérifiez si vos plants ne manquent pas d\'eau.';
+    return t('recommendations.wateringNoWatering');
   }
 
   const ratio = expectedLiters > 0 ? (weekTotalLiters / expectedLiters) : 1;
   const difference = weekTotalLiters - expectedLiters;
 
   if (ratio >= 0.95 && ratio <= 1.05) {
-    return `💧 Arrosage optimal cette semaine : ${weekTotalLiters.toFixed(0)}L (adapté à la météo actuelle)`;
+    return t('recommendations.wateringOptimal', { liters: weekTotalLiters.toFixed(0) });
   }
 
   if (ratio > 1.05) {
     const excess = Math.round(difference);
     if (excess > 0 && weather.humidity > 60) {
-      return `💧 Vous avez arrosé ${excess}L de plus que prévu, mais c'était justifié par la faible humidité (${weather.humidity}%).`;
+      return t('recommendations.wateringExcessJustified', { excess, humidity: weather.humidity });
     }
-    return `⚠️ Vous avez arrosé ${excess}L de plus que recommandé — ajustez pour la semaine prochaine.`;
+    return t('recommendations.wateringExcessWarning', { excess });
   }
 
   const deficit = Math.round(Math.abs(difference));
   if (weather.humidity > 70) {
-    return `✅ Économie d'eau réussie ! Vous avez utilisé ${deficit}L de moins grâce à la bonne humidité (${weather.humidity}%).`;
+    return t('recommendations.wateringSavingSuccess', { deficit, humidity: weather.humidity });
   }
 
-  return `⚠️ Vous avez arrosé ${deficit}L de moins que prévu — augmentez légèrement.`;
+  return t('recommendations.wateringDeficitWarning', { deficit });
 }
 
 /**
@@ -360,7 +360,7 @@ export function getHealthNarrative(
   plants: Plant[],
 ): string {
   if (healthTrend.length === 0 || plants.length === 0) {
-    return 'Pas assez de données pour générer une narrative de santé.';
+    return t('recommendations.healthNoData');
   }
 
   // Check if trend is increasing (last 2 months vs first 2 months)
@@ -389,20 +389,20 @@ export function getHealthNarrative(
 
   const factors: string[] = [];
   if (underwatered === 0 && overwatered === 0) {
-    factors.push('arrosage optimal');
+    factors.push(t('recommendations.healthFactor_optimal'));
   } else if (underwatered > 0) {
-    factors.push('⚠️ sous-arrosage');
+    factors.push(t('recommendations.healthFactor_underwatered'));
   } else if (overwatered > 0) {
-    factors.push('⚠️ sur-arrosage');
+    factors.push(t('recommendations.healthFactor_overwatered'));
   } else {
-    factors.push('arrosage équilibré');
+    factors.push(t('recommendations.healthFactor_balanced'));
   }
 
   const prefix = isTrendingUp
-    ? '📈 Santé du jardin en amélioration'
+    ? t('recommendations.healthTrendImproving')
     : recentAvg > 70
-      ? '✅ Santé stable et bonne'
-      : '⚠️ Santé déclinante';
+      ? t('recommendations.healthTrendStable')
+      : t('recommendations.healthTrendDeclining');
 
   return `${prefix} — ${factors.slice(0, 2).join(', ')}`;
 }

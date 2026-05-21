@@ -454,7 +454,21 @@
     "wateringTimingTitle": "Watering times",
     "wateringTimingMsg": "In hot weather, water early morning or after 6pm to limit evaporation.",
     "plantOutperformanceHigh": "Your yields exceed regional average by {{percent}}% — excellent work!",
-    "plantOutperformanceMedium": "Your yields surpass regional average by {{percent}}% — good mastery!"
+    "plantOutperformanceMedium": "Your yields surpass regional average by {{percent}}% — good mastery!",
+    "wateringNoWatering": "No watering this week. Check if your plants need water.",
+    "wateringOptimal": "💧 Optimal watering this week: {{liters}}L (adapted to current weather)",
+    "wateringExcessJustified": "💧 You watered {{excess}}L more than expected, but it was justified by low humidity ({{humidity}}%).",
+    "wateringExcessWarning": "⚠️ You watered {{excess}}L more than recommended — adjust for next week.",
+    "wateringSavingSuccess": "✅ Successful water savings! You used {{deficit}}L less thanks to good humidity ({{humidity}}%).",
+    "wateringDeficitWarning": "⚠️ You watered {{deficit}}L less than expected — increase slightly.",
+    "healthNoData": "Not enough data to generate a health narrative.",
+    "healthFactor_optimal": "optimal watering",
+    "healthFactor_underwatered": "⚠️ underwatering",
+    "healthFactor_overwatered": "⚠️ overwatering",
+    "healthFactor_balanced": "balanced watering",
+    "healthTrendImproving": "📈 Garden health improving",
+    "healthTrendStable": "✅ Health stable and good",
+    "healthTrendDeclining": "⚠️ Health declining"
   },
   "predictions": {
     "riskExcessiveHeat": "Risk of excessive heat",

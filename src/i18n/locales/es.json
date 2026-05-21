@@ -454,7 +454,21 @@
     "wateringTimingTitle": "Horarios de riego",
     "wateringTimingMsg": "En clima cálido, riega temprano por la mañana o después de las 6pm para limitar la evaporación.",
     "plantOutperformanceHigh": "Tus rendimientos superan el promedio regional en {{percent}}% — ¡excelente trabajo!",
-    "plantOutperformanceMedium": "Tus rendimientos superan el promedio regional en {{percent}}% — ¡buen dominio!"
+    "plantOutperformanceMedium": "Tus rendimientos superan el promedio regional en {{percent}}% — ¡buen dominio!",
+    "wateringNoWatering": "Sin riego esta semana. Verifica si tus plantas necesitan agua.",
+    "wateringOptimal": "💧 Riego óptimo esta semana: {{liters}}L (adaptado al clima actual)",
+    "wateringExcessJustified": "💧 Regaste {{excess}}L más de lo esperado, pero fue justificado por la baja humedad ({{humidity}}%).",
+    "wateringExcessWarning": "⚠️ Regaste {{excess}}L más de lo recomendado — ajusta para la próxima semana.",
+    "wateringSavingSuccess": "✅ ¡Ahorro de agua exitoso! Usaste {{deficit}}L menos gracias a la buena humedad ({{humidity}}%).",
+    "wateringDeficitWarning": "⚠️ Regaste {{deficit}}L menos de lo esperado — aumenta ligeramente.",
+    "healthNoData": "No hay suficientes datos para generar una narrativa de salud.",
+    "healthFactor_optimal": "riego óptimo",
+    "healthFactor_underwatered": "⚠️ riego insuficiente",
+    "healthFactor_overwatered": "⚠️ riego excesivo",
+    "healthFactor_balanced": "riego equilibrado",
+    "healthTrendImproving": "📈 Salud del jardín mejorando",
+    "healthTrendStable": "✅ Salud estable y buena",
+    "healthTrendDeclining": "⚠️ Salud en declive"
   },
   "predictions": {
     "riskExcessiveHeat": "Riesgo de calor excesivo",
