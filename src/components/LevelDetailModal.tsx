@@ -57,12 +57,12 @@ export default function LevelDetailModal({
   const { icon, tier } = getLevelTier(gardenerLevel, t);
 
   const milestones = [
-    { level: 1, xp: 0, desc: 'Premier jour au jardin' },
-    { level: 2, xp: 20, desc: 'Progès initial' },
-    { level: 3, xp: 40, desc: 'Apprenti reconnu' },
-    { level: 4, xp: 60, desc: 'Niveau confirmé' },
-    { level: 5, xp: 80, desc: 'Expérience croissante' },
-    { level: 6, xp: 100, desc: 'Jardinier confirmé' },
+    { level: 1, xp: 0, descKey: 'levels.milestone1' },
+    { level: 2, xp: 20, descKey: 'levels.milestone2' },
+    { level: 3, xp: 40, descKey: 'levels.milestone3' },
+    { level: 4, xp: 60, descKey: 'levels.milestone4' },
+    { level: 5, xp: 80, descKey: 'levels.milestone5' },
+    { level: 6, xp: 100, descKey: 'levels.milestone6' },
   ];
 
   return (
@@ -80,16 +80,16 @@ export default function LevelDetailModal({
           {/* Current level display */}
           <View style={styles.levelBox}>
             <Text style={styles.levelIcon}>{icon}</Text>
-            <Text style={styles.levelNumber}>Niveau {gardenerLevel}</Text>
+            <Text style={styles.levelNumber}>{t('levels.levelNumber', { level: gardenerLevel })}</Text>
             <Text style={styles.levelTier}>{tier}</Text>
           </View>
 
           {/* XP Progress bar */}
           <View style={styles.xpSection}>
             <View style={styles.xpHeader}>
-              <Text style={styles.xpLabel}>Expérience</Text>
+              <Text style={styles.xpLabel}>{t('levels.experience')}</Text>
               <Text style={styles.xpText}>
-                {levelStats.xpEarned} / {levelStats.xpForNextLevel}
+                {t('levels.xpProgress', { earned: levelStats.xpEarned, total: levelStats.xpForNextLevel })}
               </Text>
             </View>
             <View style={styles.progressBarBackground}>
@@ -102,22 +102,22 @@ export default function LevelDetailModal({
             </View>
             {levelStats.progressPercent < 100 && (
               <Text style={styles.nextLevelText}>
-                {levelStats.xpForNextLevel - levelStats.xpEarned} XP avant le prochain niveau
+                {t('levels.xpBeforeNext', { remaining: levelStats.xpForNextLevel - levelStats.xpEarned })}
               </Text>
             )}
             {levelStats.progressPercent === 100 && (
               <Text style={styles.nextLevelTextFull}>
-                ✨ Prêt à passer au niveau {gardenerLevel + 1} !
+                {t('levels.readyForNext', { level: gardenerLevel + 1 })}
               </Text>
             )}
           </View>
 
           {/* Breakdown */}
           <View style={styles.breakdownSection}>
-            <Text style={styles.sectionTitle}>Composition de l'expérience</Text>
+            <Text style={styles.sectionTitle}>{t('levels.experienceBreakdown')}</Text>
             <View style={styles.breakdownList}>
               <View style={styles.breakdownItem}>
-                <Text style={styles.breakdownLabel}>🌱 Plantes</Text>
+                <Text style={styles.breakdownLabel}>{t('levels.plants')}</Text>
                 <Text style={styles.breakdownValue}>{plants.length}</Text>
               </View>
               <View style={styles.breakdownDivider} />
@@ -127,7 +127,7 @@ export default function LevelDetailModal({
               </View>
               <View style={styles.breakdownDivider} />
               <View style={styles.breakdownItem}>
-                <Text style={styles.breakdownLabel}>📅 Jours actifs</Text>
+                <Text style={styles.breakdownLabel}>{t('levels.activeDays')}</Text>
                 <Text style={styles.breakdownValue}>{daysSinceOnboarding}</Text>
               </View>
             </View>
@@ -135,15 +135,15 @@ export default function LevelDetailModal({
 
           {/* Milestones */}
           <View style={styles.milestonesSection}>
-            <Text style={styles.sectionTitle}>Jalons atteints</Text>
+            <Text style={styles.sectionTitle}>{t('levels.milestonesTitle')}</Text>
             {milestones.slice(0, Math.min(gardenerLevel, 6)).map((milestone) => (
               <View key={milestone.level} style={styles.milestoneItem}>
                 <View style={styles.milestoneCheck}>
                   <Text style={styles.milestoneCheckmark}>✓</Text>
                 </View>
                 <View style={styles.milestoneContent}>
-                  <Text style={styles.milestoneLevel}>Niveau {milestone.level}</Text>
-                  <Text style={styles.milestoneDesc}>{milestone.desc}</Text>
+                  <Text style={styles.milestoneLevel}>{t('levels.milestone', { level: milestone.level })}</Text>
+                  <Text style={styles.milestoneDesc}>{t(milestone.descKey)}</Text>
                 </View>
               </View>
             ))}

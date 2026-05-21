@@ -48,16 +48,18 @@ export function PlantDetailDashboard() {
     });
 
     // Determine growth stage
-    let growthStage: string = 'seedling';
+    let growthStageKey: string = 'dashboard.seedling';
     const expectedMaturity = info?.harvestDays || 60;
     const progress = (daysAlive / expectedMaturity) * 100;
 
-    if (progress < 10) growthStage = 'Germination';
-    else if (progress < 25) growthStage = 'Plantule';
-    else if (progress < 60) growthStage = 'Végétatif';
-    else if (progress < 85) growthStage = 'Floraison';
-    else if (progress < 100) growthStage = 'Mature';
-    else growthStage = 'Récolté';
+    if (progress < 10) growthStageKey = 'dashboard.germination';
+    else if (progress < 25) growthStageKey = 'dashboard.seedling';
+    else if (progress < 60) growthStageKey = 'dashboard.vegetative';
+    else if (progress < 85) growthStageKey = 'dashboard.flowering';
+    else if (progress < 100) growthStageKey = 'dashboard.mature';
+    else growthStageKey = 'dashboard.harvested';
+
+    const growthStage = t(growthStageKey);
 
     const regional = REGIONAL_AVERAGES[selectedPlant.type] || 2;
 
@@ -81,41 +83,41 @@ export function PlantDetailDashboard() {
 
     return [
       {
-        label: 'Récolte',
+        label: t('dashboard.harvest'),
         value: plantMetrics.totalHarvest.toFixed(1),
         unit: 'kg',
         icon: '🥕',
         color: colors.accent,
       },
       {
-        label: 'Jours',
+        label: t('dashboard.days'),
         value: plantMetrics.daysAlive,
         unit: 'j',
         icon: '📅',
         color: colors.primary,
       },
       {
-        label: 'Récoltes',
+        label: t('dashboard.harvests'),
         value: plantMetrics.harvestCount,
-        unit: 'entrées',
+        unit: t('dashboard.entries'),
         icon: '📈',
         color: colors.success,
       },
       {
-        label: 'Santé',
+        label: t('dashboard.health'),
         value: plantMetrics.health,
         unit: '%',
         icon: '💪',
         color: colors.primaryLight,
       },
       {
-        label: 'Arrosages',
+        label: t('dashboard.watering'),
         value: plantMetrics.wateringCount,
         icon: '💧',
         color: colors.secondary,
       },
       {
-        label: 'Étape',
+        label: t('dashboard.stage'),
         value: plantMetrics.growthStage,
         icon: '🌱',
         color: colors.warning,
