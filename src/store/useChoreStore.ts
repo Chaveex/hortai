@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { differenceInDays, format, parseISO, addDays } from 'date-fns';
+import i18next from 'i18next';
 import {
   Chore,
   ChoreFilters,
@@ -13,6 +14,10 @@ import {
 } from '../types/chores';
 import { Plant, UserProfile, WateringRecommendation } from '../types';
 import { getPlantInfo } from '../constants/plants';
+
+function t(key: string, options?: Record<string, any>): string {
+  return i18next.t(key, options) as string;
+}
 
 interface AutoChoreInput {
   type: ChoreType;
@@ -176,7 +181,7 @@ export const useChoreStore = create<ChoreStoreState>()(
               type: 'watering',
               date: today,
               plantId: plant.id,
-              title: `Arroser ${plantName}`,
+              title: t('chores.waterTitle', { name: plantName }),
               description: rec.reason,
               priority: rec.urgency,
               recurrenceDays: info.wateringFrequencyDays,
@@ -204,7 +209,7 @@ export const useChoreStore = create<ChoreStoreState>()(
                 type: 'fertilizing',
                 date: today,
                 plantId: plant.id,
-                title: `Fertiliser ${plantName}`,
+                title: t('chores.fertilizeTitle', { name: plantName }),
                 description: advice,
                 priority: 'low',
                 recurrenceDays: fertilizerInterval,
@@ -217,8 +222,8 @@ export const useChoreStore = create<ChoreStoreState>()(
               type: 'harvesting',
               date: today,
               plantId: plant.id,
-              title: `Récolter ${plantName}`,
-              description: `Vérifiez la maturité. Récoltez régulièrement pour stimuler la production.`,
+              title: t('chores.harvestTitle', { name: plantName }),
+              description: t('chores.harvestDesc'),
               priority: 'medium',
               recurrenceDays: 3,
             });

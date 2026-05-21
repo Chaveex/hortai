@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { colors, spacing, typography, borderRadius } from '../constants/theme';
 import { Plant } from '../types';
 import { format, parseISO } from 'date-fns';
@@ -19,6 +20,7 @@ interface StreakDetailModalProps {
 export default function StreakDetailModal({
   visible, onClose, streakDays, longestStreakDays, plants,
 }: StreakDetailModalProps) {
+  const { t } = useTranslation();
   // Get plants watered today
   const today = format(new Date(), 'yyyy-MM-dd');
   const wateredToday = plants.filter(p => {
@@ -32,49 +34,49 @@ export default function StreakDetailModal({
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}>
           <TouchableOpacity onPress={onClose}>
-            <Text style={styles.closeBtn}>Fermer</Text>
+            <Text style={styles.closeBtn}>{t('common.close')}</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>🔥 Série de jardinage</Text>
+          <Text style={styles.title}>{t('streak.title')}</Text>
           <View style={{ width: 50 }} />
         </View>
 
         <ScrollView contentContainerStyle={styles.content}>
           {/* Current streak section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Série actuelle</Text>
+            <Text style={styles.sectionTitle}>{t('streak.currentStreak')}</Text>
             <View style={styles.streakBox}>
               <Text style={styles.streakNumber}>{streakDays}</Text>
-              <Text style={styles.streakLabel}>jours</Text>
+              <Text style={styles.streakLabel}>{t('streak.days')}</Text>
             </View>
             {streakDays > 0 && (
               <Text style={styles.encouragement}>
-                ✨ Magnifique ! Continue à maintenir cette dynamique !
+                {t('streak.excellent')}
               </Text>
             )}
             {streakDays === 0 && (
               <Text style={styles.encouragement}>
-                🌱 Commence une nouvelle série. Arrose une plante aujourd'hui !
+                {t('streak.startNew')}
               </Text>
             )}
           </View>
 
           {/* Longest streak section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Meilleure série</Text>
+            <Text style={styles.sectionTitle}>{t('streak.longestStreak')}</Text>
             <View style={styles.longestBox}>
               <Text style={styles.longestNumber}>{longestStreakDays}</Text>
-              <Text style={styles.longestLabel}>jours</Text>
+              <Text style={styles.longestLabel}>{t('streak.days')}</Text>
             </View>
           </View>
 
           {/* Plants watered today */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>
-              Arrosés aujourd'hui ({wateredToday.length})
+              {t('streak.wateredToday', { count: wateredToday.length })}
             </Text>
             {wateredToday.length === 0 ? (
               <Text style={styles.emptyText}>
-                Aucune plante n'a été arrosée aujourd'hui.
+                {t('streak.noneWatered')}
               </Text>
             ) : (
               <View style={styles.plantList}>
@@ -97,12 +99,12 @@ export default function StreakDetailModal({
           <View style={styles.ctaSection}>
             {wateredToday.length < plants.length && (
               <Text style={styles.ctaText}>
-                🎯 {plants.length - wateredToday.length} plante(s) à arroser pour garder la série !
+                {t('streak.toKeepStreak', { count: plants.length - wateredToday.length })}
               </Text>
             )}
             {wateredToday.length === plants.length && streakDays > 0 && (
               <Text style={styles.ctaTextSuccess}>
-                🎉 Bravo ! Toutes tes plantes sont arrosées aujourd'hui !
+                {t('streak.allWatered')}
               </Text>
             )}
           </View>

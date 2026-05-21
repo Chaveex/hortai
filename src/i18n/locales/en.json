@@ -122,6 +122,29 @@
     "score": "Score",
     "title": "Dashboard"
   },
+  "streak": {
+    "title": "🔥 Gardening Streak",
+    "currentStreak": "Current streak",
+    "days": "days",
+    "excellent": "✨ Excellent! Keep up this momentum!",
+    "startNew": "🌱 Start a new streak. Water a plant today!",
+    "longestStreak": "Longest streak",
+    "wateredToday": "Watered today ({{count}})",
+    "noneWatered": "No plants have been watered today.",
+    "toKeepStreak": "🎯 {{count}} plant(s) to water to keep your streak!",
+    "allWatered": "🎉 Great! All your plants are watered today!"
+  },
+  "water": {
+    "dashboardTitle": "Water Consumption",
+    "dashboardSubtitle": "Irrigation Management",
+    "efficiency": "Water Efficiency",
+    "recommended": "Recommended",
+    "actual": "Actual",
+    "consumptionChart": "Consumption (Last 6 months)",
+    "monthlyNeeds": "Monthly water needs",
+    "urgentWatering": "Priority watering needed",
+    "weatherCurrentConditions": "Current Conditions"
+  },
   "chores": {
     "todayTitle": "🗓️ Today's Chores",
     "notFound": "Chore not found.",
@@ -193,7 +216,11 @@
     "addPlantFAB": "Add a plant",
     "addPlantHint": "Tap to create a new plant",
     "addChoreFAB": "Add a chore",
-    "addChoreHint": "Tap to create a new chore"
+    "addChoreHint": "Tap to create a new chore",
+    "waterTitle": "Water {{name}}",
+    "fertilizeTitle": "Fertilize {{name}}",
+    "harvestTitle": "Harvest {{name}}",
+    "harvestDesc": "Check maturity. Harvest regularly to stimulate production."
   },
   "plants": {
     "addPlant": "Add Plant",
@@ -405,7 +432,29 @@
     "harvestGoalExceeded": "🏆 Goal reached! You've exceeded your target by {{excess}} kg — excellent!",
     "harvestAlmostThere": "🎯 Almost there! You need {{remaining}} kg more to reach your goal of {{goal}} kg.",
     "harvestGoodProgress": "📈 Good progress: {{actual}} kg / {{goal}} kg. Keep harvesting!",
-    "harvestStarting": "🌾 Start harvesting! You currently have {{actual}} kg / {{goal}} kg."
+    "harvestStarting": "🌾 Start harvesting! You currently have {{actual}} kg / {{goal}} kg.",
+    "rainRecent": "Recent rain ({{amount}} mm). No need to water.",
+    "rainForecast": "Rain expected today ({{amount}} mm). Save water.",
+    "wateringReason": "Water while considering: {{reasons}}.",
+    "wateringMethod": "Water at the base, ideally in the evening or early morning.",
+    "reasonHeat": "heat ({{temp}}°C)",
+    "reasonDryAir": "dry air",
+    "reasonMulch": "mulch reduces needs",
+    "frostRiskTitle": "Frost risk!",
+    "frostRiskMsg": "Temperatures near 0°C are expected. Protect fragile plants with frost cloth or bring pots indoors.",
+    "heatWaveTitle": "Heat wave",
+    "heatWaveMsg": "Temperatures > 35°C expected. Double watering, mulch if possible, and shade fragile plants.",
+    "strongWindTitle": "Strong wind",
+    "strongWindMsg": "Winds at {{speed}} km/h. Stake your tall plants (tomatoes, climbing beans).",
+    "harvestReadyTitle": "{{name}} ready to harvest soon",
+    "harvestReadyMsg": "Your {{name}} is in harvest phase. Check maturity and harvest regularly.",
+    "fertilizingTitle": "Fertilizing {{name}}",
+    "mulchingSpringTitle": "Spring mulching",
+    "mulchingSpringMsg": "Now is the right time to mulch your beds. Use wood chips, straw, or dead leaves (minimum 10 cm).",
+    "wateringTimingTitle": "Watering times",
+    "wateringTimingMsg": "In hot weather, water early morning or after 6pm to limit evaporation.",
+    "plantOutperformanceHigh": "Your yields exceed regional average by {{percent}}% — excellent work!",
+    "plantOutperformanceMedium": "Your yields surpass regional average by {{percent}}% — good mastery!"
   },
   "predictions": {
     "riskExcessiveHeat": "Risk of excessive heat",

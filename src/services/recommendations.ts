@@ -1,7 +1,12 @@
 import { differenceInDays, parseISO, addDays, format } from 'date-fns';
+import i18next from 'i18next';
 import { Plant, WeatherData, UserProfile, WateringRecommendation, GardeningTip } from '../types';
 import { getPlantInfo, getGrowthStage } from '../constants/plants';
 import { isFrostRisk, isHeatWave, getExpectedRainNext24h } from './weather';
+
+function t(key: string, options?: Record<string, any>): string {
+  return i18next.t(key, options) as string;
+}
 
 export function getWateringRecommendation(
   plant: Plant,
@@ -40,7 +45,7 @@ export function getWateringRecommendation(
       plantId: plant.id,
       shouldWater: false,
       amount: 0,
-      reason: `Pluie récente (${rainYesterday.toFixed(0)} mm). Pas besoin d'arroser.`,
+      reason: t('recommendations.rainRecent', { amount: rainYesterday.toFixed(0) }),
       urgency: 'low',
       nextWateringDate: format(addDays(now, info.wateringFrequencyDays), 'yyyy-MM-dd'),
       skipReason: 'rain_recent',
@@ -52,7 +57,7 @@ export function getWateringRecommendation(
       plantId: plant.id,
       shouldWater: false,
       amount: 0,
-      reason: `Pluie prévue aujourd'hui (${rainForecast.toFixed(0)} mm). Économisez l'eau.`,
+      reason: t('recommendations.rainForecast', { amount: rainForecast.toFixed(0) }),
       urgency: 'low',
       nextWateringDate: format(addDays(now, 1), 'yyyy-MM-dd'),
       skipReason: 'rain_forecast',
@@ -68,12 +73,12 @@ export function getWateringRecommendation(
   else if (daysSinceWatered >= info.wateringFrequencyDays) urgency = 'medium';
 
   const reasons: string[] = [];
-  if (weather.temperature >= 28) reasons.push(`chaleur (${weather.temperature}°C)`);
-  if (weather.humidity <= 40) reasons.push('air sec');
-  if (profile.gardeningStyle === 'permaculture') reasons.push('paillis réduit les besoins');
+  if (weather.temperature >= 28) reasons.push(t('recommendations.reasonHeat', { temp: weather.temperature }));
+  if (weather.humidity <= 40) reasons.push(t('recommendations.reasonDryAir'));
+  if (profile.gardeningStyle === 'permaculture') reasons.push(t('recommendations.reasonMulch'));
   const reason = reasons.length > 0
-    ? `Arrosez en tenant compte de : ${reasons.join(', ')}.`
-    : `Arrosez au pied, idéalement le soir ou tôt le matin.`;
+    ? t('recommendations.wateringReason', { reasons: reasons.join(', ') })
+    : t('recommendations.wateringMethod');
 
   const nextWatering = addDays(now, shouldWater ? info.wateringFrequencyDays : info.wateringFrequencyDays - daysSinceWatered);
 
@@ -99,8 +104,8 @@ export function generateTips(
   if (isFrostRisk(weather.forecast)) {
     tips.push({
       id: 'frost-risk',
-      title: 'Risque de gelée !',
-      message: 'Des températures proches de 0°C sont prévues. Protégez vos plants fragiles avec un voile de forçage ou rentrez les pots.',
+      title: t('recommendations.frostRiskTitle'),
+      message: t('recommendations.frostRiskMsg'),
       type: 'weather',
       priority: 'high',
       icon: '🥶',
@@ -110,8 +115,8 @@ export function generateTips(
   if (isHeatWave(weather.forecast)) {
     tips.push({
       id: 'heat-wave',
-      title: 'Vague de chaleur',
-      message: 'Températures > 35°C prévues. Doublez les arrosages, paillez si possible et ombragez les plants fragiles.',
+      title: t('recommendations.heatWaveTitle'),
+      message: t('recommendations.heatWaveMsg'),
       type: 'weather',
       priority: 'high',
       icon: '🔥',
@@ -121,8 +126,8 @@ export function generateTips(
   if (weather.windSpeed >= 40) {
     tips.push({
       id: 'strong-wind',
-      title: 'Vent fort',
-      message: `Vents à ${weather.windSpeed} km/h. Tuteurez vos plants hauts (tomates, haricots grimpants).`,
+      title: t('recommendations.strongWindTitle'),
+      message: t('recommendations.strongWindMsg', { speed: weather.windSpeed }),
       type: 'weather',
       priority: 'medium',
       icon: '💨',
@@ -137,8 +142,8 @@ export function generateTips(
     if (daysSincePlanting >= info.harvestDays - 7 && daysSincePlanting <= info.harvestDays + 14) {
       tips.push({
         id: `harvest-${plant.id}`,
-        title: `${info.frenchName} ${plant.variety ? `(${plant.variety})` : ''} bientôt à récolter`,
-        message: `Votre ${info.frenchName} est en phase de récolte. Vérifiez la maturité et récoltez régulièrement.`,
+        title: t('recommendations.harvestReadyTitle', { name: info.frenchName }),
+        message: t('recommendations.harvestReadyMsg', { name: info.frenchName }),
         type: 'harvesting',
         priority: 'medium',
         plantId: plant.id,
@@ -152,7 +157,7 @@ export function generateTips(
         : info.fertilizerSchedule.industriel;
       tips.push({
         id: `fertilizer-${plant.id}`,
-        title: `Fertilisation ${info.frenchName}`,
+        title: t('recommendations.fertilizingTitle', { name: info.frenchName }),
         message: fertilizerAdvice,
         type: 'fertilizing',
         priority: 'low',
@@ -165,8 +170,8 @@ export function generateTips(
   if (profile.gardeningStyle === 'permaculture' && (month === 3 || month === 4)) {
     tips.push({
       id: 'mulching-spring',
-      title: 'Paillage de printemps',
-      message: 'C\'est le bon moment pour pailler vos planches. Utilisez BRF, paille ou feuilles mortes (10 cm minimum).',
+      title: t('recommendations.mulchingSpringTitle'),
+      message: t('recommendations.mulchingSpringMsg'),
       type: 'general',
       priority: 'medium',
       icon: '♻️',
@@ -176,8 +181,8 @@ export function generateTips(
   if (month >= 5 && month <= 8 && weather.temperature >= 22) {
     tips.push({
       id: 'watering-timing',
-      title: 'Horaires d\'arrosage',
-      message: 'Par temps chaud, arrosez tôt le matin ou après 18h pour limiter l\'évaporation.',
+      title: t('recommendations.wateringTimingTitle'),
+      message: t('recommendations.wateringTimingMsg'),
       type: 'watering',
       priority: 'low',
       icon: '💧',
@@ -302,11 +307,11 @@ export function getPlantProductionNarrative(
   const outperformance = ((plantHarvest / regionalAverage) - 1) * 100;
 
   if (outperformance >= 30) {
-    return `Vos rendements dépassent la moyenne régionale de ${outperformance.toFixed(0)}% — excellent travail !`;
+    return t('recommendations.plantOutperformanceHigh', { percent: outperformance.toFixed(0) });
   }
 
   if (outperformance >= 10) {
-    return `Vos rendements surpassent la moyenne régionale de ${outperformance.toFixed(0)}% — bonne maîtrise !`;
+    return t('recommendations.plantOutperformanceMedium', { percent: outperformance.toFixed(0) });
   }
 
   return null;

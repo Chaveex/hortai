@@ -122,6 +122,29 @@
     "score": "Puntuación",
     "title": "Panel de Control"
   },
+  "streak": {
+    "title": "🔥 Racha de Jardinería",
+    "currentStreak": "Racha actual",
+    "days": "días",
+    "excellent": "✨ ¡Excelente! ¡Sigue con este ritmo!",
+    "startNew": "🌱 Inicia una nueva racha. ¡Riega una planta hoy!",
+    "longestStreak": "Racha más larga",
+    "wateredToday": "Regadas hoy ({{count}})",
+    "noneWatered": "Ninguna planta ha sido regada hoy.",
+    "toKeepStreak": "🎯 ¡{{count}} planta(s) por regar para mantener tu racha!",
+    "allWatered": "🎉 ¡Excelente! ¡Todas tus plantas están regadas hoy!"
+  },
+  "water": {
+    "dashboardTitle": "Consumo de Agua",
+    "dashboardSubtitle": "Gestión de Riego",
+    "efficiency": "Eficiencia Hídrica",
+    "recommended": "Recomendado",
+    "actual": "Real",
+    "consumptionChart": "Consumo (Últimos 6 meses)",
+    "monthlyNeeds": "Necesidades mensuales de agua",
+    "urgentWatering": "Riego urgente necesario",
+    "weatherCurrentConditions": "Condiciones Actuales"
+  },
   "chores": {
     "todayTitle": "🗓️ Tareas de Hoy",
     "notFound": "Tarea no encontrada.",
@@ -193,7 +216,11 @@
     "addPlantFAB": "Añadir una planta",
     "addPlantHint": "Toca para crear una nueva planta",
     "addChoreFAB": "Añadir una tarea",
-    "addChoreHint": "Toca para crear una nueva tarea"
+    "addChoreHint": "Toca para crear una nueva tarea",
+    "waterTitle": "Regar {{name}}",
+    "fertilizeTitle": "Fertilizar {{name}}",
+    "harvestTitle": "Cosechar {{name}}",
+    "harvestDesc": "Verifica la madurez. Cosecha regularmente para estimular la producción."
   },
   "plants": {
     "addPlant": "Añadir Planta",
@@ -405,7 +432,29 @@
     "harvestGoalExceeded": "🏆 ¡Objetivo alcanzado! Has superado tu meta por {{excess}} kg — ¡excelente!",
     "harvestAlmostThere": "🎯 ¡Casi ahí! Necesitas {{remaining}} kg más para alcanzar tu objetivo de {{goal}} kg.",
     "harvestGoodProgress": "📈 Buen progreso: {{actual}} kg / {{goal}} kg. ¡Sigue cosechando!",
-    "harvestStarting": "🌾 ¡Comienza a cosechar! Actualmente tienes {{actual}} kg / {{goal}} kg."
+    "harvestStarting": "🌾 ¡Comienza a cosechar! Actualmente tienes {{actual}} kg / {{goal}} kg.",
+    "rainRecent": "Lluvia reciente ({{amount}} mm). No necesita riego.",
+    "rainForecast": "Lluvia esperada hoy ({{amount}} mm). Ahorra agua.",
+    "wateringReason": "Riega considerando: {{reasons}}.",
+    "wateringMethod": "Riega en la base, idealmente al atardecer o temprano por la mañana.",
+    "reasonHeat": "calor ({{temp}}°C)",
+    "reasonDryAir": "aire seco",
+    "reasonMulch": "el acolchado reduce las necesidades",
+    "frostRiskTitle": "¡Riesgo de helada!",
+    "frostRiskMsg": "Se esperan temperaturas cercanas a 0°C. Protege plantas frágiles con tela de helada o lleva macetas adentro.",
+    "heatWaveTitle": "Ola de calor",
+    "heatWaveMsg": "Temperaturas > 35°C esperadas. Duplica el riego, acolcha si es posible y da sombra a plantas frágiles.",
+    "strongWindTitle": "Viento fuerte",
+    "strongWindMsg": "Vientos a {{speed}} km/h. Tutora tus plantas altas (tomates, judías trepadoras).",
+    "harvestReadyTitle": "{{name}} listo para cosechar pronto",
+    "harvestReadyMsg": "Tu {{name}} está en fase de cosecha. Verifica madurez y cosecha regularmente.",
+    "fertilizingTitle": "Fertilizando {{name}}",
+    "mulchingSpringTitle": "Acolchado de primavera",
+    "mulchingSpringMsg": "Ahora es el momento ideal para acolchar tus camas. Usa virutas de madera, paja u hojas muertas (mínimo 10 cm).",
+    "wateringTimingTitle": "Horarios de riego",
+    "wateringTimingMsg": "En clima cálido, riega temprano por la mañana o después de las 6pm para limitar la evaporación.",
+    "plantOutperformanceHigh": "Tus rendimientos superan el promedio regional en {{percent}}% — ¡excelente trabajo!",
+    "plantOutperformanceMedium": "Tus rendimientos superan el promedio regional en {{percent}}% — ¡buen dominio!"
   },
   "predictions": {
     "riskExcessiveHeat": "Riesgo de calor excesivo",

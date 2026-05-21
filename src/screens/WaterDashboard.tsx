@@ -108,17 +108,17 @@ export function WaterDashboard() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.headerBack}>← Retour</Text>
+            <Text style={styles.headerBack}>{t('common.back')}</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Consommation Eau</Text>
-          <Text style={styles.headerSubtitle}>Gestion de l'irrigation</Text>
+          <Text style={styles.headerTitle}>{t('water.dashboardTitle')}</Text>
+          <Text style={styles.headerSubtitle}>{t('water.dashboardSubtitle')}</Text>
         </View>
 
         {/* Water efficiency gauge */}
         <View style={styles.gaugeSection}>
           <HealthScoreGauge
             score={waterMetrics.efficiency}
-            label="Efficacité hydrique"
+            label={t('water.efficiency')}
             size={140}
           />
         </View>
@@ -126,14 +126,14 @@ export function WaterDashboard() {
         {/* Water metrics */}
         <View style={styles.metricsRow}>
           <View style={styles.metricBox}>
-            <Text style={styles.metricLabel}>Recommandé</Text>
+            <Text style={styles.metricLabel}>{t('water.recommended')}</Text>
             <Text style={styles.metricValue}>
               {waterMetrics.recommended.toFixed(0)}
               <Text style={styles.metricUnit}> L</Text>
             </Text>
           </View>
           <View style={styles.metricBox}>
-            <Text style={styles.metricLabel}>Réel</Text>
+            <Text style={styles.metricLabel}>{t('water.actual')}</Text>
             <Text style={styles.metricValue}>
               {waterMetrics.actual.toFixed(0)}
               <Text style={styles.metricUnit}> L</Text>
@@ -152,7 +152,7 @@ export function WaterDashboard() {
         <View style={styles.section}>
           <LineChart
             data={waterUsageByMonth}
-            title="Consommation (6 derniers mois)"
+            title={t('water.consumptionChart')}
             unit=" L"
             height={220}
             lineColor={colors.secondary}
@@ -163,7 +163,7 @@ export function WaterDashboard() {
         {/* Urgent watering needs */}
         {urgentWatering.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>À arroser en priorité</Text>
+            <Text style={styles.sectionTitle}>{t('water.urgentWatering')}</Text>
             <View style={styles.alertList}>
               {urgentWatering.map(rec => {
                 const plant = plants.find(p => p.id === rec.plantId);
@@ -186,7 +186,7 @@ export function WaterDashboard() {
         {/* Water needs ranking */}
         {plantsByWaterNeed.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Besoins en eau mensuels</Text>
+            <Text style={styles.sectionTitle}>{t('water.monthlyNeeds')}</Text>
             <View style={styles.leaderboard}>
               {plantsByWaterNeed.map((item, idx) => (
                 <LeaderboardRow
@@ -208,7 +208,7 @@ export function WaterDashboard() {
           <View style={styles.weatherNote}>
             <Text style={styles.weatherIcon}>🌤️</Text>
             <View style={styles.weatherContent}>
-              <Text style={styles.weatherTitle}>Conditions actuelles</Text>
+              <Text style={styles.weatherTitle}>{t('water.weatherCurrentConditions')}</Text>
               <Text style={styles.weatherDescription}>
                 {weather.description} - Humidité: {weather.humidity}%
               </Text>
