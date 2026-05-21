@@ -158,16 +158,16 @@ export default function PlantDetailScreen() {
         </View>
 
         <View style={styles.statsRow}>
-          <StatBox label="Âge" value={`${daysSincePlanting}j`} />
-          <StatBox label="Planté le" value={format(parseISO(plant.plantedDate), 'd MMM', { locale: fr })} />
-          <StatBox label="Récolte dans" value={daysToHarvest > 0 ? `~${daysToHarvest}j` : 'Prêt !'} highlight={daysToHarvest <= 7} />
-          {plant.location && <StatBox label="Emplacement" value={plant.location} />}
+          <StatBox label={t('plants.age')} value={`${daysSincePlanting}j`} />
+          <StatBox label={t('plants.planted')} value={format(parseISO(plant.plantedDate), 'd MMM', { locale: fr })} />
+          <StatBox label={t('plants.harvestLabel')} value={daysToHarvest > 0 ? `~${daysToHarvest}j` : t('plants.harvestReady')} highlight={daysToHarvest <= 7} />
+          {plant.location && <StatBox label={t('plants.locationLabel')} value={plant.location} />}
         </View>
 
         {rec && (
           <View style={[styles.section, rec.shouldWater ? styles.waterSection : styles.okSection]}>
             <Text style={styles.sectionTitle}>
-              {rec.shouldWater ? '💧 Arrosage recommandé' : '✅ Arrosage OK'}
+              {rec.shouldWater ? t('plants.wateringRecommended') : t('plants.wateringOk')}
             </Text>
             {rec.shouldWater ? (
               <>
@@ -177,17 +177,17 @@ export default function PlantDetailScreen() {
                   style={styles.waterBtn}
                   onPress={() => markWatered(plantId)}
                   accessibilityRole="button"
-                  accessibilityLabel="Marquer comme arrosé"
-                  accessibilityHint="Appuyez pour enregistrer l'arrosage"
+                  accessibilityLabel={t('plants.markWatered')}
+                  accessibilityHint={t('plants.wateringHint')}
                 >
-                  <Text style={styles.waterBtnText}>Marquer comme arrosé ✓</Text>
+                  <Text style={styles.waterBtnText}>{t('plants.markWateredFull')}</Text>
                 </TouchableOpacity>
               </>
             ) : (
               <Text style={styles.waterReason}>
-                {rec.skipReason === 'rain_recent' ? 'Pluie récente suffisante.'
-                  : rec.skipReason === 'rain_forecast' ? 'Pluie prévue aujourd\'hui.'
-                  : `Prochain arrosage le ${format(parseISO(rec.nextWateringDate), 'd MMM', { locale: fr })}`}
+                {rec.skipReason === 'rain_recent' ? t('plants.rainRecent')
+                  : rec.skipReason === 'rain_forecast' ? t('plants.rainForecast')
+                  : t('plants.nextWateringDate', { date: format(parseISO(rec.nextWateringDate), 'd MMM', { locale: fr }) })}
               </Text>
             )}
           </View>
@@ -195,13 +195,13 @@ export default function PlantDetailScreen() {
 
         <View style={styles.choreSection}>
           <View style={styles.choreHeader}>
-            <Text style={styles.label}>Tâches liées</Text>
+            <Text style={styles.label}>{t('plants.linkedTasks')}</Text>
             <TouchableOpacity
               onPress={() => navigation.navigate('Tâches', { screen: 'ChoreForm', params: { plantId: plant.id } })}
               style={styles.addChoreBtn}
               accessibilityRole="button"
-              accessibilityLabel="Ajouter une tâche"
-              accessibilityHint="Appuyez pour créer une nouvelle tâche pour ce plant"
+              accessibilityLabel={t('plants.addTask')}
+              accessibilityHint={t('plants.addTaskHint')}
             >
               <Text style={styles.addChoreBtnText}>➕</Text>
             </TouchableOpacity>
@@ -232,36 +232,36 @@ export default function PlantDetailScreen() {
               })}
             </View>
           ) : (
-            <Text style={styles.noChoresText}>Aucune tâche liée</Text>
+            <Text style={styles.noChoresText}>{t('plants.noLinkedTasks')}</Text>
           )}
         </View>
 
         {plantTips.length > 0 && (
           <>
-            <Text style={styles.label}>Conseils pour ce plant</Text>
+            <Text style={styles.label}>{t('plants.tipsForPlant')}</Text>
             {plantTips.map(t => <TipCard key={t.id} tip={t} />)}
           </>
         )}
 
-        <Text style={styles.label}>Conseil de saison</Text>
+        <Text style={styles.label}>{t('plants.seasonalAdvice')}</Text>
         <View style={styles.adviceBox}>
           <Text style={styles.adviceText}>{seasonalAdvice}</Text>
         </View>
 
         {profile && (
           <>
-            <Text style={styles.label}>Fertilisation</Text>
+            <Text style={styles.label}>{t('plants.fertilization')}</Text>
             <View style={styles.adviceBox}>
               <Text style={styles.adviceText}>
                 {profile.fertilizerType === 'naturel' ? info.fertilizerSchedule.naturel
                   : profile.fertilizerType === 'industriel' ? info.fertilizerSchedule.industriel
-                  : 'Aucun engrais utilisé.'}
+                  : t('plants.noFertilizer')}
               </Text>
             </View>
           </>
         )}
 
-        <Text style={styles.label}>Problèmes courants</Text>
+        <Text style={styles.label}>{t('plants.commonIssues')}</Text>
         <View style={styles.issuesList}>
           {info.commonIssues.map(issue => (
             <View key={issue} style={styles.issueChip}>
@@ -272,7 +272,7 @@ export default function PlantDetailScreen() {
 
         {plant.wateringHistory.length > 0 && (
           <>
-            <Text style={styles.label}>Historique d'arrosage (30 derniers)</Text>
+            <Text style={styles.label}>{t('plants.wateringHistory')}</Text>
             <View style={styles.historyList}>
               {plant.wateringHistory.slice().reverse().map((date, i) => (
                 <Text key={i} style={styles.historyItem}>
@@ -285,14 +285,14 @@ export default function PlantDetailScreen() {
 
         {plant.notes && (
           <>
-            <Text style={styles.label}>Notes</Text>
+            <Text style={styles.label}>{t('plants.notes')}</Text>
             <View style={styles.adviceBox}>
               <Text style={styles.adviceText}>{plant.notes}</Text>
             </View>
           </>
         )}
 
-        <Text style={styles.label}>Journal & Récoltes</Text>
+        <Text style={styles.label}>{t('plants.journalAndHarvests')}</Text>
         <View style={styles.journalForm}>
           <View style={styles.entryTypeTabs}>
             <TouchableOpacity
@@ -302,7 +302,7 @@ export default function PlantDetailScreen() {
               accessibilityLabel="Type de note"
               accessibilityState={{ selected: entryType === 'note' }}
             >
-              <Text style={[styles.typeTabText, entryType === 'note' && styles.typeTabTextActive]}>📓 Note</Text>
+              <Text style={[styles.typeTabText, entryType === 'note' && styles.typeTabTextActive]}>{t('plants.noteType')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.typeTab, entryType === 'harvest' && styles.typeTabActive]}
@@ -311,7 +311,7 @@ export default function PlantDetailScreen() {
               accessibilityLabel="Type de récolte"
               accessibilityState={{ selected: entryType === 'harvest' }}
             >
-              <Text style={[styles.typeTabText, entryType === 'harvest' && styles.typeTabTextActive]}>🌾 Récolte</Text>
+              <Text style={[styles.typeTabText, entryType === 'harvest' && styles.typeTabTextActive]}>{t('plants.harvestType')}</Text>
             </TouchableOpacity>
           </View>
 
@@ -320,7 +320,7 @@ export default function PlantDetailScreen() {
               style={styles.entryInput}
               value={entryText}
               onChangeText={setEntryText}
-              placeholder="Observation, maladie, intervention…"
+              placeholder={t('plants.notePlaceholder')}
               placeholderTextColor={colors.textMuted}
               multiline
               numberOfLines={2}
@@ -333,7 +333,7 @@ export default function PlantDetailScreen() {
                 style={[styles.entryInput, { flex: 1 }]}
                 value={entryQty}
                 onChangeText={setEntryQty}
-                placeholder="Quantité"
+                placeholder={t('plants.quantity')}
                 placeholderTextColor={colors.textMuted}
                 keyboardType="decimal-pad"
                 accessibilityLabel="Quantité récolte"
@@ -363,7 +363,7 @@ export default function PlantDetailScreen() {
             accessibilityLabel={`Ajouter ${entryType === 'note' ? 'note' : 'récolte'}`}
             accessibilityHint="Appuyez pour enregistrer votre saisie"
           >
-            <Text style={styles.addEntryBtnText}>+ Ajouter</Text>
+            <Text style={styles.addEntryBtnText}>{t('plants.addButton')}</Text>
           </TouchableOpacity>
         </View>
 
