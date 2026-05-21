@@ -148,7 +148,13 @@
     "vegetative": "Végétatif",
     "flowering": "Floraison",
     "mature": "Mature",
-    "harvested": "Récolté"
+    "harvested": "Récolté",
+    "growth": "Croissance",
+    "headerBack": "← Retour",
+    "plantDetailsTitle": "Détails Plante",
+    "metricsSubtitle": "Métriques et historique",
+    "noPlants": "Aucune plante",
+    "selectPlant": "Sélectionner une plante"
   },
   "streak": {
     "title": "🔥 Série de jardinage",

@@ -164,10 +164,10 @@ export function PlantDetailDashboard() {
 
   const progress = plantMetrics?.progress || 0;
   const growthStages = [
-    { label: 'Germination', completed: progress > 10, emoji: '🌾' },
-    { label: 'Plantule', completed: progress > 25, current: progress > 25 && progress < 60, emoji: '🌱' },
-    { label: 'Croissance', completed: progress > 60, current: progress > 60 && progress < 85, emoji: '🌿' },
-    { label: 'Mature', completed: progress > 85, current: progress > 85, emoji: '🥗' },
+    { label: t('dashboard.germination'), completed: progress > 10, emoji: '🌾' },
+    { label: t('dashboard.seedling'), completed: progress > 25, current: progress > 25 && progress < 60, emoji: '🌱' },
+    { label: t('dashboard.growth'), completed: progress > 60, current: progress > 60 && progress < 85, emoji: '🌿' },
+    { label: t('dashboard.mature'), completed: progress > 85, current: progress > 85, emoji: '🥗' },
   ];
 
   if (!selectedPlant || !plantMetrics) {
@@ -175,12 +175,12 @@ export function PlantDetailDashboard() {
       <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.headerBack}>← Retour</Text>
+            <Text style={styles.headerBack}>{t('dashboard.headerBack')}</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Détails Plante</Text>
+          <Text style={styles.headerTitle}>{t('dashboard.plantDetailsTitle')}</Text>
         </View>
         <View style={styles.empty}>
-          <Text style={styles.emptyText}>Aucune plante</Text>
+          <Text style={styles.emptyText}>{t('dashboard.noPlants')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -192,16 +192,16 @@ export function PlantDetailDashboard() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.headerBack}>← Retour</Text>
+            <Text style={styles.headerBack}>{t('dashboard.headerBack')}</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Détails Plante</Text>
-          <Text style={styles.headerSubtitle}>Métriques et historique</Text>
+          <Text style={styles.headerTitle}>{t('dashboard.plantDetailsTitle')}</Text>
+          <Text style={styles.headerSubtitle}>{t('dashboard.metricsSubtitle')}</Text>
         </View>
 
         {/* Plant selector */}
         {plants.length > 1 && (
           <View style={styles.selectorSection}>
-            <Text style={styles.selectorLabel}>Sélectionner une plante</Text>
+            <Text style={styles.selectorLabel}>{t('dashboard.selectPlant')}</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}

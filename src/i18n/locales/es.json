@@ -148,7 +148,13 @@
     "vegetative": "Vegetativo",
     "flowering": "Floración",
     "mature": "Maduro",
-    "harvested": "Cosechado"
+    "harvested": "Cosechado",
+    "growth": "Crecimiento",
+    "headerBack": "← Atrás",
+    "plantDetailsTitle": "Detalles de la Planta",
+    "metricsSubtitle": "Métricas e historial",
+    "noPlants": "Sin plantas",
+    "selectPlant": "Seleccionar una planta"
   },
   "streak": {
     "title": "🔥 Racha de Jardinería",

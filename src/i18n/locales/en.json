@@ -148,7 +148,13 @@
     "vegetative": "Vegetative",
     "flowering": "Flowering",
     "mature": "Mature",
-    "harvested": "Harvested"
+    "harvested": "Harvested",
+    "growth": "Growth",
+    "headerBack": "← Back",
+    "plantDetailsTitle": "Plant Details",
+    "metricsSubtitle": "Metrics and history",
+    "noPlants": "No plants",
+    "selectPlant": "Select a plant"
   },
   "streak": {
     "title": "🔥 Gardening Streak",
