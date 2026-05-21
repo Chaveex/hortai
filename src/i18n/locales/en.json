@@ -28,7 +28,15 @@
     "conventional": "Conventional",
     "conventionalDesc": "Classic gardening",
     "industrial": "Industrial",
-    "industrialDesc": "NPK and specialized fertilizers"
+    "industrialDesc": "NPK and specialized fertilizers",
+    "stepLocationTitle": "📍 Your location",
+    "stepLocationDesc": "Enter your city to get local weather and region-specific advice.",
+    "stepGardeningTitle": "🌿 Your gardening style",
+    "stepGardeningDesc": "Choose your approach. This will personalize your advice.",
+    "stepFertilizerTitle": "🌱 Your fertilizers",
+    "stepFertilizerDesc": "What type of fertilizer do you use? This adjusts fertilization reminders.",
+    "continue": "Continue →",
+    "start": "Get Started 🌱"
   },
   "common": {
     "save": "Save",

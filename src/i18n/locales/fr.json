@@ -28,7 +28,15 @@
     "conventional": "Conventionnel",
     "conventionalDesc": "Jardinage classique",
     "industrial": "Industriel",
-    "industrialDesc": "Engrais NPK et spécialisés"
+    "industrialDesc": "Engrais NPK et spécialisés",
+    "stepLocationTitle": "📍 Votre localisation",
+    "stepLocationDesc": "Entrez votre ville pour obtenir la météo locale et des conseils adaptés à votre région.",
+    "stepGardeningTitle": "🌿 Votre style de jardinage",
+    "stepGardeningDesc": "Choisissez votre approche. Cela personnalisera vos conseils.",
+    "stepFertilizerTitle": "🌱 Vos engrais",
+    "stepFertilizerDesc": "Quel type d'engrais utilisez-vous ? Cela adapte les rappels de fertilisation.",
+    "continue": "Continuer →",
+    "start": "Commencer 🌱"
   },
   "common": {
     "save": "Enregistrer",

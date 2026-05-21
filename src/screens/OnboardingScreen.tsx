@@ -95,9 +95,9 @@ export default function OnboardingScreen() {
 
           {step === 0 && (
             <View style={styles.stepContent}>
-              <Text style={styles.stepTitle}>📍 Votre localisation</Text>
+              <Text style={styles.stepTitle}>{t('onboarding.stepLocationTitle')}</Text>
               <Text style={styles.stepDesc}>
-                Entrez votre ville pour obtenir la météo locale et des conseils adaptés à votre région.
+                {t('onboarding.stepLocationDesc')}
               </Text>
               <TextInput
                 style={styles.input}
@@ -114,15 +114,15 @@ export default function OnboardingScreen() {
                 onPress={handleCityNext}
                 disabled={isLoading}
               >
-                {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>Continuer →</Text>}
+                {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('onboarding.continue')}</Text>}
               </TouchableOpacity>
             </View>
           )}
 
           {step === 1 && (
             <View style={styles.stepContent}>
-              <Text style={styles.stepTitle}>🌿 Votre style de jardinage</Text>
-              <Text style={styles.stepDesc}>Choisissez votre approche. Cela personnalisera vos conseils.</Text>
+              <Text style={styles.stepTitle}>{t('onboarding.stepGardeningTitle')}</Text>
+              <Text style={styles.stepDesc}>{t('onboarding.stepGardeningDesc')}</Text>
               {GARDENING_STYLES.map(item => (
                 <TouchableOpacity
                   key={item.value}
@@ -139,10 +139,10 @@ export default function OnboardingScreen() {
               ))}
               <View style={styles.navRow}>
                 <TouchableOpacity style={styles.btnSecondary} onPress={() => setStep(0)}>
-                  <Text style={styles.btnSecondaryText}>← Retour</Text>
+                  <Text style={styles.btnSecondaryText}>{t('common.back')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn} onPress={() => setStep(2)}>
-                  <Text style={styles.btnText}>Continuer →</Text>
+                  <Text style={styles.btnText}>{t('onboarding.continue')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -150,8 +150,8 @@ export default function OnboardingScreen() {
 
           {step === 2 && (
             <View style={styles.stepContent}>
-              <Text style={styles.stepTitle}>🌱 Vos engrais</Text>
-              <Text style={styles.stepDesc}>Quel type d'engrais utilisez-vous ? Cela adapte les rappels de fertilisation.</Text>
+              <Text style={styles.stepTitle}>{t('onboarding.stepFertilizerTitle')}</Text>
+              <Text style={styles.stepDesc}>{t('onboarding.stepFertilizerDesc')}</Text>
               {FERTILIZER_TYPES.map(item => (
                 <TouchableOpacity
                   key={item.value}
@@ -168,14 +168,14 @@ export default function OnboardingScreen() {
               ))}
               <View style={styles.navRow}>
                 <TouchableOpacity style={styles.btnSecondary} onPress={() => setStep(1)}>
-                  <Text style={styles.btnSecondaryText}>← Retour</Text>
+                  <Text style={styles.btnSecondaryText}>{t('common.back')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.btn, isLoading && styles.btnDisabled]}
                   onPress={handleFinish}
                   disabled={isLoading}
                 >
-                  {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>Commencer 🌱</Text>}
+                  {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>{t('onboarding.start')}</Text>}
                 </TouchableOpacity>
               </View>
             </View>

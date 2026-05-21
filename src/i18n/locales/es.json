@@ -28,7 +28,15 @@
     "conventional": "Convencional",
     "conventionalDesc": "Jardinería clásica",
     "industrial": "Industrial",
-    "industrialDesc": "Fertilizantes NPK y especializados"
+    "industrialDesc": "Fertilizantes NPK y especializados",
+    "stepLocationTitle": "📍 Tu ubicación",
+    "stepLocationDesc": "Ingresa tu ciudad para obtener el clima local y consejos adaptados a tu región.",
+    "stepGardeningTitle": "🌿 Tu estilo de jardinería",
+    "stepGardeningDesc": "Elige tu enfoque. Esto personalizará tus consejos.",
+    "stepFertilizerTitle": "🌱 Tus fertilizantes",
+    "stepFertilizerDesc": "¿Qué tipo de fertilizante usas? Esto ajusta los recordatorios de fertilización.",
+    "continue": "Continuar →",
+    "start": "Comenzar 🌱"
   },
   "common": {
     "save": "Guardar",
