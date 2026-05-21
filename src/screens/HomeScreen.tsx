@@ -207,7 +207,7 @@ export default function HomeScreen() {
           onPress={() => navigation.navigate('DashboardStack', { screen: 'ProductionDashboard' })}
         />
 
-        <TodayChoreWidget onPress={() => navigation.navigate('Chores')} />
+        <TodayChoreWidget onPress={() => navigation.navigate('Tâches')} />
 
         {plants.length === 0 ? (
           <View style={styles.emptyBox}>
