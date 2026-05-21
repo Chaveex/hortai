@@ -115,4 +115,26 @@
 6. **PlantDetailDashboard scroll dots**: Visual hint horizontal scroll si 2+ plants
 7. **HEALTH_SCORE_THRESHOLDS**: Centraliser en theme.ts (hardcoded actuel)
 
-**Dernière mise à jour:** 2026-05-20, branche `master`. P1 SHIPPED. P2 DONE (6 dashboards, navigation, services, accessibility). Commits: b434241, 535a9ae, f5bbf58. Prêt production. Backlog P2.1: virtualization, UX hints, empty states.
+## Traductions i18n — Multilingue FR/EN/ES ✅
+
+✅ **Traductions service & composants**
+- `insights.ts`: 41 clés (titres insights, descriptions, 36 actions par catégorie)
+- `PlantCard.tsx`: 7 clés (labels métadonnées: "Planté le", "Âge", "Dernier arrosage", etc.)
+- `WateringCard.tsx`: 4 clés (état arrosage: "Rien à arroser", "À arroser", "Fait ✓")
+
+✅ **Données plantes externalisées (1650+ lignes)**
+- `src/i18n/plants-data/{fr,en,es}.json` — tips, issues, seasonal advice, fertilizer schedules
+- `src/constants/plants-meta.ts` — metadata statique (icons, water needs, days)
+- `src/constants/plants.ts` — fusion dynamique par langue via `getPlantInfo()`
+- Growth stages traduits (Germination/Plantule/Végétatif/Floraison)
+
+✅ **Correctifs**
+- Placeholder syntax: `{{{var}}}` → `{{var}}` (FR/EN/ES locales)
+- TypeScript `resolveJsonModule: true` pour imports JSON
+
+🔧 **À fixer**
+- Traduire textes restants hardcodés (si trouvés)
+- Corriger placeholders dans recommandations.ts (si utilisés)
+- Vérifier i18n dans autres services (recommendations, weather, etc.)
+
+**Dernière mise à jour:** 2026-05-21, branche `master`. P1 SHIPPED. P2 DONE. i18n FR/EN/ES DONE. Commits: 6402bbc, 51ed49c. Prêt production. Backlog: traduire remaining hardcoded, fix placeholders.
