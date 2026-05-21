@@ -663,5 +663,14 @@
       "testMulching": "Prueba acolchado espeso",
       "experimentAssociations": "Experimenta con asociaciones de plantas"
     }
+  },
+  "ai": {
+    "timeoutError": "La solicitud se agotó. Verifique su conexión.",
+    "networkError": "Se requiere conexión de red. Verifique su red.",
+    "emptyResponse": "Respuesta IA vacía.",
+    "noQuestion": "Por favor, haga una pregunta.",
+    "rateLimitExceeded": "Límite diario alcanzado. Vuelva mañana.",
+    "photoCompressionFailed": "Fallo en la compresión de fotos",
+    "missingApiKey": "Falta la clave API de Anthropic. Configure EXPO_PUBLIC_ANTHROPIC_API_KEY en .env"
   }
 }

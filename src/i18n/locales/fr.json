@@ -663,5 +663,14 @@
       "testMulching": "Testez le paillage épais",
       "experimentAssociations": "Expérimentez l'association de plantes"
     }
+  },
+  "ai": {
+    "timeoutError": "Délai dépassé. Vérifiez votre connexion.",
+    "networkError": "Connexion requise. Vérifiez votre réseau.",
+    "emptyResponse": "Réponse IA vide.",
+    "noQuestion": "Posez une question.",
+    "rateLimitExceeded": "Limite quotidienne atteinte. Revenez demain.",
+    "photoCompressionFailed": "Échec compression photo",
+    "missingApiKey": "Clé API Anthropic manquante. Configurez EXPO_PUBLIC_ANTHROPIC_API_KEY dans .env"
   }
 }

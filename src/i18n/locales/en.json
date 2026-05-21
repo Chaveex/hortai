@@ -663,5 +663,14 @@
       "testMulching": "Test thick mulching",
       "experimentAssociations": "Experiment with plant associations"
     }
+  },
+  "ai": {
+    "timeoutError": "Request timed out. Check your connection.",
+    "networkError": "Network connection required. Check your network.",
+    "emptyResponse": "Empty AI response.",
+    "noQuestion": "Please ask a question.",
+    "rateLimitExceeded": "Daily limit reached. Please come back tomorrow.",
+    "photoCompressionFailed": "Photo compression failed",
+    "missingApiKey": "Anthropic API key missing. Configure EXPO_PUBLIC_ANTHROPIC_API_KEY in .env"
   }
 }

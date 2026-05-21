@@ -37,6 +37,21 @@ interface Props {
   onClose: () => void;
 }
 
+function translateErrorMessage(errorMessage: string, t: any): string {
+  const errorMap: { [key: string]: string } = {
+    'TIMEOUT_ERROR': 'ai.timeoutError',
+    'NETWORK_ERROR': 'ai.networkError',
+    'EMPTY_RESPONSE': 'ai.emptyResponse',
+    'NO_QUESTION': 'ai.noQuestion',
+    'RATE_LIMIT_EXCEEDED': 'ai.rateLimitExceeded',
+    'MISSING_API_KEY': 'ai.missingApiKey',
+    'Photo compression failed': 'ai.photoCompressionFailed',
+  };
+
+  const key = errorMap[errorMessage];
+  return key ? t(key) : errorMessage;
+}
+
 export default function AIChatModal({ visible, onClose }: Props) {
   const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -159,7 +174,8 @@ export default function AIChatModal({ visible, onClose }: Props) {
       setPhotoUri(null);
       setLastAttempt(null);
     } catch (e: any) {
-      setError(e?.message ?? t('aiChat.unknownError'));
+      const errorMsg = e?.message ?? t('aiChat.unknownError');
+      setError(translateErrorMessage(errorMsg, t));
     } finally {
       setIsLoading(false);
     }

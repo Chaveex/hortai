@@ -66,7 +66,7 @@ interface AnthropicResponse {
 function getApiKey(): string {
   const key = process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY;
   if (!key || key.length === 0) {
-    throw new Error('Clé API Anthropic manquante. Configurez EXPO_PUBLIC_ANTHROPIC_API_KEY dans .env');
+    throw new Error('MISSING_API_KEY');
   }
   return key;
 }
@@ -174,7 +174,7 @@ async function compressPhoto(uri: string): Promise<{ base64: string; mediaType: 
     },
   );
   if (!result.base64) {
-    throw new Error('Échec compression photo');
+    throw new Error('Photo compression failed');
   }
   return { base64: result.base64, mediaType: 'image/jpeg' };
 }
@@ -278,14 +278,14 @@ async function callAnthropic(
   } catch (e: any) {
     clearTimeout(timeoutId);
     if (e.name === 'AbortError') {
-      throw new Error('Délai dépassé. Vérifiez votre connexion.');
+      throw new Error('TIMEOUT_ERROR');
     }
-    throw new Error('Connexion requise. Vérifiez votre réseau.');
+    throw new Error('NETWORK_ERROR');
   }
   clearTimeout(timeoutId);
 
   if (!response.ok) {
-    let errMsg = `Erreur API (${response.status})`;
+    let errMsg = `API_ERROR_${response.status}`;
     try {
       const errBody = (await response.json()) as AnthropicResponse;
       if (errBody.error?.message) errMsg = errBody.error.message;
@@ -299,7 +299,7 @@ async function callAnthropic(
   const textBlock = data.content.find(b => b.type === 'text');
   const text = textBlock?.text?.trim();
   if (!text) {
-    throw new Error('Réponse IA vide.');
+    throw new Error('EMPTY_RESPONSE');
   }
   return text;
 }
@@ -318,12 +318,12 @@ export async function sendMessage(
 ): Promise<SendMessageResult> {
   const trimmed = question.trim();
   if (trimmed.length === 0 && !photoUri) {
-    throw new Error('Posez une question.');
+    throw new Error('NO_QUESTION');
   }
 
   const limit = await checkRateLimit();
   if (!limit.allowed) {
-    throw new Error('Limite quotidienne atteinte. Revenez demain.');
+    throw new Error('RATE_LIMIT_EXCEEDED');
   }
 
   let photoBase64: string | undefined;
@@ -340,7 +340,7 @@ export async function sendMessage(
     : SYSTEM_PROMPT;
 
   const anthropicMessages = await buildAnthropicMessages(
-    trimmed.length > 0 ? trimmed : 'Analyse cette photo de plante et donne conseils.',
+    trimmed.length > 0 ? trimmed : 'Analyze this plant photo and provide advice.',
     history,
     photoBase64,
   );
@@ -351,7 +351,7 @@ export async function sendMessage(
   const userMessage: AIChatMessage = {
     id: generateMessageId(),
     role: 'user',
-    content: trimmed.length > 0 ? trimmed : '(Photo envoyée)',
+    content: trimmed.length > 0 ? trimmed : '(Photo sent)',
     timestamp: now,
     photo: thumbnailBase64,
   };
