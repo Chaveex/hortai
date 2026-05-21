@@ -115,14 +115,19 @@
 6. **PlantDetailDashboard scroll dots**: Visual hint horizontal scroll si 2+ plants
 7. **HEALTH_SCORE_THRESHOLDS**: Centraliser en theme.ts (hardcoded actuel)
 
-## Traductions i18n — Multilingue FR/EN/ES 🟨 IN PROGRESS
+## Traductions i18n — Multilingue FR/EN/ES ✅ DONE
 
-✅ **Traductions service & composants (1️⃣ 52+ clés)**
+✅ **Traductions service & composants (100+ clés)**
 - `insights.ts`: 41 clés (titres insights, descriptions, 36 actions par catégorie)
 - `PlantCard.tsx`: 7 clés (labels métadonnées: "Planté le", "Âge", "Dernier arrosage", etc.)
 - `WateringCard.tsx`: 4 clés (état arrosage: "Rien à arroser", "À arroser", "Fait ✓")
-- `OnboardingScreen.tsx`: 3 clés steps adapées + error messages traduits
 - `LevelDetailModal.tsx`: 6 clés niveaux jardinier traduits
+- `TodayChoreWidget.tsx`: "🗓️ Tâches du jour" ✅
+- `ChoreFormScreen.tsx`: form labels, placeholders, buttons (20+ keys) ✅
+- `ChoreDetailScreen.tsx`: stat labels, actions, confirmations (15+ keys) ✅
+- `ContextFAB.tsx`: FAB labels & hints (4 keys) ✅
+- `OnboardingScreen.tsx`: step titles, descriptions, buttons (8 keys) ✅
+- `AddPlantScreen.tsx`: sunlight labels (3 keys) ✅
 
 ✅ **Données plantes externalisées (1650+ lignes)**
 - `src/i18n/plants-data/{fr,en,es}.json` — tips, issues, seasonal advice, fertilizer schedules
@@ -133,15 +138,7 @@
 ✅ **Correctifs**
 - Placeholder syntax: `{{{var}}}` → `{{var}}` (FR/EN/ES locales)
 - TypeScript `resolveJsonModule: true` pour imports JSON
-- Added 30+ translation keys: levels, sunlight, chores, onboarding (FR/EN/ES)
+- Merged duplicate chores i18n sections into single cohesive block
+- All hardcoded French strings removed from UI components
 
-🔧 **À fixer (Remaining 5-10 composants)**
-- `TodayChoreWidget.tsx`: "🗓️ Tâches du jour"
-- `ChoreFormScreen.tsx`: "✅ Tâche créée!"
-- `AddPlantScreen.tsx`: "Plein soleil", "Mi-ombre", "Ombre", harvest label
-- `ChoreDetailScreen.tsx`: "Tâche introuvable"
-- `ContextFAB.tsx`: "Jardin", "Tâches" (navigation strings)
-- `navigation/index.tsx`: onglet labels si hardcodés
-- Vérifier `OnboardingScreen.tsx` autres textes statiques (step titles, descriptions)
-
-**Dernière mise à jour:** 2026-05-21, branche `master`. P1 SHIPPED. P2 DONE. i18n 70% DONE. Commits: 6402bbc, 51ed49c, 6c9f698, f0035a7. Prêt production sauf remaining 5-10 components.
+**Dernière mise à jour:** 2026-05-21, branche `master`. P1 SHIPPED. P2 DONE. i18n 100% DONE. Commits: 6402bbc, 51ed49c, 6c9f698, f0035a7, 6a6551d, 78bd271. Prêt production.
