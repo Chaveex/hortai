@@ -48,7 +48,7 @@ export default function GardenScreen() {
           <Text style={styles.emptyEmoji}>🌱</Text>
           <Text style={styles.emptyTitle}>{t('garden.noBeds')}</Text>
           <Text style={styles.emptyDesc}>
-            Ajoutez vos plants, semis et légumes pour commencer à recevoir des conseils personnalisés.
+            {t('garden.emptyDesc')}
           </Text>
           <TouchableOpacity
             style={styles.addBtnLarge}
