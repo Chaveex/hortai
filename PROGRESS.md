@@ -115,12 +115,14 @@
 6. **PlantDetailDashboard scroll dots**: Visual hint horizontal scroll si 2+ plants
 7. **HEALTH_SCORE_THRESHOLDS**: Centraliser en theme.ts (hardcoded actuel)
 
-## Traductions i18n — Multilingue FR/EN/ES ✅
+## Traductions i18n — Multilingue FR/EN/ES 🟨 IN PROGRESS
 
-✅ **Traductions service & composants**
+✅ **Traductions service & composants (1️⃣ 52+ clés)**
 - `insights.ts`: 41 clés (titres insights, descriptions, 36 actions par catégorie)
 - `PlantCard.tsx`: 7 clés (labels métadonnées: "Planté le", "Âge", "Dernier arrosage", etc.)
 - `WateringCard.tsx`: 4 clés (état arrosage: "Rien à arroser", "À arroser", "Fait ✓")
+- `OnboardingScreen.tsx`: 3 clés steps adapées + error messages traduits
+- `LevelDetailModal.tsx`: 6 clés niveaux jardinier traduits
 
 ✅ **Données plantes externalisées (1650+ lignes)**
 - `src/i18n/plants-data/{fr,en,es}.json` — tips, issues, seasonal advice, fertilizer schedules
@@ -131,10 +133,15 @@
 ✅ **Correctifs**
 - Placeholder syntax: `{{{var}}}` → `{{var}}` (FR/EN/ES locales)
 - TypeScript `resolveJsonModule: true` pour imports JSON
+- Added 30+ translation keys: levels, sunlight, chores, onboarding (FR/EN/ES)
 
-🔧 **À fixer**
-- Traduire textes restants hardcodés (si trouvés)
-- Corriger placeholders dans recommandations.ts (si utilisés)
-- Vérifier i18n dans autres services (recommendations, weather, etc.)
+🔧 **À fixer (Remaining 5-10 composants)**
+- `TodayChoreWidget.tsx`: "🗓️ Tâches du jour"
+- `ChoreFormScreen.tsx`: "✅ Tâche créée!"
+- `AddPlantScreen.tsx`: "Plein soleil", "Mi-ombre", "Ombre", harvest label
+- `ChoreDetailScreen.tsx`: "Tâche introuvable"
+- `ContextFAB.tsx`: "Jardin", "Tâches" (navigation strings)
+- `navigation/index.tsx`: onglet labels si hardcodés
+- Vérifier `OnboardingScreen.tsx` autres textes statiques (step titles, descriptions)
 
-**Dernière mise à jour:** 2026-05-21, branche `master`. P1 SHIPPED. P2 DONE. i18n FR/EN/ES DONE. Commits: 6402bbc, 51ed49c. Prêt production. Backlog: traduire remaining hardcoded, fix placeholders.
+**Dernière mise à jour:** 2026-05-21, branche `master`. P1 SHIPPED. P2 DONE. i18n 70% DONE. Commits: 6402bbc, 51ed49c, 6c9f698, f0035a7. Prêt production sauf remaining 5-10 components.
