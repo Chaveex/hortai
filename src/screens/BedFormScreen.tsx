@@ -40,7 +40,7 @@ export function BedFormScreen() {
 
   const handleSave = () => {
     if (!name.trim()) {
-      Alert.alert('Erreur', 'Le nom du bac est requis');
+      Alert.alert(t('garden.bedFormErrorTitle'), t('garden.bedFormNameRequired'));
       return;
     }
 
@@ -66,19 +66,19 @@ export function BedFormScreen() {
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <View style={styles.header}>
         <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.backButton}>← Retour</Text>
+          <Text style={styles.backButton}>{t('common.back')}</Text>
         </Pressable>
         <Text style={styles.title}>
-          {isEditMode ? 'Modifier le bac' : 'Créer un bac'}
+          {isEditMode ? t('garden.bedFormEditTitle') : t('garden.bedFormTitle')}
         </Text>
       </View>
 
       <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
         <View style={styles.field}>
-          <Text style={styles.label}>Nom du bac *</Text>
+          <Text style={styles.label}>{t('garden.bedFormNameLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Ex: Bac tomates, Carré nord..."
+            placeholder={t('garden.bedFormNamePlaceholder')}
             value={name}
             onChangeText={setName}
             placeholderTextColor="#ccc"
@@ -86,10 +86,10 @@ export function BedFormScreen() {
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Localisation (optionnel)</Text>
+          <Text style={styles.label}>{t('garden.bedFormLocationLabel')}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Ex: Coin sud, Terrasse, Contre le mur..."
+            placeholder={t('garden.bedFormLocationPlaceholder')}
             value={location}
             onChangeText={setLocation}
             placeholderTextColor="#ccc"
@@ -98,7 +98,7 @@ export function BedFormScreen() {
 
         {!isEditMode && (
           <View style={styles.field}>
-            <Text style={styles.label}>Taille de la grille</Text>
+            <Text style={styles.label}>{t('garden.bedFormSizeLabel')}</Text>
             <View style={styles.sizeGrid}>
               {sizeOptions.map(option => (
                 <Pressable
@@ -130,7 +130,7 @@ export function BedFormScreen() {
           onPress={handleSave}
         >
           <Text style={styles.saveButtonText}>
-            {isEditMode ? 'Mettre à jour' : 'Créer le bac'}
+            {isEditMode ? t('garden.bedFormUpdateBtn') : t('garden.bedFormCreateBtn')}
           </Text>
         </Pressable>
       </View>

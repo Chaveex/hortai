@@ -83,7 +83,7 @@ export function GardenBedsScreen() {
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>{t('garden.myBeds')}</Text>
           <Text style={styles.subtitle}>
-            {gardenBeds.length} {gardenBeds.length === 1 ? t('garden.bedCount', { count: 1 }) : t('garden.bedCount', { count: gardenBeds.length })}
+            {t('garden.bedCount', { count: gardenBeds.length })}
           </Text>
         </View>
         <Pressable
