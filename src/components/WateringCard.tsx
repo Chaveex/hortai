@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { WateringRecommendation, Plant } from '../types';
 import { getPlantInfo } from '../constants/plants';
 import { colors, spacing, borderRadius } from '../constants/theme';
@@ -11,21 +12,22 @@ interface Props {
 }
 
 export default function WateringCard({ recommendations, plants, onWater }: Props) {
+  const { t } = useTranslation();
   const toWater = recommendations.filter(r => r.shouldWater);
 
   if (toWater.length === 0) {
     return (
       <View style={styles.card}>
         <Text style={styles.allGoodEmoji}>✅</Text>
-        <Text style={styles.allGoodText}>Rien à arroser aujourd'hui !</Text>
-        <Text style={styles.allGoodSub}>Vos plants sont bien hydratés.</Text>
+        <Text style={styles.allGoodText}>{t('home.noWateringNeeded')}</Text>
+        <Text style={styles.allGoodSub}>{t('home.plantsWellHydrated')}</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>💧 À arroser aujourd'hui</Text>
+      <Text style={styles.title}>{t('home.toWaterToday')}</Text>
       {toWater.map(rec => {
         const plant = plants.find(p => p.id === rec.plantId);
         if (!plant) return null;
@@ -42,7 +44,7 @@ export default function WateringCard({ recommendations, plants, onWater }: Props
               style={[styles.btn, { backgroundColor: urgencyColor }]}
               onPress={() => onWater(rec.plantId)}
             >
-              <Text style={styles.btnText}>Fait ✓</Text>
+              <Text style={styles.btnText}>{t('home.wateringDone')}</Text>
             </TouchableOpacity>
           </View>
         );

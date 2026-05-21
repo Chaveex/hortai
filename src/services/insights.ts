@@ -1,7 +1,12 @@
 import { GardenMetrics, Predictions, GardenInsight, UserProfile } from '../types';
+import i18next from '../i18n/config';
 
 function generateId(): string {
   return Math.random().toString(36).slice(2, 11) + Date.now().toString(36);
+}
+
+function t(key: string, options?: Record<string, any>): string {
+  return i18next.t(key, options) as string;
 }
 
 /**
@@ -23,9 +28,9 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'productivity',
       priority: 'high',
-      title: 'Commencez votre jardin',
-      description: 'Vous n\'avez pas encore planté de plants. Commencez par des espèces faciles comme la tomate ou la laitue.',
-      actionItems: ['Sélectionnez un emplacement ensoleillé', 'Préparez le sol', 'Choisissez vos premières plants'],
+      title: t('insights.startGarden'),
+      description: t('insights.startGardenDesc'),
+      actionItems: [t('insights.actions.selectLocation'), t('insights.actions.prepareSoil'), t('insights.actions.choosePlants')],
       generatedAt: now,
     });
   } else if (metrics.averageProductivityScore > 80) {
@@ -33,9 +38,9 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'productivity',
       priority: 'low',
-      title: 'Très bon rendement',
-      description: `Votre jardin est très productif (score: ${metrics.averageProductivityScore}/100). Continuez vos pratiques actuelles!`,
-      actionItems: ['Documentez vos succès', 'Envisagez d\'augmenter la superficie'],
+      title: t('insights.highProductivity'),
+      description: t('insights.highProductivityDesc', { score: metrics.averageProductivityScore }),
+      actionItems: [t('insights.actions.documentSuccess'), t('insights.actions.increaseSize')],
       generatedAt: now,
     });
   } else if (metrics.averageProductivityScore < 50) {
@@ -43,13 +48,13 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'productivity',
       priority: 'high',
-      title: 'Faible rendement',
-      description: `Votre productivité est faible (score: ${metrics.averageProductivityScore}/100). Analysez les plantes les moins performantes.`,
+      title: t('insights.lowProductivity'),
+      description: t('insights.lowProductivityDesc', { score: metrics.averageProductivityScore }),
       affectedPlants: metrics.leastProductivePlants.map(p => p.plantId),
       actionItems: [
-        'Améliorez les conditions d\'arrosage',
-        'Fertilisez les plantes faibles',
-        'Envisagez de remplacer les espèces non adaptées',
+        t('insights.actions.improveWatering'),
+        t('insights.actions.fertilizePlants'),
+        t('insights.actions.replaceSpecies'),
       ],
       generatedAt: now,
     });
@@ -60,9 +65,9 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'productivity',
       priority: 'low',
-      title: 'Production en hausse',
-      description: 'Votre production mensuelle est en augmentation. C\'est un excellent signe!',
-      actionItems: ['Continuez vos efforts', 'Envisagez d\'adapter vos rotations culturales'],
+      title: t('insights.productionUp'),
+      description: t('insights.productionUpDesc'),
+      actionItems: [t('insights.actions.continueEfforts'), t('insights.actions.adjustRotations')],
       generatedAt: now,
     });
   } else if (metrics.monthlyProductionTrend === 'down') {
@@ -70,12 +75,12 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'productivity',
       priority: 'medium',
-      title: 'Production en baisse',
-      description: 'Votre production mensuelle diminue. Cela peut être saisonnier ou due à des problèmes de culture.',
+      title: t('insights.productionDown'),
+      description: t('insights.productionDownDesc'),
       actionItems: [
-        'Vérifiez les conditions météorologiques',
-        'Inspectez les plantes pour détecter des maladies',
-        'Ajustez la fertilisation',
+        t('insights.actions.checkWeather'),
+        t('insights.actions.inspectPests'),
+        t('insights.actions.adjustFertilizer'),
       ],
       generatedAt: now,
     });
@@ -88,13 +93,13 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'health',
       priority: 'high',
-      title: 'Santé du jardin compromise',
-      description: `La santé générale est faible (score: ${metrics.averageHealthScore}/100). Les plantes peuvent être en stress.`,
+      title: t('insights.poorHealth'),
+      description: t('insights.poorHealthDesc', { score: metrics.averageHealthScore }),
       affectedPlants: metrics.leastProductivePlants.map(p => p.plantId),
       actionItems: [
-        'Assurez un arrosage régulier et adapté',
-        'Inspectez pour déceler des ravageurs ou maladies',
-        'Améliorez l\'aération du jardin',
+        t('insights.actions.ensureWatering'),
+        t('insights.actions.inspectHealth'),
+        t('insights.actions.improveAeration'),
       ],
       generatedAt: now,
     });
@@ -103,9 +108,9 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'health',
       priority: 'low',
-      title: 'Jardin en bon état de santé',
-      description: `Vos plants sont en excellente santé (score: ${metrics.averageHealthScore}/100). Maintenez vos pratiques.`,
-      actionItems: ['Continuez la surveillance régulière', 'Documentez vos bonnes pratiques'],
+      title: t('insights.goodHealth'),
+      description: t('insights.goodHealthDesc', { score: metrics.averageHealthScore }),
+      actionItems: [t('insights.actions.regularMonitoring'), t('insights.actions.documentSuccess')],
       generatedAt: now,
     });
   }
@@ -117,9 +122,9 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'efficiency',
       priority: 'low',
-      title: 'Excellente efficacité hydrique',
-      description: `Vous utilisez l'eau très efficacement (${metrics.overallWaterEfficiency.toFixed(2)} kg/L). Bravo!`,
-      actionItems: ['Partagez vos techniques d\'arrosage', 'Envisagez de cultiver plus de plantes'],
+      title: t('insights.highWaterEfficiency'),
+      description: t('insights.highWaterEfficiencyDesc', { efficiency: metrics.overallWaterEfficiency.toFixed(2) }),
+      actionItems: [t('insights.actions.shareTechniques'), t('insights.actions.increaseSize')],
       generatedAt: now,
     });
   } else if (metrics.overallWaterEfficiency < 0.1) {
@@ -127,12 +132,12 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'efficiency',
       priority: 'high',
-      title: 'Faible efficacité hydrique',
-      description: `Vous utilisez beaucoup d'eau pour peu de production (${metrics.overallWaterEfficiency.toFixed(2)} kg/L).`,
+      title: t('insights.lowWaterEfficiency'),
+      description: t('insights.lowWaterEfficiencyDesc', { efficiency: metrics.overallWaterEfficiency.toFixed(2) }),
       actionItems: [
-        'Installez un système de goutte-à-goutte',
-        'Paillez davantage pour conserver l\'humidité',
-        profile?.gardeningStyle !== 'permaculture' ? 'Envisagez la permaculture' : 'Renforcez les techniques de permaculture',
+        t('insights.actions.drip'),
+        t('insights.actions.mulch'),
+        profile?.gardeningStyle !== 'permaculture' ? t('insights.actions.permaculture') : t('insights.actions.strengthenPermaculture'),
       ],
       generatedAt: now,
     });
@@ -146,9 +151,9 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'seasonal',
       priority: 'low',
-      title: 'Excellente saison',
-      description: 'Vous avez une très bonne production saisonnière. Les conditions sont optimales.',
-      actionItems: ['Notez vos techniques réussies pour l\'année prochaine'],
+      title: t('insights.excellentSeason'),
+      description: t('insights.excellentSeasonDesc'),
+      actionItems: [t('insights.actions.documentSuccess')],
       generatedAt: now,
     });
   } else if (seasonalProd < 30) {
@@ -156,11 +161,11 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'seasonal',
       priority: 'medium',
-      title: 'Production saisonnière faible',
-      description: 'Votre production de cette saison est inférieure à la normale.',
+      title: t('insights.poorSeason'),
+      description: t('insights.poorSeasonDesc'),
       actionItems: [
-        'Vérifiez si c\'est dû à des facteurs météorologiques',
-        'Envisagez d\'ajuster les variétés plantées',
+        t('insights.actions.checkWeather'),
+        t('insights.actions.adjustRotations'),
       ],
       generatedAt: now,
     });
@@ -174,8 +179,8 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'risk',
       priority: 'high',
-      title: `${highRisks.length} risque(s) de santé détecté(s)`,
-      description: `${highRisks.length} plante(s) présentent des risques élevés pour leur santé.`,
+      title: t('insights.healthRisks', { count: highRisks.length }),
+      description: t('insights.healthRisksDesc', { count: highRisks.length }),
       affectedPlants: highRisks.map(r => r.plantId),
       actionItems: highRisks.map(r => `${r.plantName}: ${r.mitigation}`).slice(0, 3),
       generatedAt: now,
@@ -194,13 +199,13 @@ export function generateGardenInsights(
         id: generateId(),
         category: 'opportunity',
         priority: 'medium',
-        title: 'Récolte imminente',
-        description: `La plante "${nearestHarvest.plantName}" devrait être prête à récolter dans ${daysUntilHarvest} jour(s).`,
+        title: t('insights.imminent'),
+        description: t('insights.imminentDesc', { plantName: nearestHarvest.plantName, days: daysUntilHarvest }),
         affectedPlants: [nearestHarvest.plantId],
         actionItems: [
-          'Préparez vos contenants de récolte',
-          'Vérifiez la maturité de la plante',
-          'Planifiez votre utilisation de la récolte',
+          t('insights.actions.prepareHarvest'),
+          t('insights.actions.checkMaturity'),
+          t('insights.actions.planHarvest'),
         ],
         generatedAt: now,
       });
@@ -214,13 +219,13 @@ export function generateGardenInsights(
         id: generateId(),
         category: 'opportunity',
         priority: 'low',
-        title: 'Plante vedette à reproduire',
-        description: `La plante "${topPlant.plantName}" est exceptionnellement productive. Envisagez de cultiver plus cette variété.`,
+        title: t('insights.starPlant'),
+        description: t('insights.starPlantDesc', { plantName: topPlant.plantName }),
         affectedPlants: [topPlant.plantId],
         actionItems: [
-          'Collectez les graines ou boutures',
-          'Documentez les conditions de culture de cette plante',
-          'Envisagez une rotation avec cette espèce',
+          t('insights.actions.collectSeeds'),
+          t('insights.actions.documentPlant'),
+          t('insights.actions.rotationPlan'),
         ],
         generatedAt: now,
       });
@@ -234,12 +239,12 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'efficiency',
       priority: 'medium',
-      title: 'Haute consommation d\'eau prévue',
-      description: `Vous aurez besoin d'environ ${weeklyWater}L d'eau la semaine prochaine.`,
+      title: t('insights.highWaterUsage'),
+      description: t('insights.highWaterUsageDesc', { liters: weeklyWater }),
       actionItems: [
-        'Préparez suffisamment d\'eau',
-        'Envisagez un système d\'arrosage automatique',
-        'Augmentez le paillage pour réduire les besoins',
+        t('insights.actions.prepareWater'),
+        t('insights.actions.autoWatering'),
+        t('insights.actions.increaseMulch'),
       ],
       generatedAt: now,
     });
@@ -251,12 +256,12 @@ export function generateGardenInsights(
       id: generateId(),
       category: 'opportunity',
       priority: 'low',
-      title: 'Transition vers permaculture?',
-      description: 'Vous pourriez améliorer votre efficacité hydrique en adoptant des techniques de permaculture.',
+      title: t('insights.permacultureSuggestion'),
+      description: t('insights.permacultureSuggestionDesc'),
       actionItems: [
-        'Apprenez les principes de permaculture',
-        'Testez le paillage épais',
-        'Expérimentez l\'association de plantes',
+        t('insights.actions.learnPermaculture'),
+        t('insights.actions.testMulching'),
+        t('insights.actions.experimentAssociations'),
       ],
       generatedAt: now,
     });

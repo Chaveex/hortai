@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { differenceInDays, parseISO, format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import { Plant, WateringRecommendation } from '../types';
 import { getPlantInfo, getGrowthStage } from '../constants/plants';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
+import { getDateLocale } from '../utils/dateLocale';
 
 interface Props {
   plant: Plant;
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function PlantCard({ plant, recommendation, onPress, onWater }: Props) {
+  const { t, i18n } = useTranslation();
   const info = getPlantInfo(plant.type);
   const daysSincePlanting = differenceInDays(new Date(), parseISO(plant.plantedDate));
   const stage = getGrowthStage(daysSincePlanting, plant.type);
@@ -37,7 +39,7 @@ export default function PlantCard({ plant, recommendation, onPress, onWater }: P
           </View>
           {wateredToday ? (
             <View style={styles.waterBtnDone}>
-              <Text style={styles.waterBtnTextDone}>✓ Arrosé</Text>
+              <Text style={styles.waterBtnTextDone}>{t('plants.watered')}</Text>
             </View>
           ) : (
             <TouchableOpacity
@@ -51,29 +53,29 @@ export default function PlantCard({ plant, recommendation, onPress, onWater }: P
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
               <Text style={[styles.waterBtnText, !shouldWater && styles.waterBtnTextIdle]}>
-                💧 {shouldWater ? 'Arroser' : 'J\'ai arrosé'}
+                💧 {shouldWater ? t('plants.water_action') : t('plants.mark_watered')}
               </Text>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.meta}>
-          <MetaItem label="Planté le" value={format(parseISO(plant.plantedDate), 'd MMM yyyy', { locale: fr })} />
-          <MetaItem label="Âge" value={`${daysSincePlanting}j`} />
+          <MetaItem label={t('plants.planted')} value={format(parseISO(plant.plantedDate), 'd MMM yyyy', { locale: getDateLocale(i18n.language) })} />
+          <MetaItem label={t('plants.age')} value={`${daysSincePlanting}j`} />
           {plant.lastWatered && (
             <MetaItem
-              label="Dernier arrosage"
-              value={format(parseISO(plant.lastWatered), 'd MMM', { locale: fr })}
+              label={t('plants.lastWatered')}
+              value={format(parseISO(plant.lastWatered), 'd MMM', { locale: getDateLocale(i18n.language) })}
             />
           )}
           {recommendation && (
             <MetaItem
-              label="Prochaine eau"
-              value={format(parseISO(recommendation.nextWateringDate), 'd MMM', { locale: fr })}
+              label={t('plants.nextWatering')}
+              value={format(parseISO(recommendation.nextWateringDate), 'd MMM', { locale: getDateLocale(i18n.language) })}
             />
           )}
           <MetaItem
-            label="Quantité"
+            label={t('plants.amount')}
             value={`💧 ${recommendation ? recommendation.amount.toFixed(1) : info.dailyWaterNeed.toFixed(1)} L/m²`}
           />
         </View>
