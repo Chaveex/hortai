@@ -1,0 +1,488 @@
+{
+  "tomato": {
+    "name": "Tomato",
+    "tips": {
+      "permaculture": "Mulch generously at the base to retain moisture and naturally fertilize.",
+      "conventionnel": "Water regularly at the base, never on leaves to prevent disease.",
+      "naturel": "Use mature compost and nettle tea to strengthen plants.",
+      "industriel": "Apply NPK fertilizer rich in potassium during flowering."
+    },
+    "commonIssues": ["Late blight", "Botrytis", "Calcium deficiency"],
+    "seasonalAdvice": {
+      "spring": "Plant after the last frost date. Protect from late frosts.",
+      "summer": "Monitor watering during heat waves. Prune suckers.",
+      "autumn": "Harvest before first frost. Make preserves.",
+      "winter": "Plan rotations. Order seeds."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost in spring, nettle tea every 2 weeks during growth",
+      "industriel": "Growth fertilizer at start of season, flowering fertilizer from first flowers"
+    }
+  },
+  "pepper": {
+    "name": "Pepper",
+    "tips": {
+      "permaculture": "Pair with basil which repels aphids.",
+      "conventionnel": "Requires heat and sun. Water regularly without excess.",
+      "naturel": "Comfrey tea promotes flowering and fruiting.",
+      "industriel": "Special pepper fertilizer rich in potassium and phosphorus."
+    },
+    "commonIssues": ["Fruit rot", "Aphids"],
+    "seasonalAdvice": {
+      "spring": "Start indoors in February. Transplant mid-May after frost.",
+      "summer": "Water more frequently during intense heat.",
+      "autumn": "Harvest before frost.",
+      "winter": "Store in cool cellar or freeze."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Comfrey tea every 3 weeks",
+      "industriel": "NPK 15-15-15 fertilizer monthly"
+    }
+  },
+  "zucchini": {
+    "name": "Zucchini",
+    "tips": {
+      "permaculture": "Excellent ground cover to smother weeds. Integrate into raised beds.",
+      "conventionnel": "Water abundantly and regularly to prevent bitterness.",
+      "naturel": "Abundant compost at base. Nettle tea if yellowing.",
+      "industriel": "Nitrogen fertilizer at start of growth."
+    },
+    "commonIssues": ["Powdery mildew", "Flower rot"],
+    "seasonalAdvice": {
+      "spring": "Sow in pots in April, transplant mid-May.",
+      "summer": "Harvest young (15-20 cm) for continuous production.",
+      "autumn": "Frost will end production.",
+      "winter": "Prepare a compost bin for next season."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Abundant compost at planting, nettle tea monthly",
+      "industriel": "Slow-release granular fertilizer at start of season"
+    }
+  },
+  "cucumber": {
+    "name": "Cucumber",
+    "tips": {
+      "permaculture": "Guide on willow or bamboo trellis to save space.",
+      "conventionnel": "Water daily. Guide on trellis.",
+      "naturel": "Nettle tea every 2 weeks for vigor.",
+      "industriel": "Balanced fertilizer then potassium-rich at flowering."
+    },
+    "commonIssues": ["Powdery mildew", "Spider mites in dry weather"],
+    "seasonalAdvice": {
+      "spring": "Sow under cover in April.",
+      "summer": "Prune aerial parts after 6-8 leaves. Harvest often.",
+      "autumn": "Final harvests before frost.",
+      "winter": "Disinfect greenhouse if used."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Nettle tea every 2 weeks",
+      "industriel": "Weekly liquid tomato/cucumber fertilizer"
+    }
+  },
+  "lettuce": {
+    "name": "Lettuce",
+    "tips": {
+      "permaculture": "Perfect under tomatoes to benefit from summer shade.",
+      "conventionnel": "Water in morning to prevent leaf diseases.",
+      "naturel": "Compost tea promotes rapid growth.",
+      "industriel": "Nitrogen fertilizer for nice full heads."
+    },
+    "commonIssues": ["Slugs", "Bolting in heat"],
+    "seasonalAdvice": {
+      "spring": "Sow from March under cover, then outdoors from April.",
+      "summer": "Choose heat-resistant varieties. Water early morning.",
+      "autumn": "Good season for lettuce. Protect with row cover end of season.",
+      "winter": "Grow under tunnels or in greenhouse."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Light compost at planting, that's enough",
+      "industriel": "Diluted nitrogen fertilizer (20-0-0) at planting"
+    }
+  },
+  "carrot": {
+    "name": "Carrot",
+    "tips": {
+      "permaculture": "Sow with onion to repel carrot rust fly.",
+      "conventionnel": "Deep loose soil, no stones. Avoid fresh manure.",
+      "naturel": "Carrot needs no fertilizer. Light soil enough.",
+      "industriel": "Avoid nitrogen fertilizers. Favor potassium and phosphorus."
+    },
+    "commonIssues": ["Carrot rust fly", "Alternaria"],
+    "seasonalAdvice": {
+      "spring": "Sow from March directly in place. Mix seeds with sand.",
+      "summer": "Water deeply but rarely.",
+      "autumn": "Harvest before hard frost or mulch to store in ground.",
+      "winter": "Store in sand in cool place."
+    },
+    "fertilizerSchedule": {
+      "naturel": "No fertilizer, soil prepared with mature compost previous fall",
+      "industriel": "Potassium fertilizer only if soil very poor"
+    }
+  },
+  "radish": {
+    "name": "Radish",
+    "tips": {
+      "permaculture": "Sow at edges or between crops to mark rows.",
+      "conventionnel": "Fast growth. Harvest young to avoid hollowing and bitterness.",
+      "naturel": "Almost self-sufficient. Light compost layer enough.",
+      "industriel": "Minimal fertilizer, excess nitrogen gives leaves not roots."
+    },
+    "commonIssues": ["Flea beetles", "Snails"],
+    "seasonalAdvice": {
+      "spring": "First crop from March. Ideal as intercrop.",
+      "summer": "Avoid intense heat periods (rapid bolting).",
+      "autumn": "Excellent fall crop. Good flavor in cool weather.",
+      "winter": "Winter radishes (Daikon type) resist cold."
+    },
+    "fertilizerSchedule": {
+      "naturel": "No fertilizer necessary",
+      "industriel": "No fertilizer recommended"
+    }
+  },
+  "beans": {
+    "name": "Beans",
+    "tips": {
+      "permaculture": "Nitrogen fixer. Plant with corn and zucchini (the three sisters).",
+      "conventionnel": "Don't water too much. Beans dislike wet feet.",
+      "naturel": "Rhizobium inoculant to maximize atmospheric nitrogen fixation.",
+      "industriel": "Little fertilizer needed thanks to natural nitrogen fixation."
+    },
+    "commonIssues": ["Anthracnose", "Black aphids"],
+    "seasonalAdvice": {
+      "spring": "Sow after last frost (late May). Soil must be warm.",
+      "summer": "Harvest young and often to extend production.",
+      "autumn": "Let some pods mature for seeds.",
+      "winter": "Store dry seeds for next year."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Rhizobium inoculant at planting, no extra fertilizer",
+      "industriel": "Low nitrogen starter fertilizer only"
+    }
+  },
+  "peas": {
+    "name": "Peas",
+    "tips": {
+      "permaculture": "Nitrogen-fixing legume. Ideal winter/spring crop.",
+      "conventionnel": "Tolerate cold well. Water moderately.",
+      "naturel": "Nettle tea if leaves yellow.",
+      "industriel": "Little nitrogen fertilizer due to natural fixation."
+    },
+    "commonIssues": ["Powdery mildew", "Pea weevil"],
+    "seasonalAdvice": {
+      "spring": "Sow from March-April directly in place.",
+      "summer": "Heat ends production. Harvest before.",
+      "autumn": "Fall sowing for spring harvest.",
+      "winter": "Plants resist light frost."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Light compost, rhizobium inoculant recommended",
+      "industriel": "Phosphate fertilizer only"
+    }
+  },
+  "basil": {
+    "name": "Basil",
+    "tips": {
+      "permaculture": "Excellent tomato companion. Repels pests.",
+      "conventionnel": "Pinch off flowers to extend leaf production.",
+      "naturel": "Garlic infusion against aphids. No strong fertilizer.",
+      "industriel": "Light foliar fertilizer if leaf yellowing."
+    },
+    "commonIssues": ["Botrytis", "Aphids", "Frost sensitive"],
+    "seasonalAdvice": {
+      "spring": "Sow indoors from April. Transplant after frost.",
+      "summer": "Good production. Pinch flowers regularly.",
+      "autumn": "Bring plants indoors before frost.",
+      "winter": "Indoor culture possible on sunny windowsill."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost tea monthly",
+      "industriel": "Diluted foliar fertilizer every 3 weeks"
+    }
+  },
+  "parsley": {
+    "name": "Parsley",
+    "tips": {
+      "permaculture": "Excellent garden border. Attracts beneficial insects.",
+      "conventionnel": "Slow germination. Soak seeds 24h before sowing.",
+      "naturel": "Undemanding. Small amount of compost sufficient.",
+      "industriel": "Light nitrogen fertilizer for nice green color."
+    },
+    "commonIssues": ["Celery fly", "Lodging in wet weather"],
+    "seasonalAdvice": {
+      "spring": "Sow from March. Soak seeds 24h before to speed germination.",
+      "summer": "Cut regularly to stimulate regrowth.",
+      "autumn": "Resists light frost. Continue harvesting.",
+      "winter": "Protect with row cover."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost at planting, nothing else",
+      "industriel": "Diluted universal fertilizer once monthly"
+    }
+  },
+  "mint": {
+    "name": "Mint",
+    "tips": {
+      "permaculture": "Plant in buried pot as very invasive. Repels pests.",
+      "conventionnel": "Contain in pot or border. Water regularly.",
+      "naturel": "Very hardy. Almost no fertilizer needed.",
+      "industriel": "Minimal fertilizer, excess nitrogen reduces intensity."
+    },
+    "commonIssues": ["Mint rust"],
+    "seasonalAdvice": {
+      "spring": "Divide clumps to multiply. Ideal period.",
+      "summer": "Water to prevent drying.",
+      "autumn": "Cut back to 10 cm. Plant regrows in spring.",
+      "winter": "Dormancy. Protect in pot in cold zones."
+    },
+    "fertilizerSchedule": {
+      "naturel": "No fertilizer necessary",
+      "industriel": "No fertilizer recommended"
+    }
+  },
+  "strawberry": {
+    "name": "Strawberry",
+    "tips": {
+      "permaculture": "Mulch with straw to protect fruit and retain moisture.",
+      "conventionnel": "Drip irrigate to prevent disease.",
+      "naturel": "Leaf compost. Comfrey tea during flowering.",
+      "industriel": "Special strawberry fertilizer rich in potassium."
+    },
+    "commonIssues": ["Botrytis", "Powdery mildew", "Aphids", "Slugs"],
+    "seasonalAdvice": {
+      "spring": "Plant new plants. Remove flowers first year.",
+      "summer": "Harvest regularly. Remove runners except for propagation.",
+      "autumn": "Clean old leaves. Mulch for winter.",
+      "winter": "Protect in severe cold."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost at planting, comfrey tea monthly during flowering",
+      "industriel": "Granular strawberry fertilizer spring and fall"
+    }
+  },
+  "potato": {
+    "name": "Potato",
+    "tips": {
+      "permaculture": "Culture possible under thick mulch without digging (straw culture).",
+      "conventionnel": "Hill regularly to increase production.",
+      "naturel": "Horsetail decoction prevents late blight.",
+      "industriel": "Potato-specific fertilizer rich in potassium."
+    },
+    "commonIssues": ["Late blight", "Colorado potato beetle", "Common scab"],
+    "seasonalAdvice": {
+      "spring": "Plant sprouted seed potatoes March-April per climate.",
+      "summer": "Water abundantly. Hill one last time. Monitor blight.",
+      "autumn": "Harvest in dry weather. Store in cool dark cellar.",
+      "winter": "Prepare seed potatoes by setting to sprout in January."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Mature compost at hilling time",
+      "industriel": "Potato NPK 10-10-20 at planting"
+    }
+  },
+  "onion": {
+    "name": "Onion",
+    "tips": {
+      "permaculture": "Excellent carrot companion. Repels carrot rust fly.",
+      "conventionnel": "Reduce watering late in season to promote drying.",
+      "naturel": "Undemanding. 3-4 year rotation required.",
+      "industriel": "Potassium-rich fertilizer for nice bulbs."
+    },
+    "commonIssues": ["Onion blight", "Onion fly", "Botrytis"],
+    "seasonalAdvice": {
+      "spring": "Plant sets from March when soil warms.",
+      "summer": "Let tops fall over, sign of maturity.",
+      "autumn": "Harvest and dry indoors.",
+      "winter": "Store braided in dry airy place."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Light compost at planting",
+      "industriel": "Potassium fertilizer during growth"
+    }
+  },
+  "garlic": {
+    "name": "Garlic",
+    "tips": {
+      "permaculture": "Excellent natural repellent. Plant at garden border.",
+      "conventionnel": "Plant cloves point up. Little water needed.",
+      "naturel": "Well-drained soil. Few inputs needed.",
+      "industriel": "Avoid nitrogen fertilizers that promote disease."
+    },
+    "commonIssues": ["Garlic rust", "White rot"],
+    "seasonalAdvice": {
+      "spring": "Fall-planted garlic in full growth. Stop watering.",
+      "summer": "Harvest when tops yellow and fall over.",
+      "autumn": "Ideal planting October-November for July harvest.",
+      "winter": "Garlic resists frost well. Little maintenance."
+    },
+    "fertilizerSchedule": {
+      "naturel": "No fertilizer necessary",
+      "industriel": "Minimal potassium fertilizer in March"
+    }
+  },
+  "leek": {
+    "name": "Leek",
+    "tips": {
+      "permaculture": "Pair with carrots to repel each other's pests.",
+      "conventionnel": "Transplant 15-20 cm deep for nice white shanks.",
+      "naturel": "Compost at planting. Regular watering.",
+      "industriel": "Nitrogen fertilizer to promote shank development."
+    },
+    "commonIssues": ["Leek moth", "Rust"],
+    "seasonalAdvice": {
+      "spring": "Sow March-April. Transplant June.",
+      "summer": "Regular watering in heat.",
+      "autumn": "Begin harvests. Cold improves flavor.",
+      "winter": "Frost resistant. Harvest as needed until spring."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost at transplant, nettle tea monthly",
+      "industriel": "Nitrogen fertilizer at transplant and mid-growth"
+    }
+  },
+  "spinach": {
+    "name": "Spinach",
+    "tips": {
+      "permaculture": "Short-season crop ideal for filling gaps.",
+      "conventionnel": "Spring and fall crop. Avoid heat.",
+      "naturel": "Compost tea for intense green color.",
+      "industriel": "Nitrogen fertilizer for well-developed leaves."
+    },
+    "commonIssues": ["Bolting", "Mildew"],
+    "seasonalAdvice": {
+      "spring": "Sow from March. Rapid harvest before heat.",
+      "summer": "Avoid, bolts quickly in heat.",
+      "autumn": "Excellent fall crop until frost.",
+      "winter": "Row cover to extend harvest."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Light compost at planting",
+      "industriel": "Liquid nitrogen fertilizer at planting"
+    }
+  },
+  "chard": {
+    "name": "Chard",
+    "tips": {
+      "permaculture": "Very productive. Let some plants bolt for self-seeding.",
+      "conventionnel": "Water regularly. Harvest leaf by leaf.",
+      "naturel": "Abundant compost. Very disease resistant.",
+      "industriel": "Nitrogen fertilizer for big beautiful leaves."
+    },
+    "commonIssues": ["Cercospora", "Aphids"],
+    "seasonalAdvice": {
+      "spring": "Sow in place from April.",
+      "summer": "Abundant production. Harvest regularly.",
+      "autumn": "Resists early frost well.",
+      "winter": "Row cover to extend harvest."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost at planting, nettle tea monthly",
+      "industriel": "Universal fertilizer monthly"
+    }
+  },
+  "beet": {
+    "name": "Beet",
+    "tips": {
+      "permaculture": "Tops are edible. Let some plants bolt for self-seeding.",
+      "conventionnel": "Thin to 10 cm for nice round roots.",
+      "naturel": "Mature compost at planting. Undemanding.",
+      "industriel": "Avoid nitrogen fertilizers favoring tops over roots."
+    },
+    "commonIssues": ["Cercospora", "Black bean aphids"],
+    "seasonalAdvice": {
+      "spring": "Direct sow from April. Deep loose soil.",
+      "summer": "Water regularly to prevent splitting.",
+      "autumn": "Harvest before hard frost. Store in sand.",
+      "winter": "Store in cool cellar in moist sand."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost at planting, that's enough",
+      "industriel": "Light potassium fertilizer during growth"
+    }
+  },
+  "broccoli": {
+    "name": "Broccoli",
+    "tips": {
+      "permaculture": "Flowers attract pollinators. Pair with borage.",
+      "conventionnel": "Harvest central head before flowers open. Side heads regrow.",
+      "naturel": "Nettle tea every 3 weeks. Avoid excess nitrogen.",
+      "industriel": "Nitrogen at transplant, then phosphorus and potassium at head formation."
+    },
+    "commonIssues": ["Cabbage white", "Mealy cabbage aphid", "Clubroot"],
+    "seasonalAdvice": {
+      "spring": "Sow March under cover. Transplant May.",
+      "summer": "Water abundantly. Watch for caterpillars.",
+      "autumn": "Excellent fall crop. Cold improves flavor.",
+      "winter": "Protect with row cover in hard frost."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Rich compost at transplant, nettle tea monthly",
+      "industriel": "Brassica fertilizer at transplant and mid-growth"
+    }
+  },
+  "corn": {
+    "name": "Corn",
+    "tips": {
+      "permaculture": "Pair with beans and zucchini (three sisters). Corn supports beans.",
+      "conventionnel": "Plant in square blocks (min 4x4) for good wind pollination.",
+      "naturel": "Nettle tea and abundant compost. Hungry plant.",
+      "industriel": "Nitrogen early growth, potassium before flowering."
+    },
+    "commonIssues": ["Corn borer", "Corn earworm", "Aphids"],
+    "seasonalAdvice": {
+      "spring": "Sow under cover in April, transplant mid-May when warm (>12°C).",
+      "summer": "Water abundantly especially during flowering and ear formation.",
+      "autumn": "Harvest when kernels fully formed and silks brown.",
+      "winter": "Chop stalks for compost or mulch."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Very abundant compost at planting, nettle tea every 2 weeks",
+      "industriel": "Nitrogen (30-0-0) during growth, complete fertilizer at flowering"
+    }
+  },
+  "sunflower": {
+    "name": "Sunflower",
+    "tips": {
+      "permaculture": "Attracts pollinators and birds. Excellent natural windbreak.",
+      "conventionnel": "Face sun. Stake tall varieties against wind.",
+      "naturel": "Very hardy. Little compost enough. Avoid excess nitrogen.",
+      "industriel": "Potassium and phosphate for nice heads, avoid nitrogen."
+    },
+    "commonIssues": ["Sclerotinia", "Birds eating seeds", "Slugs on seedlings"],
+    "seasonalAdvice": {
+      "spring": "Direct sow May when frost danger passed. Sunny soil.",
+      "summer": "Water regularly but not excessive. Plant tolerates drought.",
+      "autumn": "Harvest heads when seeds detach easily. Dry before storage.",
+      "winter": "Leave some heads for birds or harvest seeds for next year."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Light compost at planting, no extra fertilizer",
+      "industriel": "Phospho-potassium fertilizer only at early flowering"
+    }
+  },
+  "other": {
+    "name": "Other plant",
+    "tips": {
+      "permaculture": "Observe plant's natural needs and integrate into your ecosystem.",
+      "conventionnel": "Adjust watering to your plant's specific needs.",
+      "naturel": "Compost and nettle tea suit most plants.",
+      "industriel": "Balanced universal fertilizer per manufacturer instructions."
+    },
+    "commonIssues": ["Varies by plant"],
+    "seasonalAdvice": {
+      "spring": "Ideal time to plant most vegetation.",
+      "summer": "Increase watering in hot dry weather.",
+      "autumn": "Prepare plant for winter.",
+      "winter": "Protect from frost if needed."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Universal compost monthly",
+      "industriel": "Universal fertilizer per manufacturer instructions"
+    }
+  },
+  "growthStages": {
+    "germination": "Germination",
+    "seedling": "Seedling",
+    "vegetative": "Vegetative",
+    "flowering": "Flowering/Harvest"
+  }
+}

@@ -1,0 +1,488 @@
+{
+  "tomato": {
+    "name": "Tomate",
+    "tips": {
+      "permaculture": "Acolcha abundantemente al pie para conservar humedad y fertilizar naturalmente.",
+      "conventionnel": "Riega regularmente al pie, nunca sobre las hojas para evitar enfermedades.",
+      "naturel": "Usa compost maduro y té de ortiga para fortalecer las plantas.",
+      "industriel": "Aplica fertilizante NPK rico en potasio durante la floración."
+    },
+    "commonIssues": ["Tizón tardío", "Botrytis", "Deficiencia de calcio"],
+    "seasonalAdvice": {
+      "spring": "Planta después de la última helada. Protege de heladas tardías.",
+      "summer": "Monitorea el riego durante olas de calor. Poda los chupones.",
+      "autumn": "Cosecha antes de la primera helada. Haz conservas.",
+      "winter": "Planifica rotaciones. Encarga semillas."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost en primavera, té de ortiga cada 2 semanas durante crecimiento",
+      "industriel": "Fertilizante de crecimiento al inicio, fertilizante de floración desde primeras flores"
+    }
+  },
+  "pepper": {
+    "name": "Pimiento",
+    "tips": {
+      "permaculture": "Combina con albahaca que repele pulgones.",
+      "conventionnel": "Requiere calor y sol. Riega regularmente sin exceso.",
+      "naturel": "Té de consuelda favorece floración y fructificación.",
+      "industriel": "Fertilizante especial para pimiento rico en potasio y fósforo."
+    },
+    "commonIssues": ["Pudrición de frutos", "Pulgones"],
+    "seasonalAdvice": {
+      "spring": "Comienza en interiores en febrero. Trasplanta a mediados de mayo después de helada.",
+      "summer": "Riega más frecuentemente durante calor intenso.",
+      "autumn": "Cosecha antes de heladas.",
+      "winter": "Almacena en bodega fresca o congela."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Té de consuelda cada 3 semanas",
+      "industriel": "Fertilizante NPK 15-15-15 mensual"
+    }
+  },
+  "zucchini": {
+    "name": "Calabacín",
+    "tips": {
+      "permaculture": "Excelente cobertura de suelo para sofocante malezas. Integra en bancales.",
+      "conventionnel": "Riega abundantemente y regularmente para evitar amargura.",
+      "naturel": "Compost abundante al pie. Té de ortiga si amarillea.",
+      "industriel": "Fertilizante nitrogenado al inicio del crecimiento."
+    },
+    "commonIssues": ["Oídio", "Pudrición floral"],
+    "seasonalAdvice": {
+      "spring": "Siembra en maceta en abril, trasplanta a mediados de mayo.",
+      "summer": "Cosecha joven (15-20 cm) para producción continua.",
+      "autumn": "Las heladas terminarán la producción.",
+      "winter": "Prepara una pila de compost para próxima temporada."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost abundante al plantar, té de ortiga mensual",
+      "industriel": "Fertilizante granular de liberación lenta al inicio"
+    }
+  },
+  "cucumber": {
+    "name": "Pepino",
+    "tips": {
+      "permaculture": "Guía sobre enrejado de sauce o bambú para ahorrar espacio.",
+      "conventionnel": "Riega diariamente. Guía sobre enrejado.",
+      "naturel": "Té de ortiga cada 2 semanas para vigor.",
+      "industriel": "Fertilizante equilibrado luego rico en potasio en floración."
+    },
+    "commonIssues": ["Oídio", "Ácaros en clima seco"],
+    "seasonalAdvice": {
+      "spring": "Siembra bajo cubierta en abril.",
+      "summer": "Poda partes aéreas después de 6-8 hojas. Cosecha frecuentemente.",
+      "autumn": "Últimas cosechas antes de heladas.",
+      "winter": "Desinfecta invernadero si se usa."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Té de ortiga cada 2 semanas",
+      "industriel": "Fertilizante líquido tomate/pepino semanal"
+    }
+  },
+  "lettuce": {
+    "name": "Lechuga",
+    "tips": {
+      "permaculture": "Perfecta bajo tomates para beneficiarse de sombra estival.",
+      "conventionnel": "Riega por la mañana para evitar enfermedades foliares.",
+      "naturel": "Té de compost promueve crecimiento rápido.",
+      "industriel": "Fertilizante nitrogenado para cogollos bien llenos."
+    },
+    "commonIssues": ["Babosas", "Espigado por calor"],
+    "seasonalAdvice": {
+      "spring": "Siembra desde marzo bajo cubierta, luego al aire libre desde abril.",
+      "summer": "Elige variedades resistentes al calor. Riega temprano por la mañana.",
+      "autumn": "Buena estación para lechugas. Protege con velo al final.",
+      "winter": "Cultiva bajo túneles o en invernadero."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost ligero al plantar, eso es suficiente",
+      "industriel": "Fertilizante nitrogenado diluido (20-0-0) al plantar"
+    }
+  },
+  "carrot": {
+    "name": "Zanahoria",
+    "tips": {
+      "permaculture": "Siembra con cebolla para repeler mosca de la zanahoria.",
+      "conventionnel": "Suelo profundo suelto, sin piedras. Evita estiércol fresco.",
+      "naturel": "Zanahoria no necesita fertilizante. Suelo ligero suficiente.",
+      "industriel": "Evita fertilizantes nitrogenados. Favorece potasio y fósforo."
+    },
+    "commonIssues": ["Mosca de la zanahoria", "Alternaria"],
+    "seasonalAdvice": {
+      "spring": "Siembra desde marzo directamente in situ. Mezcla semillas con arena.",
+      "summer": "Riega profundamente pero raramente.",
+      "autumn": "Cosecha antes de heladas duras o acolcha para almacenar en tierra.",
+      "winter": "Almacena en arena en lugar fresco."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Sin fertilizante, suelo preparado con compost maduro otoño anterior",
+      "industriel": "Fertilizante potásico solo si suelo muy pobre"
+    }
+  },
+  "radish": {
+    "name": "Rábano",
+    "tips": {
+      "permaculture": "Siembra en bordes o entre cultivos para marcar hileras.",
+      "conventionnel": "Crecimiento rápido. Cosecha joven para evitar hueco y amargura.",
+      "naturel": "Casi autosuficiente. Capa ligera de compost suficiente.",
+      "industriel": "Fertilizante mínimo, exceso de nitrógeno da hojas sin raíces."
+    },
+    "commonIssues": ["Pulgas del suelo", "Caracoles"],
+    "seasonalAdvice": {
+      "spring": "Primer cultivo desde marzo. Ideal como intercultivo.",
+      "summer": "Evita períodos de calor intenso (espigado rápido).",
+      "autumn": "Excelente cultivo otoñal. Buen sabor en clima fresco.",
+      "winter": "Rábanos de invierno (tipo Daikon) resisten frío."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Sin fertilizante necesario",
+      "industriel": "Sin fertilizante recomendado"
+    }
+  },
+  "beans": {
+    "name": "Judías",
+    "tips": {
+      "permaculture": "Fijadora de nitrógeno. Planta con maíz y calabacín (las tres hermanas).",
+      "conventionnel": "No riegues demasiado. Las judías no aman los pies mojados.",
+      "naturel": "Inoculante rizobio para maximizar fijación de nitrógeno atmosférico.",
+      "industriel": "Poco fertilizante necesario gracias a fijación natural de nitrógeno."
+    },
+    "commonIssues": ["Antracnosis", "Pulgones negros"],
+    "seasonalAdvice": {
+      "spring": "Siembra después de última helada (finales de mayo). Suelo debe estar cálido.",
+      "summer": "Cosecha joven y frecuentemente para extender producción.",
+      "autumn": "Deja madurar algunas vainas para semillas.",
+      "winter": "Almacena semillas secas para próximo año."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Inoculante rizobio al plantar, sin fertilizante extra",
+      "industriel": "Fertilizante de inicio bajo en nitrógeno solo"
+    }
+  },
+  "peas": {
+    "name": "Guisantes",
+    "tips": {
+      "permaculture": "Leguminosa fijadora de nitrógeno. Cultivo ideal invierno/primavera.",
+      "conventionnel": "Toleran bien el frío. Riega moderadamente.",
+      "naturel": "Té de ortiga si hojas amarillean.",
+      "industriel": "Poco fertilizante nitrogenado debido a fijación natural."
+    },
+    "commonIssues": ["Oídio", "Gorgojo del guisante"],
+    "seasonalAdvice": {
+      "spring": "Siembra desde marzo-abril directamente in situ.",
+      "summer": "El calor termina la producción. Cosecha antes.",
+      "autumn": "Siembra otoñal para cosecha primaveral.",
+      "winter": "Las plantas resisten heladas ligeras."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost ligero, inoculante rizobio recomendado",
+      "industriel": "Fertilizante fosfatado solo"
+    }
+  },
+  "basil": {
+    "name": "Albahaca",
+    "tips": {
+      "permaculture": "Excelente compañero del tomate. Repele plagas.",
+      "conventionnel": "Pinza las flores para extender producción de hojas.",
+      "naturel": "Infusión de ajo contra pulgones. Sin fertilizante fuerte.",
+      "industriel": "Fertilizante foliar ligero si hojas amarillean."
+    },
+    "commonIssues": ["Botrytis", "Pulgones", "Sensible al frío"],
+    "seasonalAdvice": {
+      "spring": "Siembra en interiores desde abril. Trasplanta después de heladas.",
+      "summer": "Buena producción. Pinza flores regularmente.",
+      "autumn": "Trae plantas adentro antes de heladas.",
+      "winter": "Cultivo en interiores posible en alféizar soleado."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Té de compost mensual",
+      "industriel": "Fertilizante foliar diluido cada 3 semanas"
+    }
+  },
+  "parsley": {
+    "name": "Perejil",
+    "tips": {
+      "permaculture": "Excelente en bordes de jardín. Atrae insectos auxiliares.",
+      "conventionnel": "Germinación lenta. Remoja semillas 24h antes de siembra.",
+      "naturel": "Poco exigente. Poco compost suficiente ampliamente.",
+      "industriel": "Fertilizante nitrogenado ligero para buen color verde."
+    },
+    "commonIssues": ["Mosca del apio", "Encamado en clima húmedo"],
+    "seasonalAdvice": {
+      "spring": "Siembra desde marzo. Remoja semillas 24h antes para acelerar germinación.",
+      "summer": "Corta regularmente para estimular rebrote.",
+      "autumn": "Resiste heladas ligeras. Continúa la cosecha.",
+      "winter": "Protege con velo no tejido."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost al plantar, nada más",
+      "industriel": "Fertilizante universal diluido una vez mensual"
+    }
+  },
+  "mint": {
+    "name": "Menta",
+    "tips": {
+      "permaculture": "Planta en maceta enterrada pues muy invasiva. Repele plagas.",
+      "conventionnel": "Contén en maceta o borde. Riega regularmente.",
+      "naturel": "Muy rústica. Casi ninguna necesidad de fertilizante.",
+      "industriel": "Fertilizante mínimo, exceso de nitrógeno reduce intensidad."
+    },
+    "commonIssues": ["Roya de la menta"],
+    "seasonalAdvice": {
+      "spring": "División de matas para multiplicar. Período ideal.",
+      "summer": "Riega para evitar desecamiento.",
+      "autumn": "Recorta a 10 cm. Rebrota en primavera.",
+      "winter": "Dormancia. Protege en maceta en zonas frías."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Sin fertilizante necesario",
+      "industriel": "Sin fertilizante recomendado"
+    }
+  },
+  "strawberry": {
+    "name": "Fresa",
+    "tips": {
+      "permaculture": "Acolcha con paja para proteger frutos y conservar humedad.",
+      "conventionnel": "Riega por goteo para evitar enfermedades.",
+      "naturel": "Compost de hojas. Té de consuelda durante floración.",
+      "industriel": "Fertilizante especial para fresa rico en potasio."
+    },
+    "commonIssues": ["Botrytis", "Oídio", "Pulgones", "Babosas"],
+    "seasonalAdvice": {
+      "spring": "Planta nuevas plantas. Elimina flores primer año.",
+      "summer": "Cosecha regularmente. Elimina estolones excepto para propagación.",
+      "autumn": "Limpia hojas viejas. Acolcha para invierno.",
+      "winter": "Protege en frío severo."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost al plantar, té de consuelda mensual en floración",
+      "industriel": "Fertilizante granular para fresa primavera y otoño"
+    }
+  },
+  "potato": {
+    "name": "Patata",
+    "tips": {
+      "permaculture": "Cultivo posible bajo acolchado grueso sin cavar (cultivo sobre paja).",
+      "conventionnel": "Aporca regularmente para aumentar producción.",
+      "naturel": "Decocción de cola de caballo previene tizón tardío.",
+      "industriel": "Fertilizante específico para patata rico en potasio."
+    },
+    "commonIssues": ["Tizón tardío", "Escarabajo de la patata", "Sarna común"],
+    "seasonalAdvice": {
+      "spring": "Planta semillas germinadas marzo-abril según clima.",
+      "summer": "Riega copiosamente. Aporques por última vez. Vigila tizón.",
+      "autumn": "Cosecha en clima seco. Almacena en bodega fresca y oscura.",
+      "winter": "Prepara semillas poniéndolas a germinar en enero."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost maduro al aportado",
+      "industriel": "Fertilizante para patata NPK 10-10-20 al plantar"
+    }
+  },
+  "onion": {
+    "name": "Cebolla",
+    "tips": {
+      "permaculture": "Excelente compañía de zanahorias. Repele mosca de la zanahoria.",
+      "conventionnel": "Reduce riego al final para favorecer secado.",
+      "naturel": "Poco exigente. Rotación de 3-4 años obligatoria.",
+      "industriel": "Fertilizante rico en potasio para bulbos hermosos."
+    },
+    "commonIssues": ["Tizón de la cebolla", "Mosca de la cebolla", "Botrytis"],
+    "seasonalAdvice": {
+      "spring": "Planta bulbillos desde marzo cuando suelo se calienta.",
+      "summer": "Deja caer las hojas, signo de madurez.",
+      "autumn": "Cosecha y seca al aire libre.",
+      "winter": "Almacenamiento en trenza en lugar seco y aireado."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost ligero al plantar",
+      "industriel": "Fertilizante potásico durante crecimiento"
+    }
+  },
+  "garlic": {
+    "name": "Ajo",
+    "tips": {
+      "permaculture": "Excelente repelente natural. Planta en borde de jardín.",
+      "conventionnel": "Planta dientes punta hacia arriba. Poco riego necesario.",
+      "naturel": "Suelo bien drenado. Pocos insumos necesarios.",
+      "industriel": "Evita fertilizantes nitrogenados que favorecen enfermedades."
+    },
+    "commonIssues": ["Roya del ajo", "Pudrición blanca"],
+    "seasonalAdvice": {
+      "spring": "Ajo plantado en otoño en pleno crecimiento. Para de regar.",
+      "summer": "Cosecha cuando hojas amarillean y se cuelgan.",
+      "autumn": "Siembra ideal octubre-noviembre para cosecha en julio.",
+      "winter": "Ajo resiste bien el frío. Poco mantenimiento."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Sin fertilizante necesario",
+      "industriel": "Fertilizante mínimo potásico en marzo"
+    }
+  },
+  "leek": {
+    "name": "Puerro",
+    "tips": {
+      "permaculture": "Asocia con zanahorias para alejarse plagas respectivas.",
+      "conventionnel": "Trasplante a 15-20 cm profundidad para buen blanco.",
+      "naturel": "Compost al plantar. Riego regular.",
+      "industriel": "Fertilizante nitrogenado para favorecer desarrollo de tallo."
+    },
+    "commonIssues": ["Polilla del puerro", "Roya"],
+    "seasonalAdvice": {
+      "spring": "Siembra marzo-abril. Trasplante en junio.",
+      "summer": "Riego regular por calor.",
+      "autumn": "Inicio de cosechas. Frío mejora sabor.",
+      "winter": "Resiste heladas. Cosecha según sea necesario hasta primavera."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost al trasplante, té de ortiga mensual",
+      "industriel": "Fertilizante nitrogenado al trasplante y en mid-crecimiento"
+    }
+  },
+  "spinach": {
+    "name": "Espinaca",
+    "tips": {
+      "permaculture": "Cultivo de corta estación ideal para llenar espacios.",
+      "conventionnel": "Cultivo de primavera y otoño. Evita calor.",
+      "naturel": "Té de compost para color verde intenso hermoso.",
+      "industriel": "Fertilizante nitrogenado para hojas bien desarrolladas."
+    },
+    "commonIssues": ["Espigado", "Tizón"],
+    "seasonalAdvice": {
+      "spring": "Siembra desde marzo. Cosecha rápida antes de calores.",
+      "summer": "Evita, sube rápido en calor.",
+      "autumn": "Excelente cultivo otoñal hasta heladas.",
+      "winter": "Protección con velo para extender cosecha."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost ligero al plantar",
+      "industriel": "Fertilizante nitrogenado líquido al plantar"
+    }
+  },
+  "chard": {
+    "name": "Acelga",
+    "tips": {
+      "permaculture": "Muy productiva. Deja algunos pies espigarse para autosemilla.",
+      "conventionnel": "Riega regularmente. Cosecha hoja por hoja.",
+      "naturel": "Compost abundante. Muy resistente a enfermedades.",
+      "industriel": "Fertilizante nitrogenado para hojas grandes hermosas."
+    },
+    "commonIssues": ["Cercospora", "Pulgones"],
+    "seasonalAdvice": {
+      "spring": "Siembra in situ desde abril.",
+      "summer": "Producción abundante. Cosecha regularmente.",
+      "autumn": "Resiste bien primeras heladas.",
+      "winter": "Protección con velo no tejido para extender cosecha."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost al plantar, té de ortiga mensual",
+      "industriel": "Fertilizante universal mensual"
+    }
+  },
+  "beet": {
+    "name": "Remolacha",
+    "tips": {
+      "permaculture": "Las hojas son comestibles. Deja algunos pies espigarse para autosemilla.",
+      "conventionnel": "Aclara a 10 cm para obtener raíces redondas hermosas.",
+      "naturel": "Compost maduro al plantar. Poco exigente.",
+      "industriel": "Evita fertilizantes nitrogenados favoreciendo hojas sobre raíz."
+    },
+    "commonIssues": ["Cercospora", "Pulgones negros de haba"],
+    "seasonalAdvice": {
+      "spring": "Siembra directa desde abril. Suelo suelto profundo.",
+      "summer": "Riega regularmente para evitar que raíces se agrieten.",
+      "autumn": "Cosecha antes de heladas duras. Conserva en arena.",
+      "winter": "Almacena en bodega fresca en arena húmeda."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost al plantar, es suficiente",
+      "industriel": "Fertilizante potásico ligero durante crecimiento"
+    }
+  },
+  "broccoli": {
+    "name": "Brócoli",
+    "tips": {
+      "permaculture": "Las flores atraen polinizadores. Combina con borraja.",
+      "conventionnel": "Cosecha cabeza central antes de flores abran. Cabezas secundarias rebrotan.",
+      "naturel": "Té de ortiga cada 3 semanas. Evita exceso de nitrógeno.",
+      "industriel": "Nitrógeno al trasplante, luego fósforo y potasio en formación de cabeza."
+    },
+    "commonIssues": ["Blanca de la col", "Pulgón harinoso de la col", "Hernia de la col"],
+    "seasonalAdvice": {
+      "spring": "Siembra marzo bajo cubierta. Trasplante en mayo.",
+      "summer": "Riega copiosamente. Vigila orugas.",
+      "autumn": "Excelente cultivo otoñal. Frío mejora sabor.",
+      "winter": "Protege con velo en frío duro."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost rico al trasplante, té de ortiga mensual",
+      "industriel": "Fertilizante crucífero al trasplante y mid-crecimiento"
+    }
+  },
+  "corn": {
+    "name": "Maíz",
+    "tips": {
+      "permaculture": "Combina con judías y calabacín (tres hermanas). Maíz sostiene judías.",
+      "conventionnel": "Planta en bloques cuadrados (mín 4x4) para buena polinización eólica.",
+      "naturel": "Té de ortiga y compost abundante. Planta muy hambrienta.",
+      "industriel": "Nitrógeno inicio crecimiento, potasio antes floración."
+    },
+    "commonIssues": ["Taladro del maíz", "Gusano de la espiga", "Pulgones"],
+    "seasonalAdvice": {
+      "spring": "Siembra bajo cubierta en abril, trasplanta mid-mayo cuando cálido (>12°C).",
+      "summer": "Riega abundantemente especialmente floración y formación espigas.",
+      "autumn": "Cosecha cuando granos bien formados y sedas marrones.",
+      "winter": "Pica tallos para compost o mantillo."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost muy abundante al plantar, té de ortiga cada 2 semanas",
+      "industriel": "Nitrógeno (30-0-0) durante crecimiento, fertilizante completo en floración"
+    }
+  },
+  "sunflower": {
+    "name": "Girasol",
+    "tips": {
+      "permaculture": "Atrae polinizadores y aves. Excelente cortavientos natural.",
+      "conventionnel": "Orienta al sol. Tutoriza variedades grandes contra viento.",
+      "naturel": "Muy rústico. Poco compost suficiente. Evita exceso nitrógeno.",
+      "industriel": "Potasio y fosfato para cabezas hermosas, evita nitrógeno."
+    },
+    "commonIssues": ["Esclerotinia", "Aves comiendo semillas", "Babosas en plántulas"],
+    "seasonalAdvice": {
+      "spring": "Siembra directa en mayo cuando peligro heladas pasado. Suelo soleado.",
+      "summer": "Riega regularmente pero no excesivamente. Planta tolera sequía.",
+      "autumn": "Cosecha cabezas cuando semillas se desprendan fácilmente. Seca antes almacenar.",
+      "winter": "Deja algunas cabezas para aves o cosecha semillas para próximo año."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost ligero al plantar, sin fertilizante extra",
+      "industriel": "Fertilizante fosfo-potásico solo inicio floración"
+    }
+  },
+  "other": {
+    "name": "Otra planta",
+    "tips": {
+      "permaculture": "Observa necesidades naturales planta e integra en tu ecosistema.",
+      "conventionnel": "Adapta riego a necesidades específicas tu planta.",
+      "naturel": "Compost y té de ortiga convienen a mayoría plantas.",
+      "industriel": "Fertilizante universal equilibrado según instrucciones fabricante."
+    },
+    "commonIssues": ["Varía según planta"],
+    "seasonalAdvice": {
+      "spring": "Período ideal para plantar mayoría vegetales.",
+      "summer": "Aumenta riego en clima cálido seco.",
+      "autumn": "Prepara planta para invierno.",
+      "winter": "Protege de heladas si necesario."
+    },
+    "fertilizerSchedule": {
+      "naturel": "Compost universal mensual",
+      "industriel": "Fertilizante universal según instrucciones fabricante"
+    }
+  },
+  "growthStages": {
+    "germination": "Germinación",
+    "seedling": "Plántula",
+    "vegetative": "Vegetativo",
+    "flowering": "Floración/Cosecha"
+  }
+}
