@@ -95,7 +95,7 @@ export default function AddPlantScreen() {
               💧 Besoin en eau : {selectedInfo.dailyWaterNeed} L/m²/jour · Arrosage tous les {selectedInfo.wateringFrequencyDays} jour{selectedInfo.wateringFrequencyDays > 1 ? 's' : ''}
             </Text>
             <Text style={styles.infoText}>
-              ☀️ {selectedInfo.sunExposure === 'full' ? 'Plein soleil' : selectedInfo.sunExposure === 'partial' ? 'Mi-ombre' : 'Ombre'} · Récolte en ~{selectedInfo.harvestDays} jours
+              ☀️ {selectedInfo.sunExposure === 'full' ? t('sunlight.full') : selectedInfo.sunExposure === 'partial' ? t('sunlight.partial') : t('sunlight.shade')} · {t('sunlight.harvestIn', { days: selectedInfo.harvestDays })}
             </Text>
           </View>
 

@@ -68,11 +68,11 @@ export default function ChoreFormScreen() {
   function handleBackPress() {
     if (!editingId && hasUnsavedChanges && (title.trim() || description.trim())) {
       Alert.alert(
-        'Abandonner les modifications ?',
-        'Les modifications non enregistrées seront perdues.',
+        t('chores.discardChanges'),
+        t('chores.discardMessage'),
         [
-          { text: 'Continuer', style: 'cancel' },
-          { text: 'Abandonner', style: 'destructive', onPress: () => navigation.goBack() },
+          { text: t('common.cancel'), style: 'cancel' },
+          { text: t('common.delete'), style: 'destructive', onPress: () => navigation.goBack() },
         ]
       );
     } else {
@@ -136,16 +136,16 @@ export default function ChoreFormScreen() {
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       {showToast && (
         <View style={styles.toastBanner}>
-          <Text style={styles.toastText}>✅ Tâche créée!</Text>
+          <Text style={styles.toastText}>{t('chores.created')}</Text>
         </View>
       )}
       <View style={styles.navHeader}>
         <TouchableOpacity onPress={handleBackPress}>
-          <Text style={styles.backBtn}>← Annuler</Text>
+          <Text style={styles.backBtn}>{t('chores.backBtn')}</Text>
         </TouchableOpacity>
-        <Text style={styles.navTitle}>{editingId ? 'Modifier' : 'Nouvelle tâche'}</Text>
+        <Text style={styles.navTitle}>{editingId ? t('chores.editChore') : t('chores.newChore')}</Text>
         <TouchableOpacity onPress={handleSave}>
-          <Text style={styles.saveBtn}>{editingId ? 'Enregistrer' : 'Créer'}</Text>
+          <Text style={styles.saveBtn}>{editingId ? t('chores.saveBtn') : t('chores.createBtn')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -154,20 +154,20 @@ export default function ChoreFormScreen() {
         style={{ flex: 1 }}
       >
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <Text style={styles.label}>Type</Text>
+          <Text style={styles.label}>{t('chores.type')}</Text>
           <View style={styles.row}>
-            {CHORE_TYPES.map((t) => {
-              const m = CHORE_TYPE_META[t];
-              const active = type === t;
+            {CHORE_TYPES.map((ct) => {
+              const m = CHORE_TYPE_META[ct];
+              const active = type === ct;
               return (
                 <TouchableOpacity
-                  key={t}
+                  key={ct}
                   style={[
                     styles.chip,
                     active && { backgroundColor: m.backgroundColor, borderColor: m.color },
                   ]}
                   onPress={() => {
-                    setType(t);
+                    setType(ct);
                     setHasUnsavedChanges(true);
                   }}
                 >
@@ -180,34 +180,34 @@ export default function ChoreFormScreen() {
             })}
           </View>
 
-          <Text style={styles.label}>Titre *</Text>
+          <Text style={styles.label}>{t('chores.titleLabel')}</Text>
           <TextInput
             value={title}
             onChangeText={(t) => {
               setTitle(t);
               setHasUnsavedChanges(true);
             }}
-            placeholder="Ex : Tailler les tomates"
+            placeholder={t('chores.titlePlaceholder')}
             placeholderTextColor={colors.textMuted}
             style={styles.input}
             maxLength={80}
           />
 
-          <Text style={styles.label}>Description</Text>
+          <Text style={styles.label}>{t('chores.description')}</Text>
           <TextInput
             value={description}
             onChangeText={(d) => {
               setDescription(d);
               setHasUnsavedChanges(true);
             }}
-            placeholder="Détails, méthode, dosage…"
+            placeholder={t('chores.descriptionPlaceholder')}
             placeholderTextColor={colors.textMuted}
             style={[styles.input, styles.textarea]}
             multiline
             numberOfLines={3}
           />
 
-          <Text style={styles.label}>Date *</Text>
+          <Text style={styles.label}>{t('chores.dateLabel')}</Text>
           <TouchableOpacity style={styles.dateBtn} onPress={() => setShowPicker(true)}>
             <Text style={styles.dateIcon}>📅</Text>
             <Text style={styles.dateText}>
@@ -224,7 +224,7 @@ export default function ChoreFormScreen() {
             />
           )}
 
-          <Text style={styles.label}>Priorité</Text>
+          <Text style={styles.label}>{t('chores.priorityLabel')}</Text>
           <View style={styles.row}>
             {(['high', 'medium', 'low'] as ChorePriority[]).map((p) => {
               const active = priority === p;
@@ -248,7 +248,7 @@ export default function ChoreFormScreen() {
 
           {plants.length > 0 && (
             <>
-              <Text style={styles.label}>Plante (optionnel)</Text>
+              <Text style={styles.label}>{t('chores.plant')}</Text>
               <View style={styles.row}>
                 <TouchableOpacity
                   style={[styles.chip, !plantId && styles.chipActive]}
@@ -257,7 +257,7 @@ export default function ChoreFormScreen() {
                     setHasUnsavedChanges(true);
                   }}
                 >
-                  <Text style={[styles.chipText, !plantId && styles.chipTextActive]}>Aucune</Text>
+                  <Text style={[styles.chipText, !plantId && styles.chipTextActive]}>{t('chores.plantNone')}</Text>
                 </TouchableOpacity>
                 {plants.map((p) => {
                   const info = getPlantInfo(p.type);
@@ -282,21 +282,21 @@ export default function ChoreFormScreen() {
             </>
           )}
 
-          <Text style={styles.label}>Récurrence (jours, optionnel)</Text>
+          <Text style={styles.label}>{t('chores.recurrenceLabel')}</Text>
           <TextInput
             value={recurrence}
             onChangeText={(r) => {
               setRecurrence(r);
               setHasUnsavedChanges(true);
             }}
-            placeholder="Ex : 7 pour chaque semaine"
+            placeholder={t('chores.recurrencePlaceholder')}
             placeholderTextColor={colors.textMuted}
             style={styles.input}
             keyboardType="number-pad"
             maxLength={3}
           />
           <Text style={styles.hint}>
-            Note : la prochaine occurrence sera créée à la complétion de la tâche.
+            {t('chores.recurrenceHint')}
           </Text>
         </ScrollView>
       </KeyboardAvoidingView>

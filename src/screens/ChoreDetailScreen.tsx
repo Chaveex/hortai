@@ -38,10 +38,10 @@ export default function ChoreDetailScreen() {
       <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
         <View style={styles.navHeader}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.backBtn}>← Retour</Text>
+            <Text style={styles.backBtn}>{t('common.back')}</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.notFound}>Tâche introuvable.</Text>
+        <Text style={styles.notFound}>{t('chores.notFound')}</Text>
       </SafeAreaView>
     );
   }
@@ -90,10 +90,10 @@ export default function ChoreDetailScreen() {
 
   function handleDelete() {
     if (!chore) return;
-    Alert.alert('Supprimer cette tâche ?', 'Cette action est irréversible.', [
-      { text: 'Annuler', style: 'cancel' },
+    Alert.alert(t('chores.deleteConfirmTitle'), t('chores.deleteConfirmMsg'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Supprimer',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: () => {
           deleteChore(chore.id);
@@ -117,7 +117,7 @@ export default function ChoreDetailScreen() {
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <View style={styles.navHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backBtn}>← Retour</Text>
+          <Text style={styles.backBtn}>{t('common.back')}</Text>
         </TouchableOpacity>
         {plant && (
           <TouchableOpacity onPress={handlePlantTap} style={styles.headerPlantLink}>
@@ -127,7 +127,7 @@ export default function ChoreDetailScreen() {
           </TouchableOpacity>
         )}
         <TouchableOpacity onPress={handleEdit}>
-          <Text style={styles.editBtn}>Modifier</Text>
+          <Text style={styles.editBtn}>{t('chores.editBtn')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -139,10 +139,10 @@ export default function ChoreDetailScreen() {
         </View>
 
         <View style={styles.statsRow}>
-          <StatBox label="Date" value={format(parseISO(chore.date), 'd MMM yyyy', { locale: fr })} />
-          <StatBox label="Priorité" value={PRIORITY_LABELS[chore.priority]} />
-          <StatBox label="Statut" value={STATUS_LABELS[chore.status]} highlight={isDone} />
-          <StatBox label="Origine" value={chore.source === 'auto' ? 'Auto' : 'Custom'} />
+          <StatBox label={t('chores.dateLabel')} value={format(parseISO(chore.date), 'd MMM yyyy', { locale: fr })} />
+          <StatBox label={t('chores.priorityLabel')} value={PRIORITY_LABELS[chore.priority]} />
+          <StatBox label={t('chores.statusLabel')} value={STATUS_LABELS[chore.status]} highlight={isDone} />
+          <StatBox label={t('chores.sourceLabel')} value={chore.source === 'auto' ? t('chores.auto') : t('chores.custom')} />
         </View>
 
         {plant && plantInfo && (
@@ -157,7 +157,7 @@ export default function ChoreDetailScreen() {
 
         {chore.description && (
           <>
-            <Text style={styles.sectionLabel}>Description</Text>
+            <Text style={styles.sectionLabel}>{t('chores.descriptionLabel')}</Text>
             <View style={styles.box}>
               <Text style={styles.boxText}>{chore.description}</Text>
             </View>
@@ -166,41 +166,41 @@ export default function ChoreDetailScreen() {
 
         {chore.recurrenceDays && chore.recurrenceDays > 0 && (
           <>
-            <Text style={styles.sectionLabel}>Récurrence</Text>
+            <Text style={styles.sectionLabel}>{t('chores.recurrenceLabel')}</Text>
             <View style={styles.box}>
-              <Text style={styles.boxText}>♻️ Tous les {chore.recurrenceDays} jours</Text>
+              <Text style={styles.boxText}>{t('chores.recurrencePattern', { days: chore.recurrenceDays })}</Text>
             </View>
           </>
         )}
 
         {chore.completedAt && (
           <Text style={styles.timeline}>
-            ✓ Terminé le {format(parseISO(chore.completedAt), 'd MMM yyyy à HH:mm', { locale: fr })}
+            {t('chores.completedAt', { date: format(parseISO(chore.completedAt), 'd MMM yyyy à HH:mm', { locale: fr }) })}
           </Text>
         )}
         {chore.skippedAt && (
           <Text style={styles.timeline}>
-            ↷ Ignoré le {format(parseISO(chore.skippedAt), 'd MMM yyyy à HH:mm', { locale: fr })}
+            {t('chores.skippedAt', { date: format(parseISO(chore.skippedAt), 'd MMM yyyy à HH:mm', { locale: fr }) })}
           </Text>
         )}
 
         {!isInactive ? (
           <View style={styles.actionRow}>
             <TouchableOpacity style={[styles.bigBtn, { backgroundColor: colors.success }]} onPress={handleComplete}>
-              <Text style={styles.bigBtnText}>✓ Marquer comme fait</Text>
+              <Text style={styles.bigBtnText}>{t('chores.markComplete')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.bigBtn, { backgroundColor: colors.textMuted }]} onPress={handleSkip}>
-              <Text style={styles.bigBtnText}>↷ Ignorer</Text>
+              <Text style={styles.bigBtnText}>{t('chores.skipBtn')}</Text>
             </TouchableOpacity>
           </View>
         ) : (
           <TouchableOpacity style={[styles.bigBtn, { backgroundColor: colors.primary, marginTop: spacing.md }]} onPress={handleReopen}>
-            <Text style={styles.bigBtnText}>↺ Rouvrir la tâche</Text>
+            <Text style={styles.bigBtnText}>{t('chores.reopenBtn')}</Text>
           </TouchableOpacity>
         )}
 
         <TouchableOpacity style={styles.deleteRow} onPress={handleDelete}>
-          <Text style={styles.deleteText}>Supprimer cette tâche</Text>
+          <Text style={styles.deleteText}>{t('chores.deleteBtn')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

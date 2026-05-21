@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { borderRadius, colors, spacing } from '../constants/theme';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 const TAB_BAR_HEIGHT = 60;
 
 export default function ContextFAB({ onChatPress }: Props) {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const route = useRoute();
   const navigation = useNavigation<any>();
@@ -32,10 +34,10 @@ export default function ContextFAB({ onChatPress }: Props) {
   const isAddChoreFAB = isChoreTab;
 
   const emoji = isAddPlantFAB ? '🌱' : '📅';
-  const label = isAddPlantFAB ? 'Ajouter une plante' : 'Ajouter une tâche';
+  const label = isAddPlantFAB ? t('chores.addPlantFAB') : t('chores.addChoreFAB');
   const hint = isAddPlantFAB
-    ? 'Appuyez pour créer une nouvelle plante'
-    : 'Appuyez pour créer une nouvelle tâche';
+    ? t('chores.addPlantHint')
+    : t('chores.addChoreHint');
 
   function pressIn() {
     Animated.spring(scale, { toValue: 0.9, useNativeDriver: true, friction: 6 }).start();

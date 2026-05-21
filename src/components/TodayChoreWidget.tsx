@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import { useChoreStore, choresForDate } from '../store/useChoreStore';
 import { CHORE_TYPE_META } from '../types/chores';
 import { colors, spacing, borderRadius, typography } from '../constants/theme';
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function TodayChoreWidget({ onPress }: Props) {
+  const { t } = useTranslation();
   const chores = useChoreStore((s) => s.chores);
   const today = format(new Date(), 'yyyy-MM-dd');
   const completeChore = useChoreStore((s) => s.completeChore);
@@ -28,7 +30,7 @@ export default function TodayChoreWidget({ onPress }: Props) {
   return (
     <TouchableOpacity activeOpacity={0.85} onPress={onPress} style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.title}>🗓️ Tâches du jour</Text>
+        <Text style={styles.title}>{t('chores.todayTitle')}</Text>
         <View style={styles.statsRow}>
           {high > 0 && (
             <View style={styles.highBadge}>
