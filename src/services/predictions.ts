@@ -1,7 +1,12 @@
 import { differenceInDays, parseISO, addDays, subDays, format } from 'date-fns';
+import i18next from '../i18n/config';
 import { Plant, PlantEntry, WeatherData, UserProfile, Predictions } from '../types';
 import { PLANT_DATABASE, getGrowthStage } from '../constants/plants';
 import { calculatePlantMetrics } from './gardenMetrics';
+
+function t(key: string, options?: Record<string, any>): string {
+  return i18next.t(key, options) as string;
+}
 
 function normalizeToKg(quantity: number, unit: 'kg' | 'g' | 'pièces'): number {
   switch (unit) {
@@ -113,29 +118,29 @@ export function predictSeasonalForecast(
   // Weather-based risks and recommendations
   if (weather) {
     if (weather.temperature > 30) {
-      riskFactors.push('Risque de chaleur excessive');
-      recommendations.push('Augmentez la fréquence des arrosages par temps chaud');
+      riskFactors.push(t('predictions.riskExcessiveHeat'));
+      recommendations.push(t('predictions.recommendIncreaseWatering'));
     }
     if (weather.humidity < 40) {
-      riskFactors.push('Air très sec');
-      recommendations.push('Installez un paillage épais pour conserver l\'humidité');
+      riskFactors.push(t('predictions.riskDryAir'));
+      recommendations.push(t('predictions.recommendMulch'));
     }
     if (weather.temperature < 10) {
-      riskFactors.push('Risque de gelées');
-      recommendations.push('Protégez les plantes sensibles avec un voile d\'hivernage');
+      riskFactors.push(t('predictions.riskFrost'));
+      recommendations.push(t('predictions.recommendFrostProtection'));
     }
   }
 
   // Style-based recommendations
   if (profile?.gardeningStyle === 'permaculture') {
-    recommendations.push('Augmentez le paillage pour réduire les besoins en eau');
+    recommendations.push(t('predictions.recommendPermacultureMulch'));
   }
   if (profile?.gardeningStyle === 'hydroponique') {
-    recommendations.push('Vérifiez régulièrement les niveaux d\'eau et le pH');
+    recommendations.push(t('predictions.recommendHydroponicCheck'));
   }
 
   if (plants.length === 0) {
-    recommendations.push('Plantez davantage pour augmenter votre récolte saisonnière');
+    recommendations.push(t('predictions.recommendPlantMore'));
   }
 
   return {
@@ -213,16 +218,16 @@ export function identifyHealthRisks(
         plantId: plant.id,
         plantName: plant.name,
         riskLevel: 'high',
-        description: `La santé de la plante est faible (score: ${metrics.healthScore}/100)`,
-        mitigation: 'Vérifiez l\'arrosage régulier et les signaux de stress (feuilles jaunes, flétries)',
+        description: t('predictions.healthLow', { score: metrics.healthScore }),
+        mitigation: t('predictions.healthLowMitigation'),
       });
     } else if (metrics.healthScore < 70) {
       risks.push({
         plantId: plant.id,
         plantName: plant.name,
         riskLevel: 'medium',
-        description: `La santé de la plante est correcte mais peut être améliorée (score: ${metrics.healthScore}/100)`,
-        mitigation: 'Ajustez la fréquence d\'arrosage et fertilisez si nécessaire',
+        description: t('predictions.healthMedium', { score: metrics.healthScore }),
+        mitigation: t('predictions.healthMediumMitigation'),
       });
     }
 
@@ -234,8 +239,8 @@ export function identifyHealthRisks(
           plantId: plant.id,
           plantName: plant.name,
           riskLevel: 'high',
-          description: `N'a pas été arrosée depuis ${daysSinceWatered} jours (seuil: ${info.wateringFrequencyDays * 2})`,
-          mitigation: 'Arrosez immédiatement au pied de la plante',
+          description: t('predictions.wateringOverdue', { days: daysSinceWatered, threshold: info.wateringFrequencyDays * 2 }),
+          mitigation: t('predictions.wateringOverdueMitigation'),
         });
       }
     } else if (daysAlive > info.wateringFrequencyDays) {
@@ -243,8 +248,8 @@ export function identifyHealthRisks(
         plantId: plant.id,
         plantName: plant.name,
         riskLevel: 'high',
-        description: 'Jamais été arrosée depuis la plantation',
-        mitigation: 'Arrosez généreusement à la base de la plante',
+        description: t('predictions.wateringNever'),
+        mitigation: t('predictions.wateringNeverMitigation'),
       });
     }
 
@@ -255,8 +260,8 @@ export function identifyHealthRisks(
           plantId: plant.id,
           plantName: plant.name,
           riskLevel: 'medium',
-          description: `Canicule (${weather.temperature}°C) - plante sensible à la chaleur extrême`,
-          mitigation: 'Créez de l\'ombre artificielle (filet ombrant) et augmentez l\'arrosage',
+          description: t('predictions.heatWave', { temperature: weather.temperature }),
+          mitigation: t('predictions.heatWaveMitigation'),
         });
       }
 
@@ -266,8 +271,8 @@ export function identifyHealthRisks(
           plantId: plant.id,
           plantName: plant.name,
           riskLevel: 'medium',
-          description: `Froid (${weather.temperature}°C) - plante thermophile peut souffrir`,
-          mitigation: 'Protégez avec un voile ou attendez le redoux',
+          description: t('predictions.coldRisk', { temperature: weather.temperature }),
+          mitigation: t('predictions.coldRiskMitigation'),
         });
       }
 
@@ -277,8 +282,8 @@ export function identifyHealthRisks(
           plantId: plant.id,
           plantName: plant.name,
           riskLevel: 'medium',
-          description: `Humidité très élevée (${weather.humidity}%) - risque de maladies fongiques`,
-          mitigation: 'Améliorez la ventilation, arrosez tôt le matin à la base uniquement',
+          description: t('predictions.humidityRisk', { humidity: weather.humidity }),
+          mitigation: t('predictions.humidityRiskMitigation'),
         });
       }
     }
@@ -290,8 +295,8 @@ export function identifyHealthRisks(
         plantId: plant.id,
         plantName: plant.name,
         riskLevel: 'low',
-        description: `Problèmes courants possibles: ${info.commonIssues.slice(0, 2).join(', ')}`,
-        mitigation: 'Inspectez régulièrement les feuilles et traitez rapidement si symptômes détectés',
+        description: t('predictions.commonIssuesRisk', { issues: info.commonIssues.slice(0, 2).join(', ') }),
+        mitigation: t('predictions.commonIssuesMitigation'),
       });
     }
   });

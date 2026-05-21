@@ -34,7 +34,7 @@ export default function TodayChoreWidget({ onPress }: Props) {
         <View style={styles.statsRow}>
           {high > 0 && (
             <View style={styles.highBadge}>
-              <Text style={styles.highBadgeText}>{high} urgent{high > 1 ? 's' : ''}</Text>
+              <Text style={styles.highBadgeText}>{high} {t('chores.urgent', { count: high })}</Text>
             </View>
           )}
           <Text style={styles.count}>
@@ -44,7 +44,7 @@ export default function TodayChoreWidget({ onPress }: Props) {
       </View>
 
       {pending.length === 0 ? (
-        <Text style={styles.allDone}>🎉 Toutes les tâches sont faites !</Text>
+        <Text style={styles.allDone}>{t('chores.allDone')}</Text>
       ) : (
         <View style={styles.list}>
           {preview.map((c) => {
@@ -71,12 +71,12 @@ export default function TodayChoreWidget({ onPress }: Props) {
             );
           })}
           {pending.length > 3 && (
-            <Text style={styles.more}>+{pending.length - 3} autre{pending.length - 3 > 1 ? 's' : ''}</Text>
+            <Text style={styles.more}>{t('chores.moreChores', { count: pending.length - 3 })}</Text>
           )}
         </View>
       )}
 
-      <Text style={styles.cta}>Voir le calendrier →</Text>
+      <Text style={styles.cta}>{t('chores.viewCalendar')}</Text>
     </TouchableOpacity>
   );
 }
