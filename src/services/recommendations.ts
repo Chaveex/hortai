@@ -38,12 +38,12 @@ export function getWateringRecommendation(
   if (profile.gardeningStyle === 'hydroponique') baseNeed *= 0.3;
 
   // Calculate rain from last 3 days using historical data
-  const rainLast3Days = weather.history
+  const rainLast3Days = (weather.history ?? [])
     .slice(-3)
     .reduce((sum, day) => sum + day.rain, 0);
 
   // Calculate forecast rain for next 2 days
-  const rainForecast = weather.forecast
+  const rainForecast = (weather.forecast ?? [])
     .slice(0, 2)
     .reduce((sum, day) => sum + day.rain, 0);
 

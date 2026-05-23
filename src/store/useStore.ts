@@ -531,6 +531,13 @@ export const useStore = create<StoreState>()(
         gardenerLevel: state.gardenerLevel,
         lastDailyTipDate: state.lastDailyTipDate,
       }),
+      migrate: (state: any, version: number) => {
+        // Migrate old weather data without history field
+        if (state.weather && !state.weather.history) {
+          state.weather.history = [];
+        }
+        return state;
+      },
     }
   )
 );
