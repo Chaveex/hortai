@@ -40,6 +40,14 @@ export interface Plant {
 export type ClimateType = 'mediterranean' | 'oceanic' | 'continental' | 'mountain' | 'tropical';
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
 
+export interface WeatherHistory {
+  date: string;
+  tempMax: number;
+  tempMin: number;
+  rain: number;
+  humidity: number;
+}
+
 export interface WeatherData {
   temperature: number;
   feelsLike: number;
@@ -49,6 +57,7 @@ export interface WeatherData {
   windSpeed: number;
   rain1h: number;
   forecast: ForecastDay[];
+  history: WeatherHistory[]; // Last 3 days + today for watering calculations
   lastUpdated: string;
   city: string;
   climateType?: ClimateType;

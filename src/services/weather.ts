@@ -1,9 +1,13 @@
 import axios from 'axios';
-import { WeatherData, ForecastDay } from '../types';
+import { WeatherData, ForecastDay, WeatherHistory } from '../types';
 import { detectClimateType, detectSeason, detectClimateTypeFromAPI } from './climateDetection';
+import { format, subDays, parseISO } from 'date-fns';
 
 const API_KEY = process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY ?? '';
 const BASE_URL = 'https://api.openweathermap.org';
+
+// In-memory cache of weather history (last 7 days)
+let weatherHistoryCache: WeatherHistory[] = [];
 
 export interface GeoResult {
   name: string;
@@ -65,6 +69,28 @@ export async function fetchWeather(lat: number, lon: number, cityName: string): 
       humidity: Math.round(data.humidity.reduce((a, b) => a + b, 0) / data.humidity.length),
     }));
 
+  // Build weather history: keep last 3 days + add today
+  const today = format(new Date(), 'yyyy-MM-dd');
+  const todayHistory: WeatherHistory = {
+    date: today,
+    tempMax: Math.round(current.main.temp_max),
+    tempMin: Math.round(current.main.temp_min),
+    rain: Math.round((current.rain?.['1h'] ?? 0) * 10) / 10,
+    humidity: current.main.humidity,
+  };
+
+  // Remove today if already in cache, add new today entry
+  weatherHistoryCache = weatherHistoryCache.filter(h => h.date !== today);
+  weatherHistoryCache.push(todayHistory);
+
+  // Keep last 7 days only
+  if (weatherHistoryCache.length > 7) {
+    weatherHistoryCache = weatherHistoryCache.slice(-7);
+  }
+
+  // Return last 3 days + today for watering calculations
+  const history = weatherHistoryCache.slice(-4);
+
   const month = new Date().getMonth() + 1;
   // Try API first, fallback to local detection
   const climateType = (await detectClimateTypeFromAPI(lat, lon)) || detectClimateType(lat, cityName);
@@ -79,6 +105,7 @@ export async function fetchWeather(lat: number, lon: number, cityName: string): 
     windSpeed: Math.round(current.wind.speed * 3.6),
     rain1h: current.rain?.['1h'] ?? 0,
     forecast,
+    history, // Last 3 days + today
     lastUpdated: new Date().toISOString(),
     city: cityName,
     climateType,
@@ -98,7 +125,3 @@ export function isHeatWave(forecast: ForecastDay[]): boolean {
   return forecast.slice(0, 3).some(d => d.tempMax >= 35);
 }
 
-export function getExpectedRainNext24h(forecast: ForecastDay[]): number {
-  if (forecast.length === 0) return 0;
-  return forecast[0].rain;
-}

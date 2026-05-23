@@ -58,6 +58,7 @@ const mockWeather: WeatherData = {
   windSpeed: 5,
   rain1h: 0,
   forecast: [],
+  history: [],
   lastUpdated: new Date().toISOString(),
   city: 'Paris',
 };

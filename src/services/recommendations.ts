@@ -2,7 +2,7 @@ import { differenceInDays, parseISO, addDays, format } from 'date-fns';
 import i18next from 'i18next';
 import { Plant, WeatherData, UserProfile, WateringRecommendation, GardeningTip } from '../types';
 import { getPlantInfo, getGrowthStage } from '../constants/plants';
-import { isFrostRisk, isHeatWave, getExpectedRainNext24h } from './weather';
+import { isFrostRisk, isHeatWave } from './weather';
 
 function t(key: string, options?: Record<string, any>): string {
   return i18next.t(key, options) as string;
@@ -37,15 +37,22 @@ export function getWateringRecommendation(
   if (profile.gardeningStyle === 'permaculture') baseNeed *= 0.7;
   if (profile.gardeningStyle === 'hydroponique') baseNeed *= 0.3;
 
-  const rainYesterday = weather.rain1h * 24;
-  const rainForecast = getExpectedRainNext24h(weather.forecast);
+  // Calculate rain from last 3 days using historical data
+  const rainLast3Days = weather.history
+    .slice(-3)
+    .reduce((sum, day) => sum + day.rain, 0);
 
-  if (rainYesterday >= 15) {
+  // Calculate forecast rain for next 2 days
+  const rainForecast = weather.forecast
+    .slice(0, 2)
+    .reduce((sum, day) => sum + day.rain, 0);
+
+  if (rainLast3Days >= 15) {
     return {
       plantId: plant.id,
       shouldWater: false,
       amount: 0,
-      reason: t('recommendations.rainRecent', { amount: rainYesterday.toFixed(0) }),
+      reason: t('recommendations.rainRecent', { amount: rainLast3Days.toFixed(0) }),
       urgency: 'low',
       nextWateringDate: format(addDays(now, info.wateringFrequencyDays), 'yyyy-MM-dd'),
       skipReason: 'rain_recent',
@@ -64,7 +71,7 @@ export function getWateringRecommendation(
     };
   }
 
-  const effectiveBaseNeed = Math.max(0, baseNeed - rainYesterday * 0.4);
+  const effectiveBaseNeed = Math.max(0, baseNeed - rainLast3Days * 0.4);
   const totalAmount = Math.round(effectiveBaseNeed * daysSinceWatered * 10) / 10;
   const shouldWater = daysSinceWatered >= info.wateringFrequencyDays;
 
