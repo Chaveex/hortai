@@ -75,18 +75,18 @@ export function GardenCell({
 
 const styles = StyleSheet.create({
   cell: {
-    width: 46,
-    height: 46,
+    width: 44,
+    height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 3,
-    borderRadius: 8,
+    margin: 2,
+    borderRadius: 6,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOpacity: 0.12,
+    shadowRadius: 1.5,
+    elevation: 1,
   },
   densityOverlay: {
     position: 'absolute',
