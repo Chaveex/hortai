@@ -42,10 +42,11 @@ export function getWateringRecommendation(
     .slice(-3)
     .reduce((sum, day) => sum + day.rain, 0);
 
-  // Calculate forecast rain for next 2 days
-  const rainForecast = (weather.forecast ?? [])
-    .slice(0, 2)
-    .reduce((sum, day) => sum + day.rain, 0);
+  // Calculate forecast rain for today and tomorrow separately
+  const forecast = weather.forecast ?? [];
+  const rainToday = forecast[0]?.rain ?? 0;
+  const rainTomorrow = forecast[1]?.rain ?? 0;
+  const rainForecast = rainToday + rainTomorrow;
 
   if (rainLast3Days >= 15) {
     return {
@@ -83,8 +84,20 @@ export function getWateringRecommendation(
   if (weather.temperature >= 28) reasons.push(t('recommendations.reasonHeat', { temp: weather.temperature }));
   if (weather.humidity <= 40) reasons.push(t('recommendations.reasonDryAir'));
   if (profile.gardeningStyle === 'permaculture') reasons.push(t('recommendations.reasonMulch'));
+
+  // Add rain info if applicable
+  if (rainLast3Days >= 5 && rainLast3Days < 15) {
+    reasons.push(t('recommendations.rainLast3DaysInfo', { amount: rainLast3Days.toFixed(0) }));
+  }
+  if (rainToday >= 5) {
+    reasons.push(t('recommendations.rainTodayInfo', { amount: rainToday.toFixed(0) }));
+  }
+  if (rainTomorrow >= 5) {
+    reasons.push(t('recommendations.rainTomorrowInfo', { amount: rainTomorrow.toFixed(0) }));
+  }
+
   const reason = reasons.length > 0
-    ? t('recommendations.wateringReason', { reasons: reasons.join(', ') })
+    ? t('recommendations.wateringReason', { reasons: reasons.join(' ') })
     : t('recommendations.wateringMethod');
 
   const nextWatering = addDays(now, shouldWater ? info.wateringFrequencyDays : info.wateringFrequencyDays - daysSinceWatered);
