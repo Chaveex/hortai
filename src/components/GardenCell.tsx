@@ -27,9 +27,18 @@ export function GardenCell({
   const plant = plants.find(p => p.id === plantId);
   const plantInfo = plant ? PLANT_DATABASE[plant.type] : null;
 
-  const backgroundColor = densityRatio > 0.5 ? 'rgba(255, 223, 0, 0.15)' : 'transparent';
-  const borderColor = hasConflict ? '#dc3545' : '#999';
-  const borderWidth = hasConflict ? 2 : 1;
+  // Terre/soil color with overlay for density
+  const soilColor = '#8B7355'; // Rich soil brown
+  const lightSoilColor = '#A0826D'; // Lighter soil for empty cells
+
+  const backgroundColor = plantId
+    ? soilColor
+    : lightSoilColor;
+
+  const overlayOpacity = densityRatio > 0.5 ? 0.2 : 0;
+
+  const borderColor = hasConflict ? '#dc3545' : 'transparent';
+  const borderWidth = hasConflict ? 2 : 0;
 
   return (
     <Pressable
@@ -44,6 +53,16 @@ export function GardenCell({
         },
       ]}
     >
+      {/* Density overlay */}
+      {overlayOpacity > 0 && (
+        <View
+          style={[
+            styles.densityOverlay,
+            { opacity: overlayOpacity }
+          ]}
+        />
+      )}
+
       {plantInfo && plant && (
         <View style={styles.content}>
           <Text style={styles.emoji}>{plantInfo.icon}</Text>
@@ -56,23 +75,42 @@ export function GardenCell({
 
 const styles = StyleSheet.create({
   cell: {
-    width: 44,
-    height: 44,
+    width: 46,
+    height: 46,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 2,
+    margin: 3,
+    borderRadius: 8,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  densityOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#FFD700',
   },
   content: {
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 10,
   },
   emoji: {
-    fontSize: 20,
+    fontSize: 22,
   },
   badge: {
-    fontSize: 10,
+    fontSize: 12,
     position: 'absolute',
-    top: -2,
-    right: -2,
+    top: -4,
+    right: -4,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
 });
